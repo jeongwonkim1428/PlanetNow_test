@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Ashion Template" />
+    <meta name="keywords" content="Ashion, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Ashion | Template</title>
+
+    <!-- Google Font -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Cookie&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/elegant-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/jquery-ui.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/magnific-popup.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/owl.carousel.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/slicknav.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+    />
+    <style>
+        .oswald-font {
+            font-family: "Oswald", sans-serif;
+        }
+        .bebas-font {
+            font-family: "Bebas Neue", sans-serif; /* Bebas Neue 폰트를 사용하는 클래스 */
+            font-weight: 700;
+        }
+        .custom-table {
+            width: 100%;
+            border-collapse: separate; /* 테이블 셀 간의 간격을 띄우기 위해 필요 */
+            border-spacing: 15px; /* 셀 간 간격을 15px로 설정 */
+        }
+        .custom-table th,
+        .custom-table td {
+            padding: 2px; /* 셀 안의 여백 */
+            text-align: center; /* 글자들을 가운데 정렬 */
+            font-size: 24px;
+        }
+        .custom-table th img {
+            text-align: left; /* 이미지는 왼쪽 정렬 */
+            display: block; /* 이미지를 블록 요소로 만들어 왼쪽에 붙도록 설정 */
+            margin-left: 0; /* 왼쪽 여백 제거 */
+        }
+        .center-align {
+            text-align: center; /* 가운데 정렬 */
+        }
+    </style>
+</head>
+
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__close">+</div>
+    <ul class="offcanvas__widget">
+        <li><span class="icon_search search-switch"></span></li>
+        <li>
+            <a href="#"
+            ><span class="icon_heart_alt"></span>
+                <div class="tip">2</div>
+            </a>
+        </li>
+        <li>
+            <a href="#"
+            ><span class="icon_bag_alt"></span>
+                <div class="tip">2</div>
+            </a>
+        </li>
+    </ul>
+    <div class="offcanvas__logo">
+        <a href="./index.html"><img src="../../static/img/logo.png" alt="" /></a>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__auth">
+        <a href="#">Login</a>
+        <a href="#">Register</a>
+    </div>
+</div>
+<!-- Offcanvas Menu End -->
+
+
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <div class="header__logo">
+                    <a href="../home.html"><img src="../../static/img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-8">
+                <nav class="header__menu">
+                    <ul>
+                        <li><a href="../home.html">Home</a></li>
+                        <li><a href="../task/task-list.html">게시글 조회</a></li>
+                        <li><a href="../task/create-task.html">게시글 등록</a></li>
+                        <li><a href="../user-list.html">유저 검색</a></li>
+                        <li><a href="profile.html">마이페이지</a>
+                            <ul class="dropdown">
+                                <li><a href="profile.html">내 정보</a></li>
+                                <li><a href="profile-update.html">회원정보 수정</a></li>
+                                <li><a href="profile-remove.html">회원탈퇴</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__right">
+                    <div class="header__right__auth">
+                        <a href="../login.html">로그인</a>
+                        <a href="../sign-up.html">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->
+
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="breadcrumb__links">
+                    <a href="./index.html"><i class="fa fa-home"></i> MyPage</a>
+                    <span>MyProfile</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Section Begin -->
+<section class="shop spad">
+    <div class="container">
+        <div class="row">
+<!--            <div class="col-lg-3 col-md-3">-->
+<!--                <div class="shop__sidebar">-->
+<!--                    <div>-->
+<!--                        <div class="section-title">-->
+<!--                            <h4>MyPage</h4>-->
+<!--                        </div>-->
+<!--                        <div class="categories__accordion">-->
+<!--                            <div class="accordion" id="accordionExample">-->
+<!--                                <div class="card-heading">-->
+<!--                                    <a href="./profile.html">MyProfile</a>-->
+<!--                                </div>-->
+<!--                                <br />-->
+<!--                                <div class="card-heading">-->
+<!--                                    <a href="./user-update.html">ProfileUpdate</a>-->
+<!--                                </div>-->
+<!--                                <br />-->
+<!--                                <div class="card-heading">-->
+<!--                                    <a href="./user-remove.html">User RM</a>-->
+<!--                                </div>-->
+<!--                                <br />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="col-lg-8 col-md-8">
+                <div class="row">
+                    <div class="contact__form">
+                        <h5>닉네임</h5>
+                    </div>
+
+                    <div class="container">
+                        <div class="footer__logo">
+                            <table class="custom-table">
+                                <tr>
+                                    <th th rowspan="2">
+                                        <a><img src="../../static/img/logo.png" alt="" /></a>
+                                    </th>
+                                    <th style="font-size: 24px">팔로워</th>
+                                    <th style="font-size: 24px">팔로잉</th>
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 24px">180명</th>
+                                    <th style="font-size: 24px">67명</th>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                            </table>
+                        </div>
+                        <p style="font-size: 24px" class="bebas-font">유저1</p>
+                        <br />
+                        <p class="bebas-font">열심히 하자</p>
+                        <br />
+                        <h5 class="oswald-font center-align">67.8%</h5>
+                    </div>
+                    <!-- Shop Cart Section Begin -->
+                    <section class="shop-cart spad">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="shop__cart__table">
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th>My Todo List</th>
+                                            </tr>
+                                            </thead>
+                                            <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Category</th>
+                                                <th>Like</th>
+                                                <th>status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="cart__product__item">
+                                                    <div class="cart__product__item__title">
+                                                        <h6>Todo Title</h6>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__price">category</td>
+                                                <td class="cart__total">LikeCnt</td>
+                                                <td class="cart__total">status</td>
+                                                <td class="cart__close">
+                                                    <span class="icon_close"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart__product__item">
+                                                    <div class="cart__product__item__title">
+                                                        <h6>Todo Title</h6>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__price">category</td>
+                                                <td class="cart__total">LikeCnt</td>
+                                                <td class="cart__total">status</td>
+                                                <td class="cart__close">
+                                                    <span class="icon_close"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart__product__item">
+                                                    <div class="cart__product__item__title">
+                                                        <h6>Todo Title</h6>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__price">category</td>
+                                                <td class="cart__total">LikeCnt</td>
+                                                <td class="cart__total">status</td>
+                                                <td class="cart__close">
+                                                    <span class="icon_close"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart__product__item">
+                                                    <div class="cart__product__item__title">
+                                                        <h6>Todo Title</h6>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__price">category</td>
+                                                <td class="cart__total">LikeCnt</td>
+                                                <td class="cart__total">status</td>
+                                                <td class="cart__close">
+                                                    <span class="icon_close"></span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <div class="pagination__option">
+                                    <a href="#">1</a>
+                                    <a href="#">2</a>
+                                    <a href="#">3</a>
+                                    <a href="#"><i class="fa fa-angle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Shop Cart Section End -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Section End -->
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="footer__copyright__text">
+                    <p>
+                        Copyright &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        All rights reserved | This template is made with
+                        <i class="fa fa-heart" aria-hidden="true"></i> by
+                        <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here....." />
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<script src="../../static/js/jquery-3.3.1.min.js"></script>
+<script src="../../static/js/bootstrap.min.js"></script>
+<script src="../../static/js/jquery.magnific-popup.min.js"></script>
+<script src="../../static/js/jquery-ui.min.js"></script>
+<script src="../../static/js/mixitup.min.js"></script>
+<script src="../../static/js/jquery.countdown.min.js"></script>
+<script src="../../static/js/jquery.slicknav.js"></script>
+<script src="../../static/js/owl.carousel.min.js"></script>
+<script src="../../static/js/jquery.nicescroll.min.js"></script>
+<script src="../../static/js/main.js"></script>
+</body>
+</html>
