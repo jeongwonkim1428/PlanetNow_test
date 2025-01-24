@@ -3,4 +3,67 @@
 
 <mapper namespace="com.application.planetnow.user.UserDAO">
 
+
+    <select id="validEmailResult" parameterType="String" resultType="String">
+        SELECT EMAIL
+        FROM USER
+        WHERE EMAIL = #{email}
+
+    </select>
+    <select id="validNicknameResult" parameterType="String" resultType="String">
+        SELECT NICKNAME
+        FROM USER
+        WHERE NICKNAME = #{nickname}
+
+    </select>
+
+    <insert id="saveUser" parameterType="userDTO">
+        INSERT INTO USER(NAME,
+                         EMAIL,
+                         NICKNAME,
+                         PASSWORD,
+                         BIRTH_TIMESTAMP,
+                         SEX,
+                         PHONE_NUMBER,
+                         ZIPCODE,
+                         ROAD_ADDRESS,
+                         JIBUN_ADDRESS,
+                         ETC_ADDRESS,
+                         PROFILE_ORIGINAL_NAME,
+                         PROFILE_UUID,
+                         AMBITION_QUOTE,
+                         LEVEl_ID,
+                         TOTAL_POINT,
+                         ENROLLED_AT,
+                         MODIFIED_AT,
+                         ROLE
+                         )
+        VALUES(#{name},
+               #{email},
+               #{nickname},
+               #{password},
+               #{birthTimestamp},
+               #{sex},
+               #{phoneNumber},
+               #{zipcode},
+               #{roadAddress},
+               #{jibunAddress},
+               #{etcAddress},
+               #{profileOriginalName},
+               #{profileUuid},
+               #{ambitionQuote},
+               #{levelId},
+               #{totalPoint},
+               NOW(),
+               NOW(),
+               #{role}
+
+
+              )
+
+    </insert>
+
+
+
+
 </mapper>
