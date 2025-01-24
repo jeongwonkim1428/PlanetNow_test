@@ -23,6 +23,34 @@
     <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<!--    <script>-->
+<!--        $().ready(function() {-->
+
+<!--            $("#search").click(function () {-->
+
+<!--                let keyword = $("#keyword").val();-->
+
+<!--                $.ajax({-->
+<!--                    type: "post",-->
+<!--                    url: "/task/searchMainTask",-->
+<!--                    data: { "keyword": keyword },-->
+<!--                    success: function(result) {-->
+<!--                        $('tbody').html(result);-->
+<!--                    },-->
+<!--                    error: function(error) {-->
+<!--                        console.error("Error searching tasks:", error);-->
+<!--                    }-->
+<!--                });-->
+
+<!--            });-->
+<!--        });-->
+
+<!--    </script>-->
+
+
 </head>
 
 <body>
@@ -30,31 +58,6 @@
     <div id="preloder">
         <div class="loader"></div>
     </div>
-
-<!--    &lt;!&ndash; Offcanvas Menu Begin &ndash;&gt;-->
-<!--    <div class="offcanvas-menu-overlay"></div>-->
-<!--    <div class="offcanvas-menu-wrapper">-->
-<!--        <div class="offcanvas__close">+</div>-->
-<!--        <ul class="offcanvas__widget">-->
-<!--            <li><span class="icon_search search-switch"></span></li>-->
-<!--            <li><a href="#"><span class="icon_heart_alt"></span>-->
-<!--                <div class="tip">2</div>-->
-<!--            </a></li>-->
-<!--            <li><a href="#"><span class="icon_bag_alt"></span>-->
-<!--                <div class="tip">2</div>-->
-<!--            </a></li>-->
-<!--        </ul>-->
-<!--        <div class="offcanvas__logo">-->
-<!--            <a th:href="@{/index}"><img th:src="${img/logo.png}" alt=""></a>-->
-<!--        </div>-->
-<!--        <div id="mobile-menu-wrap"></div>-->
-<!--        <div class="offcanvas__auth">-->
-<!--            <a th:href="#">Login</a>-->
-<!--            <a th:href="#">Register</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    &lt;!&ndash; Offcanvas Menu End &ndash;&gt;-->
-
 
     <!-- Header Section Begin -->
     <header class="header">
@@ -124,8 +127,8 @@
                                         <td colspan="5" align="right">
                                             <div class="col-lg-6">
                                                 <div class="discount__content">
-                                                    <input type="text" placeholder="키워드로 검색">
-                                                    <button type="submit" class="site-btn">Apply</button>
+                                                    <input type="text" placeholder="키워드로 검색" id="keyword"/>
+                                                    <input type="button" class="site-btn" id="search" value="검색" th:onclick="|location.href='@{/task/task-list(keyword=' + document.getElementById('postIdInput').value + ')}'|"/>&emsp;
                                                 </div>
                                             </div>
                                         </td>
@@ -139,53 +142,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                <div th:fragment="taskRows">
+                                    <tr th:each="mainTaskMap : ${mainTaskListMap}">
                                         <td class="cart__product__item">
                                             <div class="cart__product__item__title">
-                                                <a href="#" id="listTitle">첫번째 To Do List</a>
+                                                <a th:href="@{#}" th:text="${mainTaskMap.mainSubject}"></a>
                                             </div>
                                         </td>
-                                        <td id="userId">유저1</td>
-                                        <td id="enrollAt">
-                                            2025-01-01
-                                        </td>
-                                        <td id="progress">진행중</td>
-                                        <td id="etc">
-                                            <span id="readCnt">조회수:0/</span>
-                                            <span id ="replyCnt">댓글수:0</span>
+                                        <td th:text="${mainTaskMap.userId}"></td>
+                                        <td th:text="${mainTaskMap.enrolledAt}"></td>
+                                        <td th:text="${mainTaskMap.taskStatusValue}">진행중</td>
+                                        <td>
+                                            <span th:text="'조회수: ' + ${mainTaskMap.viewCnt}"></span>
+                                            <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="cart__product__item">
-                                            <div class="cart__product__item__title">
-                                                <a href="#" id="listTitle">두번째 To Do List</a>
-                                            </div>
-                                        </td>
-                                        <td id="userId">유저2</td>
-                                        <td id="enrollAt">
-                                            2025-01-02
-                                        </td>
-                                        <td id="progress">진행중</td>
-                                        <td id="etc">
-                                            <span id="readCnt">조회수:0/</span>
-                                            <span id ="replyCnt">댓글수:0</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart__product__item">
-                                            <div class="cart__product__item__title">
-                                                <a href="#" id="listTitle">세번째 To Do List</a>
-                                            </div>
-                                        </td>
-                                        <td id="userId">유저3</td>
-                                        <td id="enrollAt">
-                                            2025-01-03
-                                        </td>
-                                        <td id="progress">진행중</td>
-                                        <td id="etc">
-                                            <span id="readCnt">조회수:0/</span>
-                                            <span id ="replyCnt">댓글수:0</span>
-                                        </td>
+                                </div>
                                     <th:block>
                                         <tr align="center">
                                             <td colspan="2">
@@ -199,161 +171,6 @@
                     </div>
                 </div>
             </div>
-           <!-- <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="cart__btn">
-                        <a href="#">Continue Shopping</a>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="cart__btn update__btn">
-                        <a href="#"><span class="icon_loading"></span> Update cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="discount__content">
-                        <h6>Discount codes</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Enter your coupon code">
-                            <button type="submit" class="site-btn">Apply</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-4 offset-lg-2">
-                    <div class="cart__total__procced">
-                        <h6>Cart total</h6>
-                        <ul>
-                            <li>Subtotal <span>$ 750.0</span></li>
-                            <li>Total <span>$ 750.0</span></li>
-                        </ul>
-                        <a href="#" class="primary-btn">Proceed to checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- Shop Cart Section End -->
-
-    <!-- Instagram Begin -->
-   <!-- <div class="instagram">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-1.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-2.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-3.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-4.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-5.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-6.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- Instagram End -->
-
-    <!-- Footer Section Begin -->
-   <!-- <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-7">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                        cilisis.</p>
-                        <div class="footer__payment">
-                            <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-5">
-                    <div class="footer__widget">
-                        <h6>Quick links</h6>
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blogs</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <div class="footer__widget">
-                        <h6>Account</h6>
-                        <ul>
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Orders Tracking</a></li>
-                            <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Wishlist</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-8 col-sm-8">
-                    <div class="footer__newslatter">
-                        <h6>NEWSLETTER</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
-                        <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12"> -->
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     <div class="footer__copyright__text">
                         <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>

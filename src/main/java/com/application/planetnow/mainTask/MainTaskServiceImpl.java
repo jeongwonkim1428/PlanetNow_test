@@ -1,13 +1,25 @@
 package com.application.planetnow.mainTask;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MainTaskServiceImpl implements MainTaskService {
 
-    TaskStatusDTO temp = new TaskStatusDTO();
-    public void a () {
-        //temp.setTaskStatusValue(TaskStatusValue.실패);
-        //temp.setTaskStatusValue(TaskStatusValue.완료);
+    @Autowired
+    MainTaskDAO mainTaskDAO;
+
+    @Override
+    public List<Map<String, Object>> getMainTaskList() {
+        return mainTaskDAO.getMainTaskList();
     }
+
+    @Override
+    public List<Map<String, Object>> getSearchMainTaskList(String keyword) {
+        return mainTaskDAO.getSearchMainTaskList(keyword);
+    }
+
 }

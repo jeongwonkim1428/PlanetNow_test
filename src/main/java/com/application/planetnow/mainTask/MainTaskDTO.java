@@ -10,8 +10,8 @@ public class MainTaskDTO {
     private Long userId;
     private Long categoryId;
     private String mainSubject;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate startTimestamp;
+    private LocalDate endTimestamp;
     private String memo;
     private LocalDate enrolledAt;
     private LocalDate modifiedAt;
