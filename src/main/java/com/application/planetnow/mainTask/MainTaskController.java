@@ -6,5 +6,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/main-task")
 public class MainTaskController {
-        wopiejfoiwejfo
 }
