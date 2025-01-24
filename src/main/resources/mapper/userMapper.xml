@@ -62,7 +62,12 @@
               )
 
     </insert>
+    <select id="loginResult" parameterType="UserDTO" resultType="UserDTO">
+        SELECT EMAIL,PASSWORD
+        FROM USER
+        WHERE EMAIL =#{email}
 
+    </select>
 
 
 

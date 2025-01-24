@@ -89,6 +89,7 @@
             console.log("닉네임 : " + nickname)
             if (nickname == ""){
                 $("#isValidNicknameMsg").html("<span style='color:red;'>닉네임을 입력하세요.</span>");
+                return;
             }
             $.ajax({
                 type:"post",
@@ -181,7 +182,7 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="#">Login</a>
+            <a th:href="@{/user/login}">Login</a>
             <a href="#">Register</a>
         </div>
     </div>
@@ -217,8 +218,8 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-                            <a href="login.html">로그인</a>
-                            <a href="sign-up.html">회원가입</a>
+                            <a th:href="@{/user/login}">로그인</a>
+                            <a th:href="@{/user/sign-up}">회원가입</a>
                         </div>
                     </div>
                 </div>
@@ -247,7 +248,7 @@
         <div class="container">
             <div class="row">
             </div>
-            <form th:action="@{/user/sign-up}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/user/sign-up}" method="post" enctype="multipart/form-data" class="checkout__form">
                 <div class="row">
                     <div class="col-lg-8">
                         <h5>회원가입</h5>

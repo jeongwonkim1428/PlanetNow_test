@@ -1,6 +1,9 @@
 package com.application.planetnow.user;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,15 +13,35 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserService userService;
-    @GetMapping("/login")
+    @GetMapping("/home")
     public String home(){
+        return "home";
+    }
+    @GetMapping("/login")
+    public String login(){
         return "/auth/login";
+    }
+    @PostMapping("/login")
+    @ResponseBody
+    public boolean login(@RequestBody UserDTO userDTO, HttpServletRequest request){
+        log.info("email: "+userDTO.getEmail());
+        log.info("password: "+userDTO.getPassword());
+        boolean is = userService.loginResult(userDTO);
+        if (is == true){
+            HttpSession session = request.getSession();
+            session.setAttribute("email",userDTO.getEmail());
+            return true;
+        }else {
+            return false;
+        }
+
     }
     @GetMapping("/sign-up")
     public String signUp( ){
-        return "/auth/sigin-up2";
+        return "/auth/sign-up";
     }
     @PostMapping("/sign-up")
     @ResponseBody

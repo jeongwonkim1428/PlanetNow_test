@@ -10,4 +10,6 @@ public interface UserService {
     boolean validNicknameResult(String nickname);
 
     void signUp(MultipartFile myProfile, UserDTO userDTO) throws IOException;
+
+    boolean loginResult(UserDTO userDTO);
 }

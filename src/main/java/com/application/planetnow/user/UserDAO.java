@@ -8,4 +8,6 @@ public interface UserDAO {
     String validNicknameResult(String nickname);
 
     void saveUser(UserDTO userDTO);
+
+    UserDTO loginResult(UserDTO userDTO);
 }
