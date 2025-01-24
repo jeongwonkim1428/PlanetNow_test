@@ -54,6 +54,8 @@ CREATE TABLE TASK_STATUS (
                              TASK_STATUS_VALUE ENUM('진행전', '진행중', '완료', '실패') DEFAULT '진행전'
 );
 
+
+
 CREATE TABLE MAIN_TASK (
                            MAIN_TASK_ID BIGINT AUTO_INCREMENT PRIMARY KEY,
                            USER_ID BIGINT NOT NULL,

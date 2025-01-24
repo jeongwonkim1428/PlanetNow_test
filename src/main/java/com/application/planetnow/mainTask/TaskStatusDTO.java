@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TaskStatusDTO {
     private Integer taskStatusId;
-    private TaskStatusValue taskStatusValue;
+    private String taskStatusValue;
 }
