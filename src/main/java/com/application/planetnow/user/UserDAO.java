@@ -10,4 +10,8 @@ public interface UserDAO {
     void saveUser(UserDTO userDTO);
 
     UserDTO loginResult(UserDTO userDTO);
+
+    void updateUser(UserDTO loginUser);
+
+    UserDTO getUserDetail(String email);
 }

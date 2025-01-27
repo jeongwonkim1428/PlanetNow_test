@@ -63,12 +63,41 @@
 
     </insert>
     <select id="loginResult" parameterType="UserDTO" resultType="UserDTO">
-        SELECT EMAIL,PASSWORD
+        SELECT *
         FROM USER
         WHERE EMAIL =#{email}
 
     </select>
 
+    <update id="updateUser" parameterType="UserDTO">
+        UPDATE USER
+        SET
+            NAME = #{name},
+            EMAIL = #{email},
+            NICKNAME = #{nickname},
+            PASSWORD = #{password},
+            BIRTH_TIMESTAMP = #{birthTimestamp},
+            SEX = #{sex},
+            PHONE_NUMBER = #{phoneNumber},
+            ZIPCODE = #{zipcode},
+            ROAD_ADDRESS = #{roadAddress},
+            JIBUN_ADDRESS = #{jibunAddress},
+            ETC_ADDRESS = #{etcAddress},
+            PROFILE_ORIGINAL_NAME = #{profileOriginalName},
+            PROFILE_UUID = #{profileUuid},
+            AMBITION_QUOTE = #{ambitionQuote},
+            LEVEL_ID = #{levelId},
+            TOTAL_POINT = #{totalPoint},
+            ENROLLED_AT = #{enrolledAt},
+            MODIFIED_AT = #{modifiedAt},
+            ROLE = #{role}
+        WHERE USER_ID = #{userId}
+    </update>
+    <select id="getUserDetail" parameterType="String">
+        SELECT *
+        FROM USER
+        WHERE EMAIL=#{email}
+    </select>
 
 
 </mapper>

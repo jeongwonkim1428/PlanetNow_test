@@ -2,5 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.application.planetnow.user.UserPointDAO">
+    <insert id="userPointSave" parameterType="UserPointDTO">
+        INSERT INTO USER_POINT(USER_ID,POINT_ID)
+        VALUES (#{userId},
+            #{pointId})
+    </insert>
+    <select id="getUserTotalPoint" resultType="Long" parameterType="Long">
+    SELECT SUM(P.POINT_VALUE)
+    FROM USER_POINT UP
+    JOIN POINT P
+    ON UP.POINT_ID = P.POINT_ID
+    WHERE UP.USER_ID = #{userId}
+
+    </select>
+
 
 </mapper>

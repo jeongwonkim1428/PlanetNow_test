@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,5 +65,17 @@ public class UserController {
     @ResponseBody
     public boolean validNickname(@RequestParam("nickname") String nickname){
         return userService.validNicknameResult(nickname);
+    }
+    @GetMapping("/my-profile")
+    public String myProfile(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession();
+        String email = session.getAttribute("email").toString();
+        if (session.getAttribute("email") == null){
+            return "/auth/login";
+        }
+        UserDTO userDTO = userService.getUserDetail(email);
+        model.addAttribute("userDTO", userDTO);
+
+        return "/mypage/profile";
     }
 }
