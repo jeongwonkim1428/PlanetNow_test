@@ -1,5 +1,6 @@
 package com.application.planetnow;
 
+import com.application.planetnow.mainTask.CategoryDTO;
 import com.application.planetnow.mainTask.MainTaskDAO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,16 @@ class PlanetNowApplicationTests {
         for (Map<String, Object> map : getMainTaskList) {
             System.out.println(map);
         }
+    }
+
+    @Test
+    void getCategoryList() {
+
+        List<CategoryDTO> getCategoryList = mainTaskDAO.getCategoryList();
+        for (CategoryDTO map : getCategoryList) {
+            System.out.println(map);
+        }
+
     }
 
 

@@ -1,6 +1,10 @@
 package com.application.planetnow.mainTask;
 
+import com.application.planetnow.subTask.SubTaskDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionIdChangedEvent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,19 +37,27 @@ public class MainTaskController {
         return "/task/task-list";
     }
 
-//    @PostMapping("/searchMainTask")
-//    @ResponseBody
-//    public ModelAndView searchMainTask(@RequestParam("keyword") String keyword,
-//                                 Model model) {
-//        List<Map<String, Object>> mainTaskListMap = mainTaskService.getSearchMainTaskList(keyword);
-//        model.addAttribute("mainTaskListMap", mainTaskListMap);
-//
-//        // Prepare the model and view
-//        ModelAndView modelAndView = new ModelAndView("fragments/task-rows");
-//        modelAndView.addObject("mainTaskListMap", mainTaskListMap);
-//
-//        return modelAndView;
-//    }
+    @GetMapping("/create-task")
+    public String createMainTask(Model model,
+                                 HttpServletRequest request) {
+
+        //로그인 확인 필수. 없으면 로그인화면으로 리턴
+        HttpSession session = request.getSession();
+
+        model.addAttribute("categoryList", mainTaskService.getCategoryList());
+
+        return "/task/create-task";
+    }
+
+    @PostMapping("/create-task")
+    @ResponseBody
+    public String createMainTask(@ModelAttribute MainTaskDTO mainTaskDTO) {
+
+        System.out.println(mainTaskDTO);
+
+
+        return "";
+    }
 
 }
 

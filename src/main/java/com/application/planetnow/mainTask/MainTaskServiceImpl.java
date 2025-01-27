@@ -12,6 +12,8 @@ public class MainTaskServiceImpl implements MainTaskService {
     @Autowired
     MainTaskDAO mainTaskDAO;
 
+
+
     @Override
     public List<Map<String, Object>> getMainTaskList() {
         return mainTaskDAO.getMainTaskList();
@@ -20,6 +22,11 @@ public class MainTaskServiceImpl implements MainTaskService {
     @Override
     public List<Map<String, Object>> getMainTaskList(String keyword) {
         return mainTaskDAO.getMainTaskList(keyword);
+    }
+
+    @Override
+    public List<CategoryDTO> getCategoryList() {
+        return mainTaskDAO.getCategoryList();
     }
 
 

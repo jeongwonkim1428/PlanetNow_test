@@ -1,8 +1,10 @@
 package com.application.planetnow.mainTask;
 
+import com.application.planetnow.subTask.SubTaskDTO;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class MainTaskDTO {
@@ -17,5 +19,7 @@ public class MainTaskDTO {
     private LocalDate modifiedAt;
     private Long taskStatusId;
     private Long viewCnt;
+    private List<SubTaskDTO> subTaskDtoList;
+
 
 }

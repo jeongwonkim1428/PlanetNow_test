@@ -39,6 +39,11 @@
                 M.MAIN_TASK_ID
     </select>
 
+    <select id="getCategoryList" resultType="CategoryDTO">
+        SELECT *
+        FROM CATEGORY
+    </select>
+
 
 
 

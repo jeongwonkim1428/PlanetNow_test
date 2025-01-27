@@ -14,7 +14,7 @@
             display: none !important;  /* 경고 메시지 숨김 */
         }
     </style>
-    <script th:src="@{/jquery/jquery-3.7.1.min.js}"></script> 
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script>
 
         $(function(){
@@ -24,7 +24,7 @@
                 let cnt = 1;
                 cnt++;
                 let method=`
-                    <input type="text" name="subPost` + cnt + `">
+                    <input type="text" name="subTaskDtoList[" + cnt + "]">
                 `;
 
                 $("#subPostList").append(method);
@@ -93,8 +93,8 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="../home.html">Home</a></li>
-                            <li><a href="task-list.html">게시글 조회</a></li>
-                            <li class="active"><a href="./create-task.html">게시글 등록</a></li>
+                            <li><a th:href="@{/task/task-list}">게시글 조회</a></li>
+                            <li class="active"><a th:href="@{/task/create-task}">게시글 등록</a></li>
                             <li><a href="../user/user-list.html">유저 검색</a></li>
                             <li><a href="../profile.html">마이페이지</a>
                                 <ul class="dropdown">
@@ -142,33 +142,33 @@
                     <div class="contact__content">
                         <div class="contact__form">
                             <h5 align="center">게시글 등록</h5>
-                            <form action="#">
-                                <strong>Main Post</strong>
-                                <input type="text" id ="mainPost" placeholder="20자 이내(필수)" required>
+                            <form th:action="@{/task/create-task}" method="post">
+                                <strong>Main Subject</strong>
+                                <input type="text" name ="mainSubject" placeholder="20자 이내(필수)" required>
 
                                 <strong>Period</strong><br>
-                                <input type="date" id="startDate" class="col-lg-3" required> ~ 
-                                <input type="date" id="endDate" class="col-lg-3" required> &emsp;&emsp;&emsp;&emsp;
+                                <input type="date" name="startDate" class="col-lg-3" required> ~
+                                <input type="date" name="endDate" class="col-lg-3" required> &emsp;&emsp;&emsp;&emsp;
                                 
                                 <strong>Category</strong>
-                                <select id="category">
-                                    <option>직접선택</option>
-                                    <option>Study</option>
-                                    <option>Exam</option>
-                                    <option>Exercise</option>
-                                    <option>ETC</option>
+                                <select name="categoryId" required>
+                                    <option value="" disabled selected>카테고리 선택</option>
+                                    <option th:each="category : ${categoryList}"
+                                            th:value="${category.categoryId}"
+                                            th:text="${category.categoryNm}">
+                                    </option>
                                 </select>
                                 <br><br>
 
-                                <strong>Sub Post</strong>
+                                <strong>Sub Task</strong>
                                 <span id="subPostList">
-                                    <input type="text" name="subPost1">
+                                    <input type="text" name="subTaskDtoList">
                                 </span>
                                 <button type="button" class="site-btn" id="addSubPost" name="addSubPost">추가</button>
                                 </br></br>
 
                                 <strong>Memo</strong>
-                                <textarea placeholder="200자 이내" name="content"></textarea>
+                                <textarea placeholder="200자 이내" name="memo"></textarea>
 
                                 <button type="submit"  class="site-btn">Apply</button>
                             </form>

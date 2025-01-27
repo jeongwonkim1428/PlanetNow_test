@@ -11,4 +11,7 @@ public interface MainTaskDAO {
    public List<Map<String, Object>> getMainTaskList();
    public List<Map<String, Object>> getMainTaskList(String keyword);
 
+   public List<CategoryDTO> getCategoryList();
+
+
 }
