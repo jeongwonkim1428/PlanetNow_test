@@ -17,26 +17,35 @@ public class MainTaskController {
     MainTaskService mainTaskService;
 
     @GetMapping("/task-list")
-    public String mainTaskList(Model model) {
+    public String getMainTaskList(Model model) {
 
         model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList());
 
         return "/task/task-list";
     }
 
-    @PostMapping("/searchMainTask")
-    @ResponseBody
-    public ModelAndView searchMainTask(@RequestParam("keyword") String keyword,
-                                 Model model) {
-        List<Map<String, Object>> mainTaskListMap = mainTaskService.getSearchMainTaskList(keyword);
-        model.addAttribute("mainTaskListMap", mainTaskListMap);
+    @PostMapping("/task-list")
+    public String getMainTaskList(Model model,
+                                  @RequestParam("keyword") String keyword) {
 
-        // Prepare the model and view
-        ModelAndView modelAndView = new ModelAndView("fragments/task-rows");
-        modelAndView.addObject("mainTaskListMap", mainTaskListMap);
+        model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList(keyword));
 
-        return modelAndView;
+        return "/task/task-list";
     }
+
+//    @PostMapping("/searchMainTask")
+//    @ResponseBody
+//    public ModelAndView searchMainTask(@RequestParam("keyword") String keyword,
+//                                 Model model) {
+//        List<Map<String, Object>> mainTaskListMap = mainTaskService.getSearchMainTaskList(keyword);
+//        model.addAttribute("mainTaskListMap", mainTaskListMap);
+//
+//        // Prepare the model and view
+//        ModelAndView modelAndView = new ModelAndView("fragments/task-rows");
+//        modelAndView.addObject("mainTaskListMap", mainTaskListMap);
+//
+//        return modelAndView;
+//    }
 
 }
 

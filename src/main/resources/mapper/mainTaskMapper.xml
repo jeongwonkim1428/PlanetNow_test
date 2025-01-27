@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.application.planetnow.mainTask.MainTaskDAO">
-    <!-- 게시글 전체조회 -->
+    <!-- 게시글 조회 맵핑 -->
     <resultMap id="mainTaskMap" type="hashmap" >
         <result column="USER_ID"  	   property="userId"/>
         <result column="MAIN_SUBJECT"  property="mainSubject"/>
@@ -11,7 +11,9 @@
         <result column="VIEW_CNT"      property="viewCnt"/>
         <result column="REPLY_CNT"      property="replyCnt"/>
     </resultMap>
-    <select id="getMainTaskList" resultMap="mainTaskMap">
+
+    <!-- 게시글 전체조회 -->
+    <select id="getMainTaskList" parameterType="String" resultMap="mainTaskMap">
         SELECT  M.USER_ID           AS USER_ID,
                 M.MAIN_SUBJECT      AS MAIN_SUBJECT,
                 M.ENROLLED_AT       AS ENROLLED_AT,
@@ -23,6 +25,11 @@
         ON      M.TASK_STATUS_ID = T.TASK_STATUS_ID
         LEFT JOIN REPLY R
         ON      M.MAIN_TASK_ID = R.MAIN_TASK_ID
+        <where>
+            <if test="keyword != null and keyword != ''">
+                M.MAIN_SUBJECT LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
         GROUP BY
                 M.USER_ID,
                 M.MAIN_SUBJECT,
@@ -32,25 +39,8 @@
                 M.MAIN_TASK_ID
     </select>
 
-    <select id="getSearchMainTaskList" parameterType="String" resultMap="mainTaskMap">
-        SELECT  M.USER_ID           AS USER_ID,
-                M.MAIN_SUBJECT      AS MAIN_SUBJECT,
-                M.ENROLLED_AT       AS ENROLLED_AT,
-                T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
-                M.VIEW_CNT          AS VIEW_CNT,
-                COUNT(R.REPLY_ID)   AS REPLY_CNT
-        FROM    MAIN_TASK M
-        JOIN    TASK_STATUS T
-        ON      M.TASK_STATUS_ID = T.TASK_STATUS_ID
-        LEFT JOIN REPLY R
-        ON      M.MAIN_TASK_ID = R.MAIN_TASK_ID
-        WHERE   M.MAIN_SUBJECT LIKE CONCAT('%', #{keyword}, '%')
-        GROUP BY
-                M.USER_ID,
-                M.MAIN_SUBJECT,
-                M.ENROLLED_AT,
-                T.TASK_STATUS_VALUE,
-                M.VIEW_CNT,
-                M.MAIN_TASK_ID
-    </select>
+
+
+
+
 </mapper>

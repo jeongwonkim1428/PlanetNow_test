@@ -9,6 +9,6 @@ import java.util.Map;
 @Mapper
 public interface MainTaskDAO {
    public List<Map<String, Object>> getMainTaskList();
+   public List<Map<String, Object>> getMainTaskList(String keyword);
 
-   public List<Map<String, Object>> getSearchMainTaskList(String keyword);
 }

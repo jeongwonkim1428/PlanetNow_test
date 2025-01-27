@@ -18,8 +18,9 @@ public class MainTaskServiceImpl implements MainTaskService {
     }
 
     @Override
-    public List<Map<String, Object>> getSearchMainTaskList(String keyword) {
-        return mainTaskDAO.getSearchMainTaskList(keyword);
+    public List<Map<String, Object>> getMainTaskList(String keyword) {
+        return mainTaskDAO.getMainTaskList(keyword);
     }
+
 
 }

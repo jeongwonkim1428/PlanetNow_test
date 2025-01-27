@@ -26,29 +26,6 @@
 
 
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<!--    <script>-->
-<!--        $().ready(function() {-->
-
-<!--            $("#search").click(function () {-->
-
-<!--                let keyword = $("#keyword").val();-->
-
-<!--                $.ajax({-->
-<!--                    type: "post",-->
-<!--                    url: "/task/searchMainTask",-->
-<!--                    data: { "keyword": keyword },-->
-<!--                    success: function(result) {-->
-<!--                        $('tbody').html(result);-->
-<!--                    },-->
-<!--                    error: function(error) {-->
-<!--                        console.error("Error searching tasks:", error);-->
-<!--                    }-->
-<!--                });-->
-
-<!--            });-->
-<!--        });-->
-
-<!--    </script>-->
 
 
 </head>
@@ -72,7 +49,7 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="../home.html">Home</a></li>
-                            <li class="active"><a href="./task-list.html">게시글 조회</a></li>
+                            <li class="active"><a th:href="@{/task/task-list}">게시글 등록</a></li>
                             <li><a href="create-task.html">게시글 등록</a></li>
                             <li><a href="../user/user-list.html">유저 검색</a></li>
                             <li><a href="../profile.html">마이페이지</a>
@@ -120,54 +97,52 @@
                 <div class="col-lg-12">
                     <div class="contact__form"><h5 align="center">등록되어 있는 게시글</h5></div>
                     <div class="shop__cart__table">
-                        <form>
-                            <table>
-                                <thead>
-                                    <tr align="right">
-                                        <td colspan="5" align="right">
-                                            <div class="col-lg-6">
-                                                <div class="discount__content">
-                                                    <input type="text" placeholder="키워드로 검색" id="keyword"/>
-                                                    <input type="button" class="site-btn" id="search" value="검색" th:onclick="|location.href='@{/task/task-list(keyword=' + document.getElementById('postIdInput').value + ')}'|"/>&emsp;
-                                                </div>
-                                            </div>
+                        <table>
+                            <thead>
+                                <tr align="right">
+                                    <td colspan="5" align="right">
+                                        <div class="col-lg-6">
+                                            <form th:action="@{/task/task-list}" method="post" class="discount__content">
+                                                <input type="text" placeholder="제목 검색" name="keyword" required/>
+                                                <input type="submit" class="site-btn" value="검색"/>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>제목</th>
+                                    <th>유저</th>
+                                    <th>등록날짜</th>
+                                    <th>진행여부</th>
+                                    <th>기타</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <div th:fragment="taskRows">
+                                <tr th:each="mainTaskMap : ${mainTaskListMap}">
+                                    <td class="cart__product__item">
+                                        <div class="cart__product__item__title">
+                                            <a th:href="@{#}" th:text="${mainTaskMap.mainSubject}"></a>
+                                        </div>
+                                    </td>
+                                    <td th:text="${mainTaskMap.userId}"></td>
+                                    <td th:text="${mainTaskMap.enrolledAt}"></td>
+                                    <td th:text="${mainTaskMap.taskStatusValue}">진행중</td>
+                                    <td>
+                                        <span th:text="'조회수: ' + ${mainTaskMap.viewCnt}"></span>
+                                        <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>
+                                    </td>
+                                </tr>
+                            </div>
+                                <th:block>
+                                    <tr align="center">
+                                        <td colspan="2">
+                                            <a href="./regist_list.html">게시물 등록</a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th>제목</th>
-                                        <th>유저</th>
-                                        <th>등록날짜</th>
-                                        <th>진행여부</th>
-                                        <th>기타</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <div th:fragment="taskRows">
-                                    <tr th:each="mainTaskMap : ${mainTaskListMap}">
-                                        <td class="cart__product__item">
-                                            <div class="cart__product__item__title">
-                                                <a th:href="@{#}" th:text="${mainTaskMap.mainSubject}"></a>
-                                            </div>
-                                        </td>
-                                        <td th:text="${mainTaskMap.userId}"></td>
-                                        <td th:text="${mainTaskMap.enrolledAt}"></td>
-                                        <td th:text="${mainTaskMap.taskStatusValue}">진행중</td>
-                                        <td>
-                                            <span th:text="'조회수: ' + ${mainTaskMap.viewCnt}"></span>
-                                            <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>
-                                        </td>
-                                    </tr>
-                                </div>
-                                    <th:block>
-                                        <tr align="center">
-                                            <td colspan="2">
-                                                <a href="./regist_list.html">게시물 등록</a>
-                                            </td>
-                                        </tr>
-                                    </th:block>
-                                </tbody>
-                            </table>
-                    </form>
+                                </th:block>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
