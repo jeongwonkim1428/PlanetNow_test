@@ -1,12 +1,15 @@
 package com.application.planetnow.user;
 
 import com.application.planetnow.user.exception.NotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -45,6 +48,43 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public void updateUserResult(MultipartFile myProfile, UserDTO userDTO) throws IOException {
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+            userDTO.setPassword(null);  // 비밀번호가 빈 값일 경우 null로 설정
+        }else {
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
+        if (!myProfile.isEmpty()){
+            new File(fileRepo + userDTO.getProfileUuid()).delete();
+
+            String originalFilename = myProfile.getOriginalFilename();
+            userDTO.setProfileOriginalName(originalFilename);
+
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+            String uploadFile = UUID.randomUUID() + extension;
+            userDTO.setProfileUuid(uploadFile);
+
+
+
+            myProfile.transferTo(new File(fileRepo + uploadFile));
+            userDAO.update(userDTO);
+        }
+        else {
+
+            userDAO.update(userDTO);
+        }
+    }
+
+    @Override
+    public UserDTO getUserDetailById(Long userId) {
+        UserDTO userDTO = userDAO.getUserDetailById(userId);
+        return userDTO;
+    }
+
 
     @Override
     public void signUp(MultipartFile myProfile, UserDTO userDTO) throws IOException {
@@ -125,6 +165,32 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserDetail(String email) {
         return userDAO.getUserDetail(email);
     }
+
+    @Override
+    public boolean userRemoveResult(UserDTO userDTO) {
+        UserDTO user = userDAO.loginResult(userDTO);
+        if (passwordEncoder.matches(userDTO.getPassword(),user.getPassword())){
+            userDAO.removeUserResult(userDTO.getEmail());
+            return true;
+        }
+        return false;
+
+
+    }
+
+    @Override
+    public UserDTO getUserFromSession(HttpServletRequest request) {
+
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute("email");
+            if (email == null) {
+                return null;
+            }
+            return getUserDetail(email);
+
+    }
+
+
 
 
 }

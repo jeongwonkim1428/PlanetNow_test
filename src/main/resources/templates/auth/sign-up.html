@@ -78,6 +78,11 @@
                 $("#checkPassword").focus();
                 return false;
             }
+            if ($("#ambitionQuote").val().length < 10){
+                alert("포부는 10글자 이상 작성해주세요");
+                $("#ambitionQuote").focus();
+                return false;
+            }
 
         });
 

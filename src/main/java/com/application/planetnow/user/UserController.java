@@ -4,12 +4,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @Controller
 @RequestMapping("/user")
@@ -17,6 +21,8 @@ import java.io.IOException;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    @Value("${file.repo.path}")
+    private String fileRepo;
     @GetMapping("/home")
     public String home(){
         return "home";
@@ -66,16 +72,80 @@ public class UserController {
     public boolean validNickname(@RequestParam("nickname") String nickname){
         return userService.validNicknameResult(nickname);
     }
-    @GetMapping("/my-profile")
+    @GetMapping("/search-user")
+    public String searchUser(){
+        return "/user/user-list";
+    }
+    @GetMapping("/user-detail")
+    public String userDetail(@RequestParam("userId")Long userId,Model model ){
+        UserDTO userDTO = userService.getUserDetailById(userId);
+        log.info("유저 정보: " + userDTO);
+        model.addAttribute("userDTO",userDTO);
+        return "/user/user-detail";
+    }
+
+
+
+    @GetMapping("/profile")
     public String myProfile(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
-        String email = session.getAttribute("email").toString();
-        if (session.getAttribute("email") == null){
+        UserDTO userDTO = userService.getUserFromSession(request);
+        if (userDTO == null) {
             return "/auth/login";
         }
-        UserDTO userDTO = userService.getUserDetail(email);
         model.addAttribute("userDTO", userDTO);
-
         return "/mypage/profile";
+    }
+
+    @GetMapping("/profile-update")
+    public String profileUpdate(HttpServletRequest request, Model model){
+        UserDTO userDTO = userService.getUserFromSession(request);
+        if (userDTO == null) {
+            return "/auth/login";
+        }
+        model.addAttribute("userDTO", userDTO);
+        return "/mypage/profile-update";
+    }
+    @PostMapping("/profile-update")
+    @ResponseBody
+    public String profileUpdate(@RequestParam("myProfile")MultipartFile myProfile,@ModelAttribute UserDTO userDTO) throws IOException {
+        log.info("유저 정보 : " + userDTO);
+        userService.updateUserResult(myProfile,userDTO);
+        String jsScript = """
+				<script>
+					alert('수정 완료되었습니다.');
+					location.href = '/user/profile';
+				</script>""";
+        return jsScript;
+    }
+
+    @GetMapping("/profile-remove")
+    public String profileRemove(HttpServletRequest request, Model model){
+        UserDTO userDTO = userService.getUserFromSession(request);
+        if (userDTO == null) {
+            return "/auth/login";
+        }
+        model.addAttribute("userDTO", userDTO);
+        return "/mypage/profile-remove";
+    }
+
+    @PostMapping("/profile-remove")
+    @ResponseBody
+    public boolean profileRemove(@RequestBody UserDTO userDTO, HttpServletRequest request){
+        log.info("email : "+ userDTO.getEmail());
+
+        boolean isUserDel = userService.userRemoveResult(userDTO);
+        if (isUserDel){
+            HttpSession session= request.getSession();
+            session.invalidate();
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @GetMapping("/thumbnails")
+    @ResponseBody
+    public Resource thumbnails(@RequestParam("fileName") String fileName) throws MalformedURLException {
+        return new UrlResource("file:" + fileRepo + fileName);
     }
 }

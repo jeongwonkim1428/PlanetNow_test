@@ -14,4 +14,10 @@ public interface UserDAO {
     void updateUser(UserDTO loginUser);
 
     UserDTO getUserDetail(String email);
+
+    void removeUserResult(String email);
+
+    void update(UserDTO userDTO);
+
+    UserDTO getUserDetailById(Long userId);
 }

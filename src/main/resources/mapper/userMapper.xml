@@ -98,6 +98,34 @@
         FROM USER
         WHERE EMAIL=#{email}
     </select>
+    <select id="getUserDetailById" parameterType="Long">
+        SELECT *
+        FROM USER
+        WHERE USER_ID=#{userId}
+    </select>
+    <delete id="removeUserResult" parameterType="String">
+        DELETE FROM USER
+        WHERE EMAIL=#{email}
+    </delete>
+    <update id="update" parameterType="UserDTO">
+        UPDATE USER
+        SET NICKNAME =#{nickname},
+            PHONE_NUMBER = #{phoneNumber},
+            ZIPCODE = #{zipcode},
+            ROAD_ADDRESS = #{roadAddress},
+            JIBUN_ADDRESS = #{jibunAddress},
+            ETC_ADDRESS = #{etcAddress},
+            PROFILE_ORIGINAL_NAME = #{profileOriginalName},
+            PROFILE_UUID = #{profileUuid},
+            AMBITION_QUOTE = #{ambitionQuote},
+            MODIFIED_AT=NOW()
+        <if test="password != null and password != ''">
+            , PASSWORD = #{password}
+        </if>
+        WHERE USER_ID=#{userId}
+
+
+    </update>
 
 
 </mapper>

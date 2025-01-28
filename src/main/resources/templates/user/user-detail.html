@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org" >
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Ashion Template" />
@@ -192,7 +193,7 @@
             <div class="col-lg-8 col-md-8">
                 <div class="row">
                     <div class="contact__form">
-                        <h5>닉네임</h5>
+                        <h5 th:text="${userDTO.nickname}"></h5>
                     </div>
 
                     <div class="container">
@@ -200,7 +201,7 @@
                             <table class="custom-table">
                                 <tr>
                                     <th th rowspan="2">
-                                        <a><img src="/img/logo.png" alt="" /></a>
+                                        <a><img th:src="@{/user/thumbnails(fileName=${userDTO.profileUuid})}" alt="" /></a>
                                     </th>
                                     <th style="font-size: 24px">팔로워</th>
                                     <th style="font-size: 24px">팔로잉</th>
@@ -214,9 +215,9 @@
                                 </tr>
                             </table>
                         </div>
-                        <p style="font-size: 24px" class="bebas-font">유저1</p>
+                        <p style="font-size: 24px" class="bebas-font" th:text="${userDTO.name}"></p>
                         <br />
-                        <p class="bebas-font">열심히 하자</p>
+                        <p class="bebas-font" th:text="${userDTO.ambitionQuote}"></p>
                         <br />
                         <h5 class="oswald-font center-align">67.8%</h5>
                     </div>
