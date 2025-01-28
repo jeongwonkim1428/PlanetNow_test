@@ -15,4 +15,6 @@ public interface MainTaskDAO {
 
    public void createMainTask(MainTaskDTO mainTaskDTO);
 
+   public Map<String, Object> getMainTaskDetail(Long mainTaskId);
+
 }

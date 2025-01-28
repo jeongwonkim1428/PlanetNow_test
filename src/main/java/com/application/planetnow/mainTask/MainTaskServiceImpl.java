@@ -34,5 +34,10 @@ public class MainTaskServiceImpl implements MainTaskService {
         mainTaskDAO.createMainTask(mainTaskDTO);
     }
 
+    @Override
+    public Map<String, Object> getMainTaskDetail(Long mainTaskId) {
+        return mainTaskDAO.getMainTaskDetail(mainTaskId);
+    }
+
 
 }

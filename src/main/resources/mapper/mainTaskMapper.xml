@@ -7,10 +7,17 @@
         <result column="USER_ID"  	   property="userId"/>
         <result column="MAIN_SUBJECT"  property="mainSubject"/>
         <result column="ENROLLED_AT"   property="enrolledAt"/>
+        <result column="MODIFIED_AT"     property="modifiedAt"/>
         <result column="TASK_STATUS_VALUE" property="taskStatusValue"/>
         <result column="VIEW_CNT"      property="viewCnt"/>
         <result column="REPLY_CNT"      property="replyCnt"/>
         <result column="CATEGORY_NM"      property="categoryNm"/>
+        <result column="MAIN_TASK_ID"      property="mainTaskId"/>
+        <result column="START_TIMESTAMP" property="startTimestamp"/>
+        <result column="END_TIMESTAMP"   property="endTimestamp"/>
+        <result column="MEMO"            property="memo"/>
+        <result column="NICKNAME"            property="nickname"/>
+
     </resultMap>
 
     <!-- 게시글 전체조회 -->
@@ -21,7 +28,8 @@
                 T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
                 M.VIEW_CNT          AS VIEW_CNT,
                 COUNT(R.REPLY_ID)   AS REPLY_CNT,
-                C.CATEGORY_NM       AS CATEGORY_NM
+                C.CATEGORY_NM       AS CATEGORY_NM,
+                M.MAIN_TASK_ID      AS MAIN_TASK_ID
         FROM    MAIN_TASK M
         JOIN    TASK_STATUS T
         ON      M.TASK_STATUS_ID = T.TASK_STATUS_ID
@@ -43,6 +51,7 @@
                 M.ENROLLED_AT,
                 T.TASK_STATUS_VALUE,
                 M.VIEW_CNT,
+                C.CATEGORY_NM,
                 M.MAIN_TASK_ID
         ORDER BY
                 M.ENROLLED_AT DESC
@@ -59,6 +68,29 @@
         VALUES
             (#{userId}, #{categoryId}, #{mainSubject}, #{startTimestamp}, #{endTimestamp}, #{memo}, #{taskStatusId})
     </insert>
+
+    <select id="getMainTaskDetail" resultMap="mainTaskMap">
+        SELECT M.MAIN_TASK_ID   AS MAIN_TASK_ID,
+               M.USER_ID        AS USER_ID,
+               C.CATEGORY_NM    AS CATEGORY_NM,
+               M.MAIN_SUBJECT   AS MAIN_SUBJECT,
+               M.START_TIMESTAMP AS START_TIMESTAMP,
+               M.END_TIMESTAMP   AS END_TIMESTAMP,
+               M.MEMO           AS MEMO,
+               M.ENROLLED_AT    AS ENROLLED_AT,
+               M.MODIFIED_AT    AS MODIFIED_AT,
+               T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
+               M.VIEW_CNT       AS VIEW_CNT,
+               U.NICKNAME       AS NICKNAME
+        FROM MAIN_TASK M
+        JOIN CATEGORY C
+        ON M.CATEGORY_ID = C.CATEGORY_ID
+        JOIN TASK_STATUS T
+        ON  M.TASK_STATUS_ID = T.TASK_STATUS_ID
+        JOIN USER U
+        ON M.USER_ID = U.USER_ID
+        WHERE M.MAIN_TASK_ID = #{mainTaskId}
+    </select>
 
 
 

@@ -8,6 +8,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ashion | Template</title>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:inline="javascript">
+        let taskStatusValue = '[[${mainTaskDetail.taskStatusValue}]]';
+    </script>
+    <script>
+        $(document).ready(function() {
+            let $taskStatusSpan = $(".taskStatusSpan");
+
+            console.log(taskStatusValue)
+
+            if (taskStatusValue === '"진행전"') {
+                $taskStatusSpan.css("background", "purple");
+            } else if (taskStatusValue === '"진행중"') {
+                $taskStatusSpan.css("background", "green");
+            } else if (taskStatusValue === '"완료"') {
+                $taskStatusSpan.css("background", "#ED2A2AFF");
+            } else if (taskStatusValue === '"실패"') {
+                $taskStatusSpan.css("background", "blue");
+            } else {
+                $taskStatusSpan.css("background", "lightgray");
+            }
+
+        });
+    </script>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -120,22 +144,21 @@
                         <div class="blog__details__item">
 <!--                            <img src="img/blog/details/blog-details.jpg" alt="">-->
                             <div class="blog__details__item__title">
-                                <span class="tip">완료?</span>
-                                <h4>게시글 제목</h4>
+                                <span th:text="${mainTaskDetail.taskStatusValue}"
+                                          class="taskStatusSpan"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                </span>
+                                <h4 th:text="${mainTaskDetail.mainSubject}"></h4>
                                 <ul>
-                                    <li>by <span>작성자</span></li>
-                                    <li>등록날짜 <span>2025-01-22</span></li>
-                                    <li>카테고리: <span>ㅎㅇ</span> </li>
-                                    <li>조회수: <span>255</span></li>
+                                    <li>by <span th:text="${mainTaskDetail.nickname}"></span></li>
+                                    <li>등록날짜 <span th:text="${mainTaskDetail.enrolledAt}"></span></li>
+                                    <li>카테고리: <span th:text="${mainTaskDetail.categoryNm}"></span> </li>
+                                    <li>조회수: <span th:text="${mainTaskDetail.viewCnt}"></span></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="blog__details__desc">
-                            <p>Occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                                laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                dolor in reprehenderit in voluptate.</p>
+                            <p th:text="${mainTaskDetail.memo}"></p>
                         </div>
                         <div class="blog__details__desc">
                             <div><h4>서브테스크</h4></div>
@@ -187,7 +210,6 @@
                             <a class="fa fa-heart-o" href="#"> 좋아요</a>
                             <a href="#">수정하기</a>
                             <a href="#">삭제하기</a>
-                            <a href="#"></a>
                         </div>
                         <div class="blog__details__btns">
                             <div class="row">

@@ -132,7 +132,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="contact__form"><h5 align="center">등록되어 있는 게시글</h5></div>
+                    <div class="contact__form"><h5 align="center">전체 게시판</h5></div>
                     <div class="shop__cart__table">
                         <table>
                             <thead>
@@ -154,7 +154,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>제목</th>
+                                    <th>제목 / 카테고리</th>
                                     <th>유저</th>
                                     <th>등록날짜</th>
                                     <th>진행여부</th>
@@ -166,7 +166,7 @@
                                 <tr th:each="mainTaskMap : ${mainTaskListMap}">
                                     <td class="cart__product__item">
                                         <div class="cart__product__item__title">
-                                            <a th:href="@{#}" th:text="${mainTaskMap.mainSubject}"></a>
+                                            <a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId })}" th:text="${mainTaskMap.mainSubject}"></a>
                                         </div>
                                         <span th:text="${mainTaskMap.categoryNm}"
                                               class="categoryNmSpan"

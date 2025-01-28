@@ -37,8 +37,7 @@ public class MainTaskController {
     public String getMainTaskList(Model model,
                                   @RequestParam("keyword") String keyword,
                                   @RequestParam("categoryId") Long categoryId) {
-        System.out.println("키워드 : "+ keyword);
-        System.out.println(categoryId);
+
         model.addAttribute("selectedCategoryId", categoryId);
         model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList(keyword, categoryId));
         model.addAttribute("categoryList", mainTaskService.getCategoryList());
@@ -80,6 +79,7 @@ public class MainTaskController {
                 subTaskDTO.setMainTaskId(mainTaskId);
                 subTaskDTO.setTaskStatusId(1);
                 subTaskService.createSubTask(subTaskDTO);
+                // 물어보자 여기서 for 돌리는 게 좋은지 아니면 sql 쿼리로 하는 게 좋은지 성능면에서
             }
         }
         String response = """
@@ -92,7 +92,10 @@ public class MainTaskController {
 
 
     @GetMapping("/task-detail")
-    public String taskDetail() {
+    public String getMainTaskDetail(@RequestParam("mainTaskId") Long mainTaskId, Model model) {
+
+        model.addAttribute("mainTaskDetail", mainTaskService.getMainTaskDetail(mainTaskId));
+
         return "/task/task-detail";
     }
 
