@@ -27,6 +27,43 @@
 
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 
+    <script th:inline="javascript">
+        let selectedCategoryId = [[${selectedCategoryId}]];  // The categoryId is passed from the controller
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Set the selected category based on the categoryId
+            if (selectedCategoryId != null) {
+                $("select[name='categoryId']").val(selectedCategoryId);
+            }
+
+            $(".categoryNmSpan").each(function() {
+                // Get the category name from the data attribute
+                let categoryNm = $(this).data('category').trim();
+                // Change the background color based on the category name
+                switch (categoryNm) {
+                    case "학업":
+                        $(this).css("background", "#ED2A2AFF");
+                        break;
+                    case "건강":
+                        $(this).css("background", "green");
+                        break;
+                    case "자격증":
+                        $(this).css("background", "purple");
+                        break;
+                    case "취미":
+                        $(this).css("background", "blue");
+                        break;
+                    case "기타":
+                        $(this).css("background", "lightgray");
+                        break;
+                    default:
+                        $(this).css("background", "lightgray");
+                }
+            });
+        });
+    </script>
+
 
 </head>
 
@@ -49,7 +86,7 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="../home.html">Home</a></li>
-                            <li class="active"><a th:href="@{/task/task-list}">게시글 등록</a></li>
+                            <li class="active"><a th:href="@{/task/task-list}">게시글 조회</a></li>
                             <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
                             <li><a href="../user/user-list.html">유저 검색</a></li>
                             <li><a href="../profile.html">마이페이지</a>
@@ -103,7 +140,14 @@
                                     <td colspan="5" align="right">
                                         <div class="col-lg-6">
                                             <form th:action="@{/task/task-list}" method="post" class="discount__content">
-                                                <input type="text" placeholder="제목 검색" name="keyword" required/>
+                                                <select name="categoryId">
+                                                    <option value="0" selected>카테고리 전체</option>
+                                                    <option th:each="category : ${categoryList}"
+                                                            th:value="${category.categoryId}"
+                                                            th:text="${category.categoryNm}">
+                                                    </option>
+                                                </select>
+                                                <input type="text" placeholder="제목 검색" name="keyword"/>
                                                 <input type="submit" class="site-btn" value="검색"/>
                                             </form>
                                         </div>
@@ -124,6 +168,11 @@
                                         <div class="cart__product__item__title">
                                             <a th:href="@{#}" th:text="${mainTaskMap.mainSubject}"></a>
                                         </div>
+                                        <span th:text="${mainTaskMap.categoryNm}"
+                                              class="categoryNmSpan"
+                                              th:data-category="${mainTaskMap.categoryNm}"
+                                              style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 5px;">
+                                        </span>
                                     </td>
                                     <td th:text="${mainTaskMap.userId}"></td>
                                     <td th:text="${mainTaskMap.enrolledAt}"></td>

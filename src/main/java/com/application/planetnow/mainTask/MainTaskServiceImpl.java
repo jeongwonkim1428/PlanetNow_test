@@ -20,8 +20,8 @@ public class MainTaskServiceImpl implements MainTaskService {
     }
 
     @Override
-    public List<Map<String, Object>> getMainTaskList(String keyword) {
-        return mainTaskDAO.getMainTaskList(keyword);
+    public List<Map<String, Object>> getMainTaskList(String keyword, Long categoryId) {
+        return mainTaskDAO.getMainTaskList(keyword, categoryId);
     }
 
     @Override

@@ -10,24 +10,31 @@
         <result column="TASK_STATUS_VALUE" property="taskStatusValue"/>
         <result column="VIEW_CNT"      property="viewCnt"/>
         <result column="REPLY_CNT"      property="replyCnt"/>
+        <result column="CATEGORY_NM"      property="categoryNm"/>
     </resultMap>
 
     <!-- 게시글 전체조회 -->
-    <select id="getMainTaskList" parameterType="String" resultMap="mainTaskMap">
+    <select id="getMainTaskList" resultMap="mainTaskMap">
         SELECT  M.USER_ID           AS USER_ID,
                 M.MAIN_SUBJECT      AS MAIN_SUBJECT,
                 M.ENROLLED_AT       AS ENROLLED_AT,
                 T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
                 M.VIEW_CNT          AS VIEW_CNT,
-                COUNT(R.REPLY_ID)   AS REPLY_CNT
+                COUNT(R.REPLY_ID)   AS REPLY_CNT,
+                C.CATEGORY_NM       AS CATEGORY_NM
         FROM    MAIN_TASK M
         JOIN    TASK_STATUS T
         ON      M.TASK_STATUS_ID = T.TASK_STATUS_ID
         LEFT JOIN REPLY R
         ON      M.MAIN_TASK_ID = R.MAIN_TASK_ID
+        JOIN    CATEGORY C
+        ON      M.CATEGORY_ID = C.CATEGORY_ID
         <where>
             <if test="keyword != null and keyword != ''">
                 M.MAIN_SUBJECT LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="categoryId != null and categoryId !=0">
+                AND C.CATEGORY_ID = #{categoryId}
             </if>
         </where>
         GROUP BY
@@ -37,6 +44,8 @@
                 T.TASK_STATUS_VALUE,
                 M.VIEW_CNT,
                 M.MAIN_TASK_ID
+        ORDER BY
+                M.ENROLLED_AT DESC
     </select>
 
     <select id="getCategoryList" resultType="CategoryDTO">

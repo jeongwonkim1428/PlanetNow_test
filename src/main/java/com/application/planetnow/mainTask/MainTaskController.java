@@ -28,15 +28,20 @@ public class MainTaskController {
     public String getMainTaskList(Model model) {
 
         model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList());
+        model.addAttribute("categoryList", mainTaskService.getCategoryList());
 
         return "/task/task-list";
     }
 
     @PostMapping("/task-list")
     public String getMainTaskList(Model model,
-                                  @RequestParam("keyword") String keyword) {
-
-        model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList(keyword));
+                                  @RequestParam("keyword") String keyword,
+                                  @RequestParam("categoryId") Long categoryId) {
+        System.out.println("키워드 : "+ keyword);
+        System.out.println(categoryId);
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList(keyword, categoryId));
+        model.addAttribute("categoryList", mainTaskService.getCategoryList());
 
         return "/task/task-list";
     }
@@ -62,13 +67,7 @@ public class MainTaskController {
         //유저 아이디 받아야함 세션 (추가예정)
         mainTaskDTO.setUserId(1L);
 
-        System.out.println(mainTaskDTO);
-
-
         mainTaskService.createMainTask(mainTaskDTO);
-
-
-        System.out.println(mainTaskDTO.getSubTaskDtoList());
 
         // 생성된 mainTaskId 불러오기
         Long mainTaskId = mainTaskDTO.getMainTaskId();
@@ -83,13 +82,18 @@ public class MainTaskController {
                 subTaskService.createSubTask(subTaskDTO);
             }
         }
-        String jsScript = """
+        String response = """
 				<script>
 					alert('게시글이 등록 되었습니다.');
 					location.href = '/task/task-list';
 				</script>""";
+        return response;
+    }
 
-        return jsScript;
+
+    @GetMapping("/task-detail")
+    public String taskDetail() {
+        return "/task/task-detail";
     }
 
 }
