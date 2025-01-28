@@ -17,7 +17,7 @@ public class MainTaskDTO {
     private String memo;
     private LocalDate enrolledAt;
     private LocalDate modifiedAt;
-    private Long taskStatusId;
+    private Integer taskStatusId;
     private Long viewCnt;
     private List<SubTaskDTO> subTaskDtoList;
 

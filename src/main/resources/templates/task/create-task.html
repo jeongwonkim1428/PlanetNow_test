@@ -17,20 +17,26 @@
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script>
 
-        $(function(){
+        $(function () {
+            let cnt = 0; // Declare `cnt` outside the click event to maintain its value across multiple clicks
 
-            $("#addSubPost").click(function(){
+            $("#addSubTask").click(function () {
+                cnt++; // Increment the counter
 
-                let cnt = 1;
-                cnt++;
-                let method=`
-                    <input type="text" name="subTaskDtoList[" + cnt + "]">
-                `;
+                // Use the counter value in the name attribute dynamically
+                let method = `
+            <input type="text" name="subTaskDtoList[${cnt}].subSubject" placeholder="40자 이내(필수)" required>
+        `;
 
-                $("#subPostList").append(method);
-
+                $("#subTaskList").append(method); // Append the new input element
             });
 
+            $("#deleteSubTask").click(function () {
+                if (cnt > 0) { // Ensure there are inputs to delete
+                    $("#subTaskList input:last-child").remove(); // Remove the last input
+                    cnt--; // Decrease the counter
+                }
+            });
         });
 
     </script>
@@ -144,11 +150,11 @@
                             <h5 align="center">게시글 등록</h5>
                             <form th:action="@{/task/create-task}" method="post">
                                 <strong>Main Subject</strong>
-                                <input type="text" name ="mainSubject" placeholder="20자 이내(필수)" required>
+                                <input type="text" name ="mainSubject" placeholder="40자 이내(필수)" required>
 
                                 <strong>Period</strong><br>
-                                <input type="date" name="startDate" class="col-lg-3" required> ~
-                                <input type="date" name="endDate" class="col-lg-3" required> &emsp;&emsp;&emsp;&emsp;
+                                <input type="date" name="startTimestamp" class="col-lg-3" required> ~
+                                <input type="date" name="endTimestamp" class="col-lg-3" required> &emsp;&emsp;&emsp;&emsp;
                                 
                                 <strong>Category</strong>
                                 <select name="categoryId" required>
@@ -161,16 +167,17 @@
                                 <br><br>
 
                                 <strong>Sub Task</strong>
-                                <span id="subPostList">
-                                    <input type="text" name="subTaskDtoList">
+                                <span id="subTaskList">
+                                    <input type="text" name="subTaskDtoList[0].subSubject" placeholder="40자 이내(필수)" required>
                                 </span>
-                                <button type="button" class="site-btn" id="addSubPost" name="addSubPost">추가</button>
+                                <button type="button" class="site-btn" id="addSubTask">추가</button>
+                                <button type="button" class="site-btn-grey" id="deleteSubTask">삭제</button>
                                 </br></br>
 
                                 <strong>Memo</strong>
                                 <textarea placeholder="200자 이내" name="memo"></textarea>
 
-                                <button type="submit"  class="site-btn">Apply</button>
+                                <button type="submit"  class="site-btn">게시글 등록</button>
                             </form>
                         </div>
                     </div>

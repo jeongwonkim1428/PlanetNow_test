@@ -179,6 +179,17 @@ ol {
 	padding: 12px 30px;
 	border-radius: 50px;
 }
+.site-btn-grey {
+	font-size: 14px;
+	color: #ffffff;
+	background: darkgrey;
+	font-weight: 600;
+	border: none;
+	text-transform: uppercase;
+	display: inline-block;
+	padding: 12px 30px;
+	border-radius: 50px;
+}
 .site-btn:disabled {
 	font-size: 14px;
 	color: #ffffff;

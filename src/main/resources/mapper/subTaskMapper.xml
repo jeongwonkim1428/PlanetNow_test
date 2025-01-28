@@ -2,5 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.application.planetnow.subTask.SubTaskDAO">
-
+    <insert id="createSubTask">
+        INSERT INTO sub_task
+            (MAIN_TASK_ID, SUB_SUBJECT, TASK_STATUS_ID)
+        VALUES
+            (#{mainTaskId}, #{subSubject}, #{taskStatusId})
+    </insert>
 </mapper>

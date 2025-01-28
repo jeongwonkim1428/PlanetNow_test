@@ -29,5 +29,10 @@ public class MainTaskServiceImpl implements MainTaskService {
         return mainTaskDAO.getCategoryList();
     }
 
+    @Override
+    public void createMainTask(MainTaskDTO mainTaskDTO) {
+        mainTaskDAO.createMainTask(mainTaskDTO);
+    }
+
 
 }

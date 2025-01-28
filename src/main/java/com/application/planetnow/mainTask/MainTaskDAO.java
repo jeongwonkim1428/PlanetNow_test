@@ -13,5 +13,6 @@ public interface MainTaskDAO {
 
    public List<CategoryDTO> getCategoryList();
 
+   public void createMainTask(MainTaskDTO mainTaskDTO);
 
 }

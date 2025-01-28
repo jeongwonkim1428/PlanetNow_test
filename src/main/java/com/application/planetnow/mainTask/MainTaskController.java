@@ -1,6 +1,7 @@
 package com.application.planetnow.mainTask;
 
 import com.application.planetnow.subTask.SubTaskDTO;
+import com.application.planetnow.subTask.SubTaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class MainTaskController {
 
     @Autowired
     MainTaskService mainTaskService;
+
+    @Autowired
+    SubTaskService subTaskService;
 
     @GetMapping("/task-list")
     public String getMainTaskList(Model model) {
@@ -53,10 +57,39 @@ public class MainTaskController {
     @ResponseBody
     public String createMainTask(@ModelAttribute MainTaskDTO mainTaskDTO) {
 
+        mainTaskDTO.setTaskStatusId(1);
+
+        //유저 아이디 받아야함 세션 (추가예정)
+        mainTaskDTO.setUserId(1L);
+
         System.out.println(mainTaskDTO);
 
 
-        return "";
+        mainTaskService.createMainTask(mainTaskDTO);
+
+
+        System.out.println(mainTaskDTO.getSubTaskDtoList());
+
+        // 생성된 mainTaskId 불러오기
+        Long mainTaskId = mainTaskDTO.getMainTaskId();
+        System.out.println(mainTaskId);
+
+        // Extract the subTaskDtoList from MainTaskDTO
+        List<SubTaskDTO> subTaskDtoList = mainTaskDTO.getSubTaskDtoList();
+        if (subTaskDtoList != null && !subTaskDtoList.isEmpty()) {
+            for (SubTaskDTO subTaskDTO : subTaskDtoList) {
+                subTaskDTO.setMainTaskId(mainTaskId);
+                subTaskDTO.setTaskStatusId(1);
+                subTaskService.createSubTask(subTaskDTO);
+            }
+        }
+        String jsScript = """
+				<script>
+					alert('게시글이 등록 되었습니다.');
+					location.href = '/task/task-list';
+				</script>""";
+
+        return jsScript;
     }
 
 }
