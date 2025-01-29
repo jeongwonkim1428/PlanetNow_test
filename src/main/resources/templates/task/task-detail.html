@@ -16,16 +16,15 @@
         $(document).ready(function() {
             let $taskStatusSpan = $(".taskStatusSpan");
 
-            console.log(taskStatusValue)
 
             if (taskStatusValue === '"진행전"') {
-                $taskStatusSpan.css("background", "purple");
+                $taskStatusSpan.css("background", "#d3d3d3");
             } else if (taskStatusValue === '"진행중"') {
-                $taskStatusSpan.css("background", "green");
+                $taskStatusSpan.css("background", "#28a745");
             } else if (taskStatusValue === '"완료"') {
-                $taskStatusSpan.css("background", "#ED2A2AFF");
+                $taskStatusSpan.css("background", "#007bff");
             } else if (taskStatusValue === '"실패"') {
-                $taskStatusSpan.css("background", "blue");
+                $taskStatusSpan.css("background", "#dc3545");
             } else {
                 $taskStatusSpan.css("background", "lightgray");
             }
@@ -93,8 +92,8 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="../home.html">Home</a></li>
-                            <li><a href="task-list.html">게시글 조회</a></li>
-                            <li><a href="create-task.html">게시글 등록</a></li>
+                            <li><a th:href="@{/task/task-list}">게시글 조회</a></li>
+                            <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
                             <li><a href="../user/user-list.html">유저 검색</a></li>
                             <li><a href="../profile.html">마이페이지</a>
                                 <ul class="dropdown">

@@ -61,6 +61,30 @@
                         $(this).css("background", "lightgray");
                 }
             });
+
+            $(".taskStatusSpan").each(function() {
+                // Get the task status from the data attribute
+                let taskStatus = $(this).data("tstatus");  // Replace "task-status" with the actual attribute
+
+                // Apply background color based on the task status value
+                switch (taskStatus) {
+                    case "진행전":
+                        $(this).css("background", "#d3d3d3"); // Light Gray
+                        break;
+                    case "진행중":
+                        $(this).css("background", "#28a745"); // Green
+                        break;
+                    case "완료":
+                        $(this).css("background", "#007bff"); // Blue
+                        break;
+                    case "실패":
+                        $(this).css("background", "#dc3545"); // Red
+                        break;
+                    default:
+                        $(this).css("background", "grey");
+                }
+            });
+
         });
     </script>
 
@@ -171,12 +195,18 @@
                                         <span th:text="${mainTaskMap.categoryNm}"
                                               class="categoryNmSpan"
                                               th:data-category="${mainTaskMap.categoryNm}"
-                                              style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 5px;">
+                                              style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
                                         </span>
                                     </td>
-                                    <td th:text="${mainTaskMap.userId}"></td>
+                                    <td th:text="${mainTaskMap.nickname}"></td>
                                     <td th:text="${mainTaskMap.enrolledAt}"></td>
-                                    <td th:text="${mainTaskMap.taskStatusValue}">진행중</td>
+                                    <td>
+                                        <span th:text="${mainTaskMap.taskStatusValue}"
+                                              class="taskStatusSpan"
+                                              th:data-tstatus="${mainTaskMap.taskStatusValue}"
+                                              style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                        </span>
+                                    </td>
                                     <td>
                                         <span th:text="'조회수: ' + ${mainTaskMap.viewCnt}"></span>
                                         <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>

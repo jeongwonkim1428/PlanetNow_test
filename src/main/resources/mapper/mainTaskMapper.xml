@@ -4,25 +4,25 @@
 <mapper namespace="com.application.planetnow.mainTask.MainTaskDAO">
     <!-- 게시글 조회 맵핑 -->
     <resultMap id="mainTaskMap" type="hashmap" >
-        <result column="USER_ID"  	   property="userId"/>
-        <result column="MAIN_SUBJECT"  property="mainSubject"/>
-        <result column="ENROLLED_AT"   property="enrolledAt"/>
-        <result column="MODIFIED_AT"     property="modifiedAt"/>
+        <result column="USER_ID"  	       property="userId"/>
+        <result column="MAIN_SUBJECT"      property="mainSubject"/>
+        <result column="ENROLLED_AT"       property="enrolledAt"/>
+        <result column="MODIFIED_AT"       property="modifiedAt"/>
         <result column="TASK_STATUS_VALUE" property="taskStatusValue"/>
-        <result column="VIEW_CNT"      property="viewCnt"/>
-        <result column="REPLY_CNT"      property="replyCnt"/>
-        <result column="CATEGORY_NM"      property="categoryNm"/>
+        <result column="VIEW_CNT"          property="viewCnt"/>
+        <result column="REPLY_CNT"         property="replyCnt"/>
+        <result column="CATEGORY_NM"       property="categoryNm"/>
         <result column="MAIN_TASK_ID"      property="mainTaskId"/>
-        <result column="START_TIMESTAMP" property="startTimestamp"/>
-        <result column="END_TIMESTAMP"   property="endTimestamp"/>
-        <result column="MEMO"            property="memo"/>
-        <result column="NICKNAME"            property="nickname"/>
+        <result column="START_TIMESTAMP"   property="startTimestamp"/>
+        <result column="END_TIMESTAMP"     property="endTimestamp"/>
+        <result column="MEMO"              property="memo"/>
+        <result column="NICKNAME"          property="nickname"/>
 
     </resultMap>
 
     <!-- 게시글 전체조회 -->
     <select id="getMainTaskList" resultMap="mainTaskMap">
-        SELECT  M.USER_ID           AS USER_ID,
+        SELECT  U.NICKNAME          AS NICKNAME,
                 M.MAIN_SUBJECT      AS MAIN_SUBJECT,
                 M.ENROLLED_AT       AS ENROLLED_AT,
                 T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
@@ -37,6 +37,8 @@
         ON      M.MAIN_TASK_ID = R.MAIN_TASK_ID
         JOIN    CATEGORY C
         ON      M.CATEGORY_ID = C.CATEGORY_ID
+        JOIN    USER U
+        ON      M.USER_ID = U.USER_ID
         <where>
             <if test="keyword != null and keyword != ''">
                 M.MAIN_SUBJECT LIKE CONCAT('%', #{keyword}, '%')
@@ -46,7 +48,7 @@
             </if>
         </where>
         GROUP BY
-                M.USER_ID,
+                U.NICKNAME,
                 M.MAIN_SUBJECT,
                 M.ENROLLED_AT,
                 T.TASK_STATUS_VALUE,
