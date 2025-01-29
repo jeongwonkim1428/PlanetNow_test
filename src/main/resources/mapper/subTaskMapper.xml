@@ -2,10 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.application.planetnow.subTask.SubTaskDAO">
+    <resultMap id="subTaskMap" type="hashmap" >
+        <result column="SUB_TASK_ID"  	       property="subTaskId"/>
+        <result column="MAIN_TASK_ID"  	       property="mainTaskId"/>
+        <result column="SUB_SUBJECT"  	       property="subSubject"/>
+        <result column="ENROLLED_AT"  	       property="enrolledAt"/>
+        <result column="MODIFIED_AT"  	       property="modifiedAt"/>
+        <result column="TASK_STATUS_VALUE"     property="taskStatusValue"/>
+    </resultMap>
+
+
     <insert id="createSubTask">
         INSERT INTO sub_task
             (MAIN_TASK_ID, SUB_SUBJECT, TASK_STATUS_ID)
         VALUES
             (#{mainTaskId}, #{subSubject}, #{taskStatusId})
     </insert>
+
+    <select id="getSubTaskList" resultMap="subTaskMap">
+        SELECT S.SUB_TASK_ID        AS SUB_TASK_ID,
+               S.MAIN_TASK_ID       AS MAIN_TASK_ID,
+               S.SUB_SUBJECT        AS SUB_SUBJECT,
+               S.ENROLLED_AT        AS ENROLLED_AT,
+               S.MODIFIED_AT        AS MODIFIED_AT,
+               T.TASK_STATUS_VALUE  AS TASK_STATUS_VALUE
+        FROM SUB_TASK S
+        JOIN MAIN_TASK M
+        ON S.MAIN_TASK_ID = M.MAIN_TASK_ID
+        JOIN TASK_STATUS T
+        ON S.TASK_STATUS_ID = T.TASK_STATUS_ID
+        WHERE S.MAIN_TASK_ID = #{mainTaskId}
+    </select>
+
+    <update id="changeStatus" parameterType="SubTaskDTO">
+        UPDATE SUB_TASK
+        SET TASK_STATUS_ID = #{taskStatusId}
+        WHERE SUB_TASK_ID = #{subTaskId}
+    </update>
+
+
+
 </mapper>

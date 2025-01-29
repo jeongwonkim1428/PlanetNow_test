@@ -12,7 +12,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+          rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
@@ -31,13 +31,13 @@
         let selectedCategoryId = [[${selectedCategoryId}]];  // The categoryId is passed from the controller
     </script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Set the selected category based on the categoryId
             if (selectedCategoryId != null) {
                 $("select[name='categoryId']").val(selectedCategoryId);
             }
 
-            $(".categoryNmSpan").each(function() {
+            $(".categoryNmSpan").each(function () {
                 // Get the category name from the data attribute
                 let categoryNm = $(this).data('category').trim();
                 // Change the background color based on the category name
@@ -62,7 +62,7 @@
                 }
             });
 
-            $(".taskStatusSpan").each(function() {
+            $(".taskStatusSpan").each(function () {
                 // Get the task status from the data attribute
                 let taskStatus = $(this).data("tstatus");  // Replace "task-status" with the actual attribute
 
@@ -92,147 +92,151 @@
 </head>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
 
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-3 col-lg-2">
-                    <div class="header__logo">
-                        <a href="../home.html"><img src="/img/logo.png" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-lg-8">
-                    <nav class="header__menu">
-                        <ul>
-                            <li><a href="../home.html">Home</a></li>
-                            <li class="active"><a th:href="@{/task/task-list}">게시글 조회</a></li>
-                            <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
-                            <li><a href="../user/user-list.html">유저 검색</a></li>
-                            <li><a href="../profile.html">마이페이지</a>
-                                <ul class="dropdown">
-                                    <li><a href="../profile.html">내 정보</a></li>
-                                    <li><a href="../profile-update.html">회원정보 수정</a></li>
-                                    <li><a href="../profile-remove.html">회원탈퇴</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__right">
-                        <div class="header__right__auth">
-                            <a href="../login.html">로그인</a>
-                            <a href="../sign-up.html">회원가입</a>
-                        </div>
-                    </div>
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <div class="header__logo">
+                    <a href="../home.html"><img src="/img/logo.png" alt=""></a>
                 </div>
             </div>
-        </div>
-    </header>
-    <!-- Header Section End -->
-
-    <!-- Breadcrumb Begin -->
-    <div class="breadcrumb-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__links">
-                        <a href="../home.html"><i class="fa fa-home"></i> Home</a>
-                        <span>게시글 조회</span>
+            <div class="col-xl-6 col-lg-8">
+                <nav class="header__menu">
+                    <ul>
+                        <li><a href="../home.html">Home</a></li>
+                        <li class="active"><a th:href="@{/task/task-list}">게시글 조회</a></li>
+                        <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
+                        <li><a href="../user/user-list.html">유저 검색</a></li>
+                        <li><a href="../profile.html">마이페이지</a>
+                            <ul class="dropdown">
+                                <li><a href="../profile.html">내 정보</a></li>
+                                <li><a href="../profile-update.html">회원정보 수정</a></li>
+                                <li><a href="../profile-remove.html">회원탈퇴</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__right">
+                    <div class="header__right__auth">
+                        <a href="../login.html">로그인</a>
+                        <a href="../sign-up.html">회원가입</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Breadcrumb End -->
+</header>
+<!-- Header Section End -->
 
-    <!-- Shop Cart Section Begin -->
-    <section class="shop-cart spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="contact__form"><h5 align="center">전체 게시판</h5></div>
-                    <div class="shop__cart__table">
-                        <table>
-                            <thead>
-                                <tr align="right">
-                                    <td colspan="5" align="right">
-                                        <div class="col-lg-6">
-                                            <form th:action="@{/task/task-list}" method="post" class="discount__content">
-                                                <select name="categoryId">
-                                                    <option value="0" selected>카테고리 전체</option>
-                                                    <option th:each="category : ${categoryList}"
-                                                            th:value="${category.categoryId}"
-                                                            th:text="${category.categoryNm}">
-                                                    </option>
-                                                </select>
-                                                <input type="text" placeholder="제목 검색" name="keyword"/>
-                                                <input type="submit" class="site-btn" value="검색"/>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>제목 / 카테고리</th>
-                                    <th>유저</th>
-                                    <th>등록날짜</th>
-                                    <th>진행여부</th>
-                                    <th>기타</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <div th:fragment="taskRows">
-                                <tr th:each="mainTaskMap : ${mainTaskListMap}">
-                                    <td class="cart__product__item">
-                                        <div class="cart__product__item__title">
-                                            <a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId })}" th:text="${mainTaskMap.mainSubject}"></a>
-                                        </div>
-                                        <span th:text="${mainTaskMap.categoryNm}"
-                                              class="categoryNmSpan"
-                                              th:data-category="${mainTaskMap.categoryNm}"
-                                              style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="../home.html"><i class="fa fa-home"></i> Home</a>
+                    <span>게시글 조회</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Cart Section Begin -->
+<section class="shop-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="contact__form"><h5 align="center">전체 게시판</h5></div>
+                <div class="shop__cart__table">
+                    <table>
+                        <thead>
+                        <tr align="right">
+                            <td colspan="5" align="right">
+                                <div class="col-lg-6">
+                                    <form th:action="@{/task/task-list}" method="post" class="discount__content">
+                                        <select name="categoryId">
+                                            <option value="0" selected>카테고리 전체</option>
+                                            <option th:each="category : ${categoryList}"
+                                                    th:value="${category.categoryId}"
+                                                    th:text="${category.categoryNm}">
+                                            </option>
+                                        </select>
+                                        <input type="text" placeholder="제목 검색" name="keyword"/>
+                                        <input type="submit" class="site-btn" value="검색"/>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>제목 / 카테고리</th>
+                            <th>유저</th>
+                            <th>등록날짜</th>
+                            <th>진행여부</th>
+                            <th>기타</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:fragment="taskRows">
+                            <tr th:each="mainTaskMap : ${mainTaskListMap}">
+                                <td class="cart__product__item">
+                                    <div class="cart__product__item__title">
+                                        <a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId})}"
+                                           th:text="${mainTaskMap.mainSubject}"></a>
+                                    </div>
+                                    <span th:text="${mainTaskMap.categoryNm}"
+                                          class="categoryNmSpan"
+                                          th:data-category="${mainTaskMap.categoryNm}"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
                                         </span>
-                                    </td>
-                                    <td th:text="${mainTaskMap.nickname}"></td>
-                                    <td th:text="${mainTaskMap.enrolledAt}"></td>
-                                    <td>
+                                </td>
+                                <td th:text="${mainTaskMap.nickname}"></td>
+                                <td th:text="${mainTaskMap.enrolledAt}"></td>
+                                <td>
                                         <span th:text="${mainTaskMap.taskStatusValue}"
                                               class="taskStatusSpan"
                                               th:data-tstatus="${mainTaskMap.taskStatusValue}"
                                               style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
                                         </span>
-                                    </td>
-                                    <td>
-                                        <span th:text="'조회수: ' + ${mainTaskMap.viewCnt}"></span>
-                                        <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>
-                                    </td>
-                                </tr>
-                            </div>
-                                <th:block>
-                                    <tr align="center">
-                                        <td colspan="2">
-                                            <a th:href="@{/task/create-task}">게시물 등록</a>
-                                        </td>
-                                    </tr>
-                                </th:block>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <div class="footer__copyright__text">
-                        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
-                    </div>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                </td>
+                                <td>
+                                    <span th:text="'조회수: ' + ${mainTaskMap.viewCnt}"></span>
+                                    <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>
+                                </td>
+                            </tr>
+                        </div>
+                        <th:block>
+                            <tr align="center">
+                                <td colspan="2">
+                                    <a th:href="@{/task/create-task}">게시물 등록</a>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        <div class="footer__copyright__text">
+            <p>Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script>
+                All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
+                        href="https://colorlib.com" target="_blank">Colorlib</a></p>
+        </div>
+        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+    </div>
+    </div>
+    </div>
     </footer>
     <!-- Footer Section End -->
 

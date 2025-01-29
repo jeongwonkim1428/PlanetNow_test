@@ -95,6 +95,7 @@ public class MainTaskController {
     public String getMainTaskDetail(@RequestParam("mainTaskId") Long mainTaskId, Model model) {
 
         model.addAttribute("mainTaskDetail", mainTaskService.getMainTaskDetail(mainTaskId));
+        model.addAttribute("subTaskList", subTaskService.getSubTaskList(mainTaskId));
 
         return "/task/task-detail";
     }

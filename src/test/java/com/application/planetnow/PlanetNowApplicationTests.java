@@ -22,7 +22,7 @@ class PlanetNowApplicationTests {
     @Test
     void searchMainTask() {
 
-        List<Map<String, Object>> getMainTaskList = mainTaskDAO.getMainTaskList("ㅎ");
+        List<Map<String, Object>> getMainTaskList = mainTaskDAO.getMainTaskList();
         for (Map<String, Object> map : getMainTaskList) {
             System.out.println(map);
         }

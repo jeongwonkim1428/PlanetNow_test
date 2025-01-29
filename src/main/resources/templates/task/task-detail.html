@@ -14,20 +14,50 @@
     </script>
     <script>
         $(document).ready(function() {
-            let $taskStatusSpan = $(".taskStatusSpan");
+            applyTaskStatusColors();
+            function applyTaskStatusColors() {
+                $(".taskStatusSpan").each(function () {
+                    let taskStatus = $(this).data("tstatus"); // Ensure this matches the data attribute in HTML
 
-
-            if (taskStatusValue === '"진행전"') {
-                $taskStatusSpan.css("background", "#d3d3d3");
-            } else if (taskStatusValue === '"진행중"') {
-                $taskStatusSpan.css("background", "#28a745");
-            } else if (taskStatusValue === '"완료"') {
-                $taskStatusSpan.css("background", "#007bff");
-            } else if (taskStatusValue === '"실패"') {
-                $taskStatusSpan.css("background", "#dc3545");
-            } else {
-                $taskStatusSpan.css("background", "lightgray");
+                    switch (taskStatus) {
+                        case "진행전":
+                            $(this).css("background", "#d3d3d3"); // Light Gray
+                            break;
+                        case "진행중":
+                            $(this).css("background", "#28a745"); // Green
+                            break;
+                        case "완료":
+                            $(this).css("background", "#007bff"); // Blue
+                            break;
+                        case "실패":
+                            $(this).css("background", "#dc3545"); // Red
+                            break;
+                        default:
+                            $(this).css("background", "grey");
+                    }
+                });
             }
+
+            $(".updateStatus").click(function () {
+                let subTaskId = Number($(this).data("subtaskid"));
+                let taskStatusId = Number($(this).data("taskstatusid"));
+
+                $.ajax({
+                    url: "/sub-task/change-status", // Replace with your actual API endpoint
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ subTaskId: subTaskId,
+                                           taskStatusId: taskStatusId }),
+                    success: function (response) {
+                        alert("상태가 업데이트되었습니다: " + taskStatusId);
+                        location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("업데이트 실패: " + error);
+                    }
+                });
+            });
 
         });
     </script>
@@ -144,8 +174,9 @@
 <!--                            <img src="img/blog/details/blog-details.jpg" alt="">-->
                             <div class="blog__details__item__title">
                                 <span th:text="${mainTaskDetail.taskStatusValue}"
-                                          class="taskStatusSpan"
-                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                      class="taskStatusSpan"
+                                      th:data-tstatus="${mainTaskDetail.taskStatusValue}"
+                                      style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
                                 </span>
                                 <h4 th:text="${mainTaskDetail.mainSubject}"></h4>
                                 <ul>
@@ -160,22 +191,26 @@
                             <p th:text="${mainTaskDetail.memo}"></p>
                         </div>
                         <div class="blog__details__desc">
-                            <div><h4>서브테스크</h4></div>
-                            <p>
+                            <div><h4>서브 태스크</h4></div>
+                            <div th:each="subTaskMap : ${subTaskList}">
                                 <div class="blog__feature__item__pic">
-                                    <img src="/img/blog/sidebar/fp-1.jpg" alt="">
+                                    <span th:text="${subTaskMap.taskStatusValue}"
+                                          class="taskStatusSpan"
+                                          th:data-tstatus="${subTaskMap.taskStatusValue}"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                    </span>
                                 </div>
                                 <div class="blog__feature__item__text">
-                                    <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
-                                    <span>Seb 17, 2019</span>
+                                    <h6 th:text="${subTaskMap.subSubject}"></h6>
+                                    <span th:text="|등록일: ${subTaskMap.enrolledAt}|"></span>
                                 </div>
                                 <div class="blog__details__tags">
-                                    <a href="#">진행중</a>
-                                    <a href="#">완료</a>
-                                    <a href="#">실패</a>
+                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="2" value="진행중" />
+                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="3" value="완료" />
+                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="4" value="실패" />
                                     <a href="#">수정하기</a>
                                 </div>
-                            </p>
+                            </div>
                         </div>
                         <div class="blog__details__quote">
                             <div class="icon"><i class="fa fa-quote-left"></i></div>
@@ -185,7 +220,11 @@
                         <div class="blog__details__desc">
                             <p>
                             <div class="blog__feature__item__pic">
-                                <img src="/img/blog/sidebar/fp-1.jpg" alt="">
+                                <span th:text="${mainTaskDetail.taskStatusValue}"
+                                      class="taskStatusSpan"
+                                      th:data-tstatus="${mainTaskDetail.taskStatusValue}"
+                                      style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                </span>
                             </div>
                             <div class="blog__feature__item__text">
                                 <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
