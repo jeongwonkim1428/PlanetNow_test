@@ -23,5 +23,13 @@ public class SubTaskController {
         return "success";
     }
 
+    @PostMapping("/update-sub-task")
+    @ResponseBody
+    public String updateSubTask(@RequestBody SubTaskDTO subTaskDTO) {
+        System.out.println(subTaskDTO.getSubTaskId());
+        System.out.println(subTaskDTO.getSubSubject());
+        return "";
+    }
+
 
 }

@@ -9,9 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ashion | Template</title>
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:inline="javascript">
-        let taskStatusValue = '[[${mainTaskDetail.taskStatusValue}]]';
-    </script>
+
     <script>
         $(document).ready(function() {
             applyTaskStatusColors();
@@ -43,13 +41,13 @@
                 let taskStatusId = Number($(this).data("taskstatusid"));
 
                 $.ajax({
-                    url: "/sub-task/change-status", // Replace with your actual API endpoint
+                    url: "/sub-task/change-status",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({ subTaskId: subTaskId,
                                            taskStatusId: taskStatusId }),
                     success: function (response) {
-                        alert("상태가 업데이트되었습니다: " + taskStatusId);
+                        alert("상태가 업데이트되었습니다");
                         location.reload()
                     },
                     error: function (xhr, status, error) {
@@ -59,13 +57,36 @@
                 });
             });
 
+            $(".updateSubTask").click(function () {
+
+                let $parentDiv = $(this).closest(".blog__details__tags");
+                let $existingForm = $parentDiv.find(".subTaskUpdateForm");
+
+                if ($existingForm.length) {
+                    $existingForm.remove();
+                    $(this).val("수정하기");
+                } else {
+                    let subTaskId = $(this).data("subtaskid");
+                    let subTaskUpdateForm = `
+                    <form th:action="@{/sub-task/update-sub-task}" th:method="post" class="subTaskUpdateForm" style="margin-top: 10px;">
+                        <input type="text" name="subSubject"
+                               style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
+                        <input type="hidden" name="subTaskId" value="${subTaskId}"/>
+                        <input type="submit" style="font-size: 15px; width: 80%; max-width: 80px; height: 40px;" value="수정하기"/>
+                    </form>
+                    `;
+                    $parentDiv.append(subTaskUpdateForm);
+                    $(this).val("수정하기 취소");
+                }
+            })
         });
+
     </script>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+          rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
@@ -208,7 +229,9 @@
                                     <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="2" value="진행중" />
                                     <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="3" value="완료" />
                                     <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="4" value="실패" />
-                                    <a href="#">수정하기</a>
+                                    &nbsp;&nbsp;
+                                    <input type="button" class="updateSubTask" th:data-subtaskid="${subTaskMap.subTaskId}" value="수정하기"/>
+
                                 </div>
                             </div>
                         </div>
@@ -219,21 +242,21 @@
                         <div><h4>추천 서브테스크:</h4></div>
                         <div class="blog__details__desc">
                             <p>
-                            <div class="blog__feature__item__pic">
-                                <span th:text="${mainTaskDetail.taskStatusValue}"
-                                      class="taskStatusSpan"
-                                      th:data-tstatus="${mainTaskDetail.taskStatusValue}"
-                                      style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
-                                </span>
-                            </div>
-                            <div class="blog__feature__item__text">
-                                <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
-                                <span>Seb 17, 2019</span>
-                            </div>
-                            <div class="blog__details__tags">
-                                <a href="#">수락하기</a>
-                                <a href="#">거절하기</a>
-                            </div>
+                                <div class="blog__feature__item__pic">
+                                    <span th:text="${mainTaskDetail.taskStatusValue}"
+                                          class="taskStatusSpan"
+                                          th:data-tstatus="${mainTaskDetail.taskStatusValue}"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                    </span>
+                                </div>
+                                <div class="blog__feature__item__text">
+                                    <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
+                                    <span>Seb 17, 2019</span>
+                                </div>
+                                <div class="blog__details__tags">
+                                    <a href="#">수락하기</a>
+                                    <a href="#">거절하기</a>
+                                </div>
                             </p>
                             <p>
                                 <div>
