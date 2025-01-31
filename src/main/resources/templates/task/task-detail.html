@@ -239,23 +239,23 @@
                         </div>
                         <div><h4>추천 서브테스크:</h4></div>
                         <div class="blog__details__desc">
-                            <p>
+                            <div th:each="subTaskMap : ${subTaskList}">
                                 <div class="blog__feature__item__pic">
-                                    <span th:text="${mainTaskDetail.taskStatusValue}"
+                                    <span th:text="${subTaskMap.taskStatusValue}"
                                           class="taskStatusSpan"
-                                          th:data-tstatus="${mainTaskDetail.taskStatusValue}"
+                                          th:data-tstatus="${subTaskMap.taskStatusValue}"
                                           style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
                                     </span>
                                 </div>
                                 <div class="blog__feature__item__text">
-                                    <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
-                                    <span>Seb 17, 2019</span>
+                                    <h6 th:text="${subTaskMap.subSubject}"></h6>
+                                    <span th:text="|등록일: ${subTaskMap.enrolledAt}|"></span>
                                 </div>
                                 <div class="blog__details__tags">
                                     <a href="#">수락하기</a>
                                     <a href="#">거절하기</a>
                                 </div>
-                            </p>
+                            </div>
                             <p>
                                 <div>
                                     <input type="text" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">

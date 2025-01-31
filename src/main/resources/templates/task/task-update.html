@@ -26,7 +26,7 @@
                 $("select[name='categoryId']").val(selectedCategoryId);
             }
 
-            let cnt = 0; // Declare `cnt` outside the click event to maintain its value across multiple clicks
+            let cnt = -1; // Declare `cnt` outside the click event to maintain its value across multiple clicks
 
             $("#addSubTask").click(function () {
                 cnt++; // Increment the counter
@@ -40,10 +40,10 @@
             });
 
             $("#deleteSubTask").click(function () {
-                if (cnt > 0) { // Ensure there are inputs to delete
+
                     $("#subTaskList input:last-child").remove(); // Remove the last input
                     cnt--; // Decrease the counter
-                }
+
             });
         });
 
@@ -174,13 +174,13 @@
                                 </select>
                                 <br><br>
 
-<!--                                <strong>Sub Task</strong>-->
-<!--                                <span id="subTaskList">-->
-<!--                                    <input type="text" name="subTaskDtoList[0].subSubject" placeholder="40자 이내(필수)" required>-->
-<!--                                </span>-->
-<!--                                <button type="button" class="site-btn" id="addSubTask">추가</button>-->
-<!--                                <button type="button" class="site-btn-grey" id="deleteSubTask">삭제</button>-->
-<!--                                </br></br>-->
+                                <strong>Sub Task</strong>
+                                <span id="subTaskList">
+
+                                </span>
+                                <button type="button" class="site-btn" id="addSubTask">추가</button>
+                                <button type="button" class="site-btn-grey" id="deleteSubTask">삭제</button>
+                                </br></br>
 
                                 <strong>Memo</strong>
                                 <textarea name="memo" th:text="${mainTaskDTO.memo}"></textarea>

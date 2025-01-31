@@ -45,12 +45,16 @@ public class MainTaskServiceImpl implements MainTaskService {
         MainTaskDTO mainTaskDTO = mainTaskDAO.getMainTaskDTO(mainTaskId);
 
         int nOfTotalSubTask = getSubTaskList.size();
+        int nOfNotInProgressSubTask = 0;
         int nOfInProgressSubTask = 0;
         int nOfCompletedSubTask = 0;
         int nOfFailedSubTask = 0;
 
         for (Map<String, Object> subTask : getSubTaskList) {
             Integer taskStatusId = (Integer) subTask.get("taskStatusId");
+            if (taskStatusId == 1) {
+                nOfNotInProgressSubTask++;
+            }
             if (taskStatusId == 2) {
                 nOfInProgressSubTask++;
             }
@@ -61,7 +65,7 @@ public class MainTaskServiceImpl implements MainTaskService {
                 nOfFailedSubTask++;
             }
         }
-        if (nOfInProgressSubTask != 0 ) {
+        if (nOfInProgressSubTask != 0 || nOfNotInProgressSubTask != 0 ) {
             mainTaskDTO.setTaskStatusId(2);
         }
         if (nOfCompletedSubTask == nOfTotalSubTask ||((nOfFailedSubTask + nOfCompletedSubTask) == nOfTotalSubTask)) {

@@ -112,8 +112,20 @@ public class MainTaskController {
     @PostMapping("/task-update")
     @ResponseBody
     public String updateMainTask(@ModelAttribute MainTaskDTO mainTaskDTO) {
-        System.out.println(mainTaskDTO);
+
         mainTaskService.updateMainTask(mainTaskDTO);
+
+        // Extract the subTaskDtoList from MainTaskDTO
+        List<SubTaskDTO> subTaskDtoList = mainTaskDTO.getSubTaskDtoList();
+        if (subTaskDtoList != null && !subTaskDtoList.isEmpty()) {
+            for (SubTaskDTO subTaskDTO : subTaskDtoList) {
+                subTaskDTO.setMainTaskId(mainTaskDTO.getMainTaskId());
+                subTaskDTO.setTaskStatusId(1);
+                subTaskService.createSubTask(subTaskDTO);
+                //여기서 for 돌리는 게 좋은지 아니면 sql 쿼리로 하는 게 좋은지 성능면에서
+            }
+        }
+
         String jsScript = "";
         jsScript += "<script>";
         jsScript += "alert('수정되었습니다.');";
