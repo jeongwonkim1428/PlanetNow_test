@@ -10,4 +10,6 @@ public interface SubTaskService {
     public List<Map<String, Object>> getSubTaskList(Long mainTaskId);
 
     public void changeStatus(SubTaskDTO subTaskDTO);
+
+    public void updateSubTask(SubTaskDTO subTaskDTO);
 }

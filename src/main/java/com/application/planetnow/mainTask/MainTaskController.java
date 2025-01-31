@@ -79,7 +79,7 @@ public class MainTaskController {
                 subTaskDTO.setMainTaskId(mainTaskId);
                 subTaskDTO.setTaskStatusId(1);
                 subTaskService.createSubTask(subTaskDTO);
-                // 물어보자 여기서 for 돌리는 게 좋은지 아니면 sql 쿼리로 하는 게 좋은지 성능면에서
+                //여기서 for 돌리는 게 좋은지 아니면 sql 쿼리로 하는 게 좋은지 성능면에서
             }
         }
         String response = """

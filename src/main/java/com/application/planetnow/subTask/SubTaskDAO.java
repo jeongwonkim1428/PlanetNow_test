@@ -14,4 +14,5 @@ public interface SubTaskDAO {
 
     public void changeStatus(SubTaskDTO subTaskDTO);
 
+    public void updateSubTask(SubTaskDTO subTaskDTO);
 }

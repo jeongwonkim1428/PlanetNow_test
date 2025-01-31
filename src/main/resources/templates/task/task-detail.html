@@ -47,7 +47,7 @@
                     data: JSON.stringify({ subTaskId: subTaskId,
                                            taskStatusId: taskStatusId }),
                     success: function (response) {
-                        alert("상태가 업데이트되었습니다");
+                        // alert("상태가 업데이트되었습니다");
                         location.reload()
                     },
                     error: function (xhr, status, error) {
@@ -60,23 +60,14 @@
             $(".updateSubTask").click(function () {
 
                 let $parentDiv = $(this).closest(".blog__details__tags");
-                let $existingForm = $parentDiv.find(".subTaskUpdateForm");
+                let $form = $parentDiv.find(".subTaskUpdateForm");
 
-                if ($existingForm.length) {
-                    $existingForm.remove();
-                    $(this).val("수정하기");
+                if ($form.is(":visible")) {
+                    $form.hide();
+                    $(this).text("수정하기");
                 } else {
-                    let subTaskId = $(this).data("subtaskid");
-                    let subTaskUpdateForm = `
-                    <form th:action="@{/sub-task/update-sub-task}" th:method="post" class="subTaskUpdateForm" style="margin-top: 10px;">
-                        <input type="text" name="subSubject"
-                               style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
-                        <input type="hidden" name="subTaskId" value="${subTaskId}"/>
-                        <input type="submit" style="font-size: 15px; width: 80%; max-width: 80px; height: 40px;" value="수정하기"/>
-                    </form>
-                    `;
-                    $parentDiv.append(subTaskUpdateForm);
-                    $(this).val("수정하기 취소");
+                    $form.show();
+                    $(this).text("수정하기 취소");
                 }
             })
         });
@@ -231,7 +222,14 @@
                                     <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="4" value="실패" />
                                     &nbsp;&nbsp;
                                     <input type="button" class="updateSubTask" th:data-subtaskid="${subTaskMap.subTaskId}" value="수정하기"/>
-
+                                    <form th:action="@{/sub-task/update-sub-task}" th:method="post"
+                                          class="subTaskUpdateForm" style="display: none; margin-top: 10px;">
+                                        <input type="text" name="subSubject"
+                                               style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
+                                        <input type="hidden" name="subTaskId" th:value="${subTaskMap.subTaskId}"/>
+                                        <input type="hidden" name="mainTaskId" th:value="${subTaskMap.mainTaskId}"/>
+                                        <input type="submit" style="font-size: 15px; width: 80px; height: 40px;" value="수정하기"/>
+                                    </form>
                                 </div>
                             </div>
                         </div>

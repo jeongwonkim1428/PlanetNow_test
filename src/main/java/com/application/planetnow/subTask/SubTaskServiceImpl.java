@@ -26,4 +26,9 @@ public class SubTaskServiceImpl implements SubTaskService {
     public void changeStatus(SubTaskDTO subTaskDTO) {
         subTaskDAO.changeStatus(subTaskDTO);
     }
+
+    @Override
+    public void updateSubTask(SubTaskDTO subTaskDTO) {
+        subTaskDAO.updateSubTask(subTaskDTO);
+    }
 }

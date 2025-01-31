@@ -40,6 +40,12 @@
         WHERE SUB_TASK_ID = #{subTaskId}
     </update>
 
+    <update id="updateSubTask" parameterType="SubTaskDTO">
+        UPDATE SUB_TASK
+        SET   SUB_SUBJECT = #{subSubject}
+        WHERE SUB_TASK_ID = #{subTaskId}
+    </update>
+
 
 
 </mapper>
