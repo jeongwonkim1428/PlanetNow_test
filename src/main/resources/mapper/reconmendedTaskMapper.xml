@@ -8,4 +8,12 @@
         FROM RECOMMENDED_TASK
         WHERE MAIN_TASK_ID = #{mainTaskId}
     </select>
+
+    <insert id="createRecommendedTask" >
+        INSERT INTO RECOMMENDED_TASK
+            (MAIN_TASK_ID, USER_ID, SUB_SUBJECT)
+        VALUES
+            (#{mainTaskId}, #{userId}, #{subSubject})
+    </insert>
+
 </mapper>

@@ -9,4 +9,5 @@ import java.util.Map;
 public interface RecommendedTaskDAO {
     public List<RecommendedTaskDTO> getRecommendedTaskList(Long mainTaskId);
 
+    public void createRecommendedTask(RecommendedTaskDTO recommendedTaskDTO);
 }

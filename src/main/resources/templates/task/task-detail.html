@@ -256,10 +256,11 @@
                                 </div>
                             </div>
                             <p>
-                                <div>
-                                    <input type="text" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
-                                    <input type="button" class="site-btn" value="추천하기"></input>
-                                </div>
+                                <form th:action="@{/recommended/create-recommended-task}" method="post">
+                                    <input type="text" name="subSubject" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
+                                    <input type="hidden" name="mainTaskId" th:value="${mainTaskDetail.mainTaskId}"/>
+                                    <input type="submit" class="site-btn" value="추천하기"></input>
+                                </form>
                             </p>
                             </br>
                         </div>

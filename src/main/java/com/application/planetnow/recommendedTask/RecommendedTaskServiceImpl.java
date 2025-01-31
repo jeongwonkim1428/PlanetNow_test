@@ -16,4 +16,9 @@ public class RecommendedTaskServiceImpl implements RecommendedTaskService {
     public List<RecommendedTaskDTO> getRecommendedTaskList(Long mainTaskId) {
         return recommendedTaskDAO.getRecommendedTaskList(mainTaskId);
     }
+
+    @Override
+    public void createRecommendedTask(RecommendedTaskDTO recommendedTaskDTO) {
+        recommendedTaskDAO.createRecommendedTask(recommendedTaskDTO);
+    }
 }
