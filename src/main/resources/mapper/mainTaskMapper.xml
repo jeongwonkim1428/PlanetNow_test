@@ -94,6 +94,18 @@
         WHERE M.MAIN_TASK_ID = #{mainTaskId}
     </select>
 
+    <select id="getMainTaskDTO" resultType="MainTaskDTO">
+        SELECT *
+        FROM MAIN_TASK
+        WHERE MAIN_TASK_ID = #{mainTaskId}
+    </select>
+
+
+    <update id="updateMainTask" parameterType="mainTaskDTO">
+        UPDATE MAIN_TASK
+        SET TASK_STATUS_ID = #{taskStatusId}
+        WHERE MAIN_TASK_ID = #{mainTaskId}
+    </update>
 
 
 

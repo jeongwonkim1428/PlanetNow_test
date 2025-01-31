@@ -9,6 +9,7 @@
         <result column="ENROLLED_AT"  	       property="enrolledAt"/>
         <result column="MODIFIED_AT"  	       property="modifiedAt"/>
         <result column="TASK_STATUS_VALUE"     property="taskStatusValue"/>
+        <result column="TASK_STATUS_ID"        property="taskStatusId"/>
     </resultMap>
 
 
@@ -25,7 +26,9 @@
                S.SUB_SUBJECT        AS SUB_SUBJECT,
                S.ENROLLED_AT        AS ENROLLED_AT,
                S.MODIFIED_AT        AS MODIFIED_AT,
-               T.TASK_STATUS_VALUE  AS TASK_STATUS_VALUE
+               T.TASK_STATUS_VALUE  AS TASK_STATUS_VALUE,
+               T.TASK_STATUS_ID     AS TASK_STATUS_ID
+
         FROM SUB_TASK S
         JOIN MAIN_TASK M
         ON S.MAIN_TASK_ID = M.MAIN_TASK_ID
