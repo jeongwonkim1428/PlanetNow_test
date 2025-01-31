@@ -19,6 +19,7 @@ public interface MainTaskDAO {
 
    public MainTaskDTO getMainTaskDTO(Long mainTaskId);
 
-   public void updateMainTask(MainTaskDTO mainTaskDTO);
+   public void updateMainTaskStatus(MainTaskDTO mainTaskDTO);
 
+   public void updateMainTask(MainTaskDTO mainTaskDTO);
 }

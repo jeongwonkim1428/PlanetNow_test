@@ -101,11 +101,24 @@
     </select>
 
 
-    <update id="updateMainTask" parameterType="mainTaskDTO">
+    <update id="updateMainTaskStatus" parameterType="MainTaskDTO">
         UPDATE MAIN_TASK
         SET TASK_STATUS_ID = #{taskStatusId}
         WHERE MAIN_TASK_ID = #{mainTaskId}
     </update>
+
+    <update id="updateMainTask" >
+        UPDATE MAIN_TASK
+        SET CATEGORY_ID = #{categoryId},
+            MAIN_SUBJECT = #{mainSubject},
+            START_TIMESTAMP = #{startTimestamp},
+            END_TIMESTAMP = #{endTimestamp},
+            MEMO = #{memo},
+            MODIFIED_AT = NOW()
+        WHERE MAIN_TASK_ID = #{mainTaskId}
+    </update>
+
+
 
 
 

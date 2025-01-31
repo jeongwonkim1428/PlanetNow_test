@@ -50,8 +50,7 @@ public class MainTaskServiceImpl implements MainTaskService {
         int nOfFailedSubTask = 0;
 
         for (Map<String, Object> subTask : getSubTaskList) {
-            Integer taskStatusId = (Integer) subTask.get("taskStatusId"); // Cast to Integer
-            System.out.println(taskStatusId);
+            Integer taskStatusId = (Integer) subTask.get("taskStatusId");
             if (taskStatusId == 2) {
                 nOfInProgressSubTask++;
             }
@@ -63,20 +62,29 @@ public class MainTaskServiceImpl implements MainTaskService {
             }
         }
 
-        if (nOfInProgressSubTask != 0) {
+        if (nOfInProgressSubTask != 0 ) {
             mainTaskDTO.setTaskStatusId(2);
         }
-        if (nOfCompletedSubTask == nOfTotalSubTask) {
+        if (nOfCompletedSubTask == nOfTotalSubTask ||((nOfFailedSubTask + nOfCompletedSubTask) == nOfTotalSubTask)) {
             mainTaskDTO.setTaskStatusId(3);
         }
         if (nOfFailedSubTask == nOfTotalSubTask) {
             mainTaskDTO.setTaskStatusId(4);
         }
 
-        mainTaskDAO.updateMainTask(mainTaskDTO);
-
+        mainTaskDAO.updateMainTaskStatus(mainTaskDTO);
 
         return mainTaskDAO.getMainTaskDetail(mainTaskId);
+    }
+
+    @Override
+    public MainTaskDTO getMainTaskDTO(Long mainTaskId) {
+        return mainTaskDAO.getMainTaskDTO(mainTaskId);
+    }
+
+    @Override
+    public void updateMainTask(MainTaskDTO mainTaskDTO) {
+        mainTaskDAO.updateMainTask(mainTaskDTO);
     }
 
 

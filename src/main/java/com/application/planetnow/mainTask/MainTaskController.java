@@ -100,5 +100,28 @@ public class MainTaskController {
         return "/task/task-detail";
     }
 
+    @GetMapping("/task-update")
+    public String updateMainTask(Model model,
+                                 @RequestParam("mainTaskId") Long mainTaskId) {
+        model.addAttribute("mainTaskDTO", mainTaskService.getMainTaskDTO(mainTaskId));
+        model.addAttribute("categoryList", mainTaskService.getCategoryList());
+
+        return "/task/task-update";
+    }
+
+    @PostMapping("/task-update")
+    @ResponseBody
+    public String updateMainTask(@ModelAttribute MainTaskDTO mainTaskDTO) {
+        System.out.println(mainTaskDTO);
+        mainTaskService.updateMainTask(mainTaskDTO);
+        String jsScript = "";
+        jsScript += "<script>";
+        jsScript += "alert('수정되었습니다.');";
+        jsScript += "location.href='/task/task-detail?mainTaskId=" + mainTaskDTO.getMainTaskId() + "';";
+        jsScript += "</script>";
+
+        return jsScript;
+    }
+
 }
 
