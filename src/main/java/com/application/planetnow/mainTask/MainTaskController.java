@@ -1,5 +1,6 @@
 package com.application.planetnow.mainTask;
 
+import com.application.planetnow.recommendedTask.RecommendedTaskService;
 import com.application.planetnow.subTask.SubTaskDTO;
 import com.application.planetnow.subTask.SubTaskService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,9 @@ public class MainTaskController {
 
     @Autowired
     SubTaskService subTaskService;
+
+    @Autowired
+    RecommendedTaskService recommendedTaskService;
 
     @GetMapping("/task-list")
     public String getMainTaskList(Model model) {
@@ -96,7 +100,7 @@ public class MainTaskController {
 
         model.addAttribute("mainTaskDetail", mainTaskService.getMainTaskDetail(mainTaskId));
         model.addAttribute("subTaskList", subTaskService.getSubTaskList(mainTaskId));
-
+        model.addAttribute("recommendedTaskList", recommendedTaskService.getRecommendedTaskList(mainTaskId));
         return "/task/task-detail";
     }
 

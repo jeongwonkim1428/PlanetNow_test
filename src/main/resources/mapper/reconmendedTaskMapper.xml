@@ -3,4 +3,9 @@
 
 <mapper namespace="com.application.planetnow.recommendedTask.RecommendedTaskDAO">
 
+    <select id="getRecommendedTaskList" resultType="RecommendedTaskDTO">
+        SELECT *
+        FROM RECOMMENDED_TASK
+        WHERE MAIN_TASK_ID = #{mainTaskId}
+    </select>
 </mapper>
