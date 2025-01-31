@@ -15,5 +15,16 @@
         VALUES
             (#{mainTaskId}, #{userId}, #{subSubject})
     </insert>
+    
+    <select id="getRecommendedTaskDTO" resultType="RecommendedTaskDTO">
+        SELECT *
+        FROM RECOMMENDED_TASK
+        WHERE RECOMMENDED_TASK_ID = #{recommendedTaskId}
+    </select>
+    
+    <delete id="declineRecommendedTask">
+        DELETE FROM RECOMMENDED_TASK
+        WHERE RECOMMENDED_TASK_ID = #{recommendedTaskId}
+    </delete>
 
 </mapper>

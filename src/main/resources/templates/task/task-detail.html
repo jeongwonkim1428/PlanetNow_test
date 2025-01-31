@@ -70,6 +70,43 @@
                     $(this).text("수정하기 취소");
                 }
             })
+
+            $(".acceptRecommended").click(function () {
+                let recommendedTaskId = Number($(this).data("recommendedtaskid"));
+
+                $.ajax({
+                    url: "/recommended/accept-recommended-task",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ recommendedTaskId: recommendedTaskId}),
+                    success: function (response) {
+                        alert("수락 되었습니다");
+                        location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("수락 실패: " + error);
+                    }
+                });
+            });
+            $(".declineRecommended").click(function () {
+                let recommendedTaskId = Number($(this).data("recommendedtaskid"));
+
+                $.ajax({
+                    url: "/recommended/decline-recommended-task",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ recommendedTaskId: recommendedTaskId}),
+                    success: function (response) {
+                        alert("삭제 되었습니다");
+                        location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("삭제 실패: " + error);
+                    }
+                });
+            });
         });
 
     </script>
@@ -251,8 +288,8 @@
                                     <span th:text="|등록일: ${recommendedTaskDTO.enrolledAt}|"></span>
                                 </div>
                                 <div class="blog__details__tags">
-                                    <a href="#">수락하기</a>
-                                    <a href="#">거절하기</a>
+                                    <input type="button" class="acceptRecommended" value="수락하기" th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}"/>
+                                    <input type="button" class="declineRecommended" value="거절하기" th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}">
                                 </div>
                             </div>
                             <p>
