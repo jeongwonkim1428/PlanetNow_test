@@ -21,5 +21,7 @@ public interface MainTaskDAO {
 
    public void updateMainTaskStatus(MainTaskDTO mainTaskDTO);
 
+   public void increaseViewCnt(Long mainTaskId);
+
    public void updateMainTask(MainTaskDTO mainTaskDTO);
 }

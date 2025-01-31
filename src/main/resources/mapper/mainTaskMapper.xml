@@ -107,6 +107,12 @@
         WHERE MAIN_TASK_ID = #{mainTaskId}
     </update>
 
+    <update id="increaseViewCnt">
+        UPDATE MAIN_TASK
+        SET VIEW_CNT = VIEW_CNT + 1
+        WHERE MAIN_TASK_ID = #{mainTaskId}
+    </update>
+
     <update id="updateMainTask" >
         UPDATE MAIN_TASK
         SET CATEGORY_ID = #{categoryId},

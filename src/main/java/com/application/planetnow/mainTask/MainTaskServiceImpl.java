@@ -61,7 +61,6 @@ public class MainTaskServiceImpl implements MainTaskService {
                 nOfFailedSubTask++;
             }
         }
-
         if (nOfInProgressSubTask != 0 ) {
             mainTaskDTO.setTaskStatusId(2);
         }
@@ -73,6 +72,7 @@ public class MainTaskServiceImpl implements MainTaskService {
         }
 
         mainTaskDAO.updateMainTaskStatus(mainTaskDTO);
+        mainTaskDAO.increaseViewCnt(mainTaskId);
 
         return mainTaskDAO.getMainTaskDetail(mainTaskId);
     }
