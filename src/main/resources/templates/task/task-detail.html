@@ -237,7 +237,8 @@
                             </div>
                         </div>
                         <div class="blog__details__desc">
-                            <p th:text="${mainTaskDetail.memo}"></p>
+                            <p th:text="'기한 : ' + ${#dates.format(mainTaskDetail.startTimestamp, 'yyyy-MM-dd')} + ' 부터 ' + ${#dates.format(mainTaskDetail.endTimestamp, 'yyyy-MM-dd') + ' 까지.'}"></p>
+                            <p th:text="|메모 : ${mainTaskDetail.memo}|"></p>
                         </div>
                         <div class="blog__details__desc">
                             <div><h4>서브 태스크 : </h4></div>
@@ -273,9 +274,9 @@
                         </div>
                         <div class="blog__details__quote">
                             <div class="icon"><i class="fa fa-quote-left"></i></div>
-                            <p>이 유저에게 도움이 될만한 서브테스크를 추천해주세요</p>
+                            <p>이 유저에게 도움이 될만한 서브태스크를 추천해주세요! 추천 해주신 서브태스크는 글쓴이가 수락 또는 거절할 수 있습니다</p>
                         </div>
-                        <div><h4>추천 서브테스크:</h4></div>
+                        <div><h4>추천 서브태스크:</h4></div>
                         </br>
                         <div class="blog__details__desc">
                             <div th:each="recommendedTaskDTO : ${recommendedTaskList}">

@@ -55,17 +55,20 @@ public class MainTaskServiceImpl implements MainTaskService {
             if (taskStatusId == 1) {
                 nOfNotInProgressSubTask++;
             }
-            if (taskStatusId == 2) {
+            else if (taskStatusId == 2) {
                 nOfInProgressSubTask++;
             }
-            if (taskStatusId == 3) {
+            else if (taskStatusId == 3) {
                 nOfCompletedSubTask++;
             }
-            if (taskStatusId == 4) {
+            else if (taskStatusId == 4) {
                 nOfFailedSubTask++;
             }
         }
-        if (nOfInProgressSubTask != 0 || nOfNotInProgressSubTask != 0 ) {
+        if (nOfInProgressSubTask != 0 ) {
+            mainTaskDTO.setTaskStatusId(2);
+        }
+        if (nOfNotInProgressSubTask != 0 ) {
             mainTaskDTO.setTaskStatusId(2);
         }
         if (nOfCompletedSubTask == nOfTotalSubTask ||((nOfFailedSubTask + nOfCompletedSubTask) == nOfTotalSubTask)) {

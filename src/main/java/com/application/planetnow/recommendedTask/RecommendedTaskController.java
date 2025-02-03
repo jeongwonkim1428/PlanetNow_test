@@ -45,7 +45,6 @@ public class RecommendedTaskController {
         subTaskService.createSubTask(subTaskDTO);
 
         recommendedTaskService.declineRecommendedTask(recommendedTaskDTO.getRecommendedTaskId());
-
         return "";
     }
 
