@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Ashion Template" />
@@ -27,6 +28,53 @@
     <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css" />
     <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <script>
+      $(function (){
+
+        // $("form").submit(function (){
+        //
+        //
+        //
+        // });
+        $("#removeBtn").click(function (){
+          console.log("누름");
+          let removeMsg =$("#removeMsg").text();
+          let removeMsgCheck =$("#removeMsgCheck").val();
+          if (removeMsgCheck != removeMsg){
+            $("#isRemoveMsg").html("<span style='color:green;'>메시지가 일치하지 않습니다.</span>");
+            $("#isRemoveMsg").focus();
+              return;
+          }else {
+            $("#isRemoveMsg").html("");
+          }
+          let user = {
+            "email" : $("#email").val(),
+            "password" : $("#password").val()
+          }
+
+          $.ajax({
+
+            type:"post",
+            url:"/user/profile-remove",
+            contentType : "application/json",
+            data:JSON.stringify(user),
+            success : function (data){
+              if (data==true){
+                location.href="/user/login"
+              }else {
+                $("#isPasswordCheckMsg").html("<span style='color:red;'>비밀번호를 다시 확인해주세요</span>");
+              }
+            }
+
+          });
+
+
+        });
+
+      })
+
+
+    </script>
   </head>
 
   <body>
@@ -134,15 +182,15 @@
                 <div class="categories__accordion">
                   <div class="accordion" id="accordionExample">
                     <div class="card-heading">
-                      <a href="profile.html">내 정보</a>
+                      <a th:href="@{/user/profile}">내 정보</a>
                     </div>
                     <br />
                     <div class="card-heading">
-                      <a href="profile-update.html">회원정보 수정</a>
+                      <a th:href="@{/user/profile-update}">회원정보 수정</a>
                     </div>
                     <br />
                     <div class="card-heading">
-                      <a href="./profile-remove.html">회원탈퇴</a>
+                      <a th:href="@{/user/profile-remove}">회원탈퇴</a>
                     </div>
                     <br />
                   </div>
@@ -154,18 +202,20 @@
             <div class="row">
               <div class="contact__form">
                 <h5>회원 탈퇴</h5>
-                <form action="#">
-                  <input type="text" placeholder="이름" disabled/>
-                  <input type="text" placeholder="이메일@이메일" disabled />
-                  <input type="text" placeholder="닉네임" disabled/>
-                  <input type="text" placeholder="비밀번호 확인" />
-                  <p style="color: red">이메일 / 회원 탈퇴하겠습니다.</p>
+                <form>
+                  <input type="text" th:value="${userDTO.name}" placeholder="이름" disabled/>
+                  <input type="text" id="email" placeholder="이메일@이메일" th:value="${userDTO.email}" disabled />
+                  <input type="text" placeholder="닉네임" th:value="${userDTO.nickname}" disabled/>
+                  <input type="text" id="password" name="password" placeholder="비밀번호 확인"/>
+                  <span id="isPasswordCheckMsg"></span>
+                  <p style="color: red" id="removeMsg" th:text="|${userDTO.email}/회원탈퇴하겠습니다.|"></p>
                   <input
                     type="text"
+                    id="removeMsgCheck"
                     placeholder="탈퇴 진행을 위해 위에 메시지 동일하게 작성해주세요"
                   />
-
-                  <button type="submit" class="site-btn">Send Message</button>
+                  <p><span id="isRemoveMsg"></span></p>
+                  <button type="button" id="removeBtn" class="site-btn">탈퇴하기</button>
                 </form>
               </div>
               <!-- Shop Cart Section Begin -->

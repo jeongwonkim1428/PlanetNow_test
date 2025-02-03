@@ -27,4 +27,4 @@ server:
       max-request-size: 100MB
 file:
   repo:
-    path: /Users/syoo/member_profile_repository/
+    path: C:/member_profile_repository/

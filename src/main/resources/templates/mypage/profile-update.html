@@ -1,5 +1,127 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<script th:src="@{http://dmaps.daum.net/map_js_init/postcode.v2.js}"></script>
+<script th:src="@{//cdn.ckeditor.com/4.22.1/full/ckeditor.js}"></script>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{http://dmaps.daum.net/map_js_init/postcode.v2.js}"></script>
+<script>
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+
+                var fullRoadAddr = data.roadAddress;
+                var extraRoadAddr = '';
+
+                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                if (data.buildingName !== '' && data.apartment === 'Y'){
+                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                if (extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+                if (fullRoadAddr !== ''){
+                    fullRoadAddr += extraRoadAddr;
+                }
+
+                document.getElementById('zipcode').value = data.zonecode; 				//5자리 새우편번호 사용
+                document.getElementById('roadAddress').value = fullRoadAddr;
+                document.getElementById('jibunAddress').value = data.jibunAddress;
+
+            }
+        }).open();
+    }
+</script>
+
+<script>
+    $(function(){
+        let nicknameCheckValue =false;
+        let passwordCheckValue = false;
+
+        $("#isValidNickname").click(function (){
+            let nickname = $("#nickname").val();
+            let originalNickname = $("#originalNickname").val();
+
+
+            $.ajax({
+                type:"post",
+                url:"/user/valid-nickname",
+                data:{
+                    "nickname": nickname,
+                    "originalNickname": originalNickname
+                },
+                success : function (data){
+                    if (data == true){
+                        $("#isValidNicknameMsg").html("<span style='color:green;'>사용가능한닉네임입니다.</span>");
+                        nicknameCheckValue = true;
+                    }else{
+                        $("#isValidNicknameMsg").html("<span style='color:red;'>사용 중인 닉네임입니다.</span>");
+                        nicknameCheckValue=false;
+                    }
+                }
+
+            });
+
+
+        });
+        $("#checkPassword").keyup(function() {
+            let password = $("#password").val();
+
+            let checkPassword = $("#checkPassword").val();
+            console.log(password);
+            console.log(checkPassword);
+
+            if (password=== "" && checkPassword === "") {
+                $("#isValidPasswordMsg").html("");
+                passwordCheckValue = true;
+            }
+            else if (password === checkPassword) {
+                $("#isValidPasswordMsg").html("<span style='color:green;'>패스워드가 일치합니다.</span>");
+                passwordCheckValue = true;
+            }
+            else {
+                $("#isValidPasswordMsg").html("<span style='color:red;'>패스워드가 일치하지 않습니다.</span>");
+                passwordCheckValue = false;
+            }
+        });
+        $("form").submit(function(){
+            let nickname = $("#nickname").val();
+            let originalNickname = $("#originalNickname").val();
+            if (nickname === originalNickname){
+                nicknameCheckValue=true;
+            }
+            if (!nicknameCheckValue) {
+                alert("닉네임을 확인해주세요.");
+                $("#nickname").focus();
+                return false;
+            }
+            // 폼 제출 시 비밀번호 유효성 초기 체크
+            let password = $("#password").val().trim();
+            let checkPassword = $("#checkPassword").val().trim();
+
+            if (password === "" && checkPassword === "") {
+                // 비밀번호가 비어 있을 경우는 true로 설정 (변경 없음)
+                passwordCheckValue = true;
+            }
+
+            if (!passwordCheckValue) {
+                alert("패스워드를 확인해주세요.");
+                $("#checkPassword").focus();
+                return false;
+            }
+            if ($("#ambitionQuote").val().length < 10){
+                alert("포부는 10글자 이상 작성해주세요");
+                $("#ambitionQuote").focus();
+                return false;
+            }
+
+        });
+
+
+    });
+
+</script>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Ashion Template" />
@@ -7,6 +129,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Ashion | Template</title>
+
 
     <!-- Google Font -->
     <link
@@ -132,17 +255,17 @@
                 </div>
                 <div class="categories__accordion">
                   <div class="accordion" id="accordionExample">
-                    <div class="card-heading">
-                      <a href="profile.html">내 정보</a>
-                    </div>
-                    <br />
-                    <div class="card-heading">
-                      <a href="./profile-update.html">회원정보 수정</a>
-                    </div>
-                    <br />
-                    <div class="card-heading">
-                      <a href="profile-remove.html">회원탈퇴</a>
-                    </div>
+                      <div class="card-heading">
+                          <a th:href="@{/user/profile}">내 정보</a>
+                      </div>
+                      <br />
+                      <div class="card-heading">
+                          <a th:href="@{/user/profile-update}">회원정보 수정</a>
+                      </div>
+                      <br />
+                      <div class="card-heading">
+                          <a th:href="@{/user/profile-remove}">회원탈퇴</a>
+                      </div>
                     <br />
                   </div>
                 </div>
@@ -152,7 +275,7 @@
 
           <div class="col-lg-9 col-md-9">
                 <div class="row">
-                <form action="#" class="checkout__form">
+                <form th:action="@{/user/profile-update}" method="post" enctype="multipart/form-data" class="checkout__form">
                     <div class="row">
                         <div class="col-lg-9">
                           <div class="contact__form">
@@ -162,83 +285,90 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>이름 <span>*</span></p>
-                                        <input type="text" naem="" placeholder="이름">
+                                        <p>이름</p>
+                                        <input type="text" id="name" name="name" th:value="${userDTO.name}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>아이디 <span>*</span></p>
-                                        <input type="text" name="nameNm" id="nameNm" placeholder="예 : qwer1234@naver.com"/>
+                                        <p>아이디</p>
+                                        <input type="text" name="email" id="email" th:value="${userDTO.email}" disabled/>
+                                        <input type="hidden" name="userId" th:value="${userDTO.userId}">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>닉네임 <span>*</span></p>
-                                        <input type="email" placeholder="닉네임">
-                                        <input type="button" value="중복확인">
+                                        <p>닉네임</p>
+                                        <input type="text" id="nickname" name="nickname" th:value="${userDTO.nickname}" placeholder="닉네임" required>
+                                        <input type="button" id="isValidNickname" value="중복확인">
+                                        <input type="hidden" id="originalNickname" th:value="${userDTO.nickname}">
+                                        <span id="isValidNicknameMsg"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="checkout__form__input">
-                                        <p>비밀번호 <span>*</span></p>
-                                        <input type="password" name="passwd" id="passwd" placeholder="비밀번호">
+                                        <p>비밀번호</p>
+                                        <input type="password" name="password" id="password" placeholder=" 변경 할 비밀번호">
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>비밀번호 확인 <span>*</span></p>
-                                        <input type="password" name="confirmPassword" placeholder="비밀번호 확인">
+                                        <p>비밀번호 확인</p>
+                                        <input type="password" name="checkPassword" id="checkPassword"  placeholder="비밀번호 확인">
                                         <span id="isValidPasswordMsg"></span>
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>생년월일 <span>*</span></p>
-                                        <input type="date" name="birthAt" >
+                                        <p>생년월일</p>
+                                        <input type="date" name="birthTimestamp" th:value="${userDTO.birthTimestamp}" disabled >
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>성별 <span>*</span></p>
+                                        <p>성별</p>
                                     </div>
                                     <label>
-                                        <input type="radio" name="gender" value="m">
+                                        <input type="radio" id="sex" name="sex" value="m" th:checked = "${userDTO.sex =='m'}" disabled>
                                         남성&emsp;
                                     </label>
                                     <label>
-                                        <input type="radio" name="gender" value="w">
+                                        <input type="radio"  name="sex" value="w" th:checked = "${userDTO.sex =='w'}" disabled>
                                           여성
                                     </label>
                                     </br>
                                     </br>
                                     <div class="checkout__form__input">
-                                        <p>핸드폰 번호 <span>*</span></p>
-                                        <input type="text" name="hp" placeholder="010-0000-0000" required>
+                                        <p>핸드폰 번호</p>
+                                        <input type="text" name="phoneNumber" th:value="${userDTO.phoneNumber}" required>
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>주소 <span>*</span></p>
-                                        <input type="text" placeholder="우편번호 입력" id="zipcode" name="zipcode" >
-                                        <input type="button" th:onclick="javascript:execDaumPostcode()" value="검색" />
-                                        <input type="text" name="roadAddress" id="roadAddress" placeholder="도로명 주소">
-                                        <input type="text" name="jibunAddress" id="jibunAddress"  placeholder="지번 주소">
-                                           <input type="text" name="namujiAddress" id="namujiAddress"  placeholder="나머지 주소" >
+                                        <p>주소</p>
+                                        <input type="text" th:value ="${userDTO.zipcode}" placeholder="우편번호 입력" id="zipcode" name="zipcode" required>
+                                        <input type="button" th:onclick="execDaumPostcode()" value="검색" />
+                                        <input type="text" name="roadAddress" id="roadAddress" th:value ="${userDTO.roadAddress}" placeholder="도로명 주소" required>
+                                        <input type="text" name="jibunAddress" id="jibunAddress" th:value ="${userDTO.jibunAddress}"  placeholder="지번 주소" required>
+                                           <input type="text" name="etcAddress" id="namujiAddress" th:value ="${userDTO.etcAddress}" placeholder="나머지 주소" >
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>프로필 <span>*</span></p>
-                                        <input type="file" name="myProfile" required>
+                                        <p>프로필</p>
+                                        <input type="file" name="myProfile">
+                                        <input type="hidden" th:field="${userDTO.profileOriginalName}" />
+                                        <input type="hidden" th:field="${userDTO.profileUuid}" />
                                     </div>
                                     <div class="checkout__form__input">
-                                        <p>포부 <span>*</span> (10자이상)</p>
-                                        <input type="text" placeholder="예 : 끊임없는 노력을 통해 목표를 이루겠습니다">
+                                        <p>포부(10자이상)</p>
+                                        <input type="text" name="ambitionQuote" th:value="${userDTO.ambitionQuote}" placeholder="예 : 끊임없는 노력을 통해 목표를 이루겠습니다" required>
                                     </div>
     
                                     <div class="checkout__form__input col-lg-6">
-                                        <input type="submit" value="가입하기" th:onclick="|location.href='@{/login}'|"/>
+                                        <input type="submit" value="수정하기" />
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </form>
                 </div>
             </div>
+        </div>
 
               <!-- Shop Cart Section Begin -->
-
+      </div>
     </section>
     <!-- Shop Section End -->
 

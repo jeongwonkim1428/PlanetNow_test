@@ -7,7 +7,8 @@
         display: none !important;  /* 경고 메시지 숨김 */
     }
 </style>
-<script th:src="@{/jquery/jquety-3.7.1.min.js}"></script>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{http://dmaps.daum.net/map_js_init/postcode.v2.js}"></script>
 	<script>
 		function execDaumPostcode() {
@@ -38,6 +39,106 @@
 		    }).open();
 		}
 	</script>
+<script>
+    $(function (){
+        let idCheckValue =false;
+        let nicknameCheckValue =false;
+        let passwordCheckValue = false;
+
+        $("#checkPassword").keyup(function(){
+
+            let password = $("#password").val();
+            let checkPassword = $("#checkPassword").val();
+
+            if (password == checkPassword) {
+                $("#isValidPasswordMsg").html("<span style='color:green;'>패스워드가 일치합니다.</span>");
+                passwordCheckValue = true;
+            }
+            else {
+                $("#isValidPasswordMsg").html("<span style='color:red;'>패스워드가 일치하지 않습니다.</span>");
+                passwordCheckValue = false;
+            }
+
+        });
+        $("form").submit(function(){
+
+            if (!idCheckValue) {
+                alert("아이디를 확인해주세요.");
+                $("#email").focus();
+                return false;
+            }
+            if (!nicknameCheckValue) {
+                alert("닉네임을 확인해주세요.");
+                $("#nickname").focus();
+                return false;
+            }
+
+            if (!passwordCheckValue) {
+                alert("패스워드를 확인해주세요.");
+                $("#checkPassword").focus();
+                return false;
+            }
+            if ($("#ambitionQuote").val().length < 10){
+                alert("포부는 10글자 이상 작성해주세요");
+                $("#ambitionQuote").focus();
+                return false;
+            }
+
+        });
+
+
+
+        $("#isValidNickname").click(function (){
+            console.log("누름2")
+            let nickname = $("#nickname").val();
+            console.log("닉네임 : " + nickname)
+            if (nickname == ""){
+                $("#isValidNicknameMsg").html("<span style='color:red;'>닉네임을 입력하세요.</span>");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"/user/valid-nickname",
+                data:{"nickname" : nickname},
+                success : function (data){
+                    if (data == true){
+                        $("#isValidNicknameMsg").html("<span style='color:green;'>사용가능한닉네임입니다.</span>");
+                        nicknameCheckValue = true;
+                    }else{
+                        $("#isValidNicknameMsg").html("<span style='color:red;'>사용 중인 닉네임입니다.</span>");
+                        nicknameCheckValue=false;
+                    }
+                }
+
+            });
+        });
+
+        $("#isValidId").click(function (){
+            console.log("눌렸습니다.")
+            let email = $("#email").val();
+            if (email == ""){
+                $("#isValidIdMsg").html("<span style='color:red;'>이메일을 입력하세요.</span>");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"/user/valid-email",
+                data:{"email" : email},
+                success : function (data){
+                    if (data == true){
+                        $("#isValidIdMsg").html("<span style='color:green;'>사용가능한 아이디입니다.</span>");
+                        idCheckValue = true;
+                    }else{
+                        $("#isValidIdMsg").html("<span style='color:red;'>사용 중인 아이디입니다.</span>");
+                        idCheckValue=false;
+                    }
+                }
+            });
+        });
+    })
+
+
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Ashion Template">
@@ -86,7 +187,7 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="#">Login</a>
+            <a th:href="@{/user/login}">Login</a>
             <a href="#">Register</a>
         </div>
     </div>
@@ -122,8 +223,8 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-                            <a href="login.html">로그인</a>
-                            <a href="sign-up.html">회원가입</a>
+                            <a th:href="@{/user/login}">로그인</a>
+                            <a th:href="@{/user/sign-up}">회원가입</a>
                         </div>
                     </div>
                 </div>
@@ -152,7 +253,7 @@
         <div class="container">
             <div class="row">
             </div>
-            <form action="#" class="checkout__form">
+            <form th:action="@{/user/sign-up}" method="post" enctype="multipart/form-data" class="checkout__form">
                 <div class="row">
                     <div class="col-lg-8">
                         <h5>회원가입</h5>
@@ -160,59 +261,61 @@
                             <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>이름 <span>*</span></p>
-                                    <input type="text" naem="" placeholder="이름">
+                                    <input type="text" name="name" placeholder="이름">
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>아이디 <span>*</span></p>
-                                    <input type="text" name="nameNm" id="nameNm" placeholder="예 : qwer1234@naver.com"/>
-                                    <input type="button" value="중복확인"/>
+                                    <input type="email" name="email" id="email" placeholder="예 : qwer1234@naver.com"/>
+                                    <input type="button" id="isValidId" value="중복확인"/>
+                                    <span id="isValidIdMsg"></span>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>닉네임 <span>*</span></p>
-                                    <input type="email" placeholder="닉네임">
-                                    <input type="button" value="중복확인">
+                                    <input type="text" name="nickname" id="nickname" placeholder="닉네임">
+                                    <input type="button" id="isValidNickname" value="중복확인">
+                                    <span id="isValidNicknameMsg"></span>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>비밀번호 <span>*</span></p>
-                                    <input type="password" name="passwd" id="passwd" placeholder="비밀번호">
+                                    <input type="password" name="password" id="password" placeholder="비밀번호">
                                 </div>
                                 <div class="checkout__form__input">
                                     <p>비밀번호 확인 <span>*</span></p>
-                                    <input type="password" name="confirmPassword" placeholder="비밀번호 확인">
+                                    <input type="password" id="checkPassword" placeholder="비밀번호 확인">
                                     <span id="isValidPasswordMsg"></span>
                                 </div>
                                 <div class="checkout__form__input">
                                     <p>생년월일 <span>*</span></p>
-                                    <input type="date" name="birthAt" >
+                                    <input type="date" name="birthTimestamp" >
                                 </div>
                                 <div class="checkout__form__input">
 							    	<p>성별 <span>*</span></p>
 							    </div>
 							    <label>
-							        <input type="radio" name="gender" value="m">
+							        <input type="radio" name="sex" value="m">
 							        남성&emsp;
 							    </label>
 							    <label>
-							        <input type="radio" name="gender" value="w">
+							        <input type="radio" name="sex" value="w">
 							      	여성</label>
 							    </label>
                                 <div class="checkout__form__input">
                                     <p>핸드폰 번호 <span>*</span></p>
-                                    <input type="text" name="hp" placeholder="010-0000-0000" required>
+                                    <input type="text" name="phoneNumber" placeholder="010-0000-0000" required>
                                 </div>
                                 <div class="checkout__form__input">
                                     <p>주소 <span>*</span></p>
                                     <input type="text" placeholder="우편번호 입력" id="zipcode" name="zipcode" >
-                                    <input type="button" th:onclick="javascript:execDaumPostcode()" value="검색" />
+                                    <input type="button" th:onclick="execDaumPostcode()" value="검색" />
                                     <input type="text" name="roadAddress" id="roadAddress" placeholder="도로명 주소">
                                     <input type="text" name="jibunAddress" id="jibunAddress"  placeholder="지번 주소">
-                                   	<input type="text" name="namujiAddress" id="namujiAddress"  placeholder="나머지 주소" >
+                                   	<input type="text" name="etcAddress" id="namujiAddress"  placeholder="나머지 주소" >
                                 </div>
                                 <div class="checkout__form__input">
                                     <p>프로필 <span>*</span></p>
@@ -220,13 +323,14 @@
                                 </div>
                                 <div class="checkout__form__input">
                                     <p>포부 <span>*</span> (10자이상)</p>
-                                    <input type="text" value="예 : 끊임없는 노력을 통해 목표를 이루겠습니다">
+                                    <input type="text" name="ambitionQuote" id="ambitionQuote" value="예 : 끊임없는 노력을 통해 목표를 이루겠습니다">
                                 </div>
                                 <div class="checkout__form__input">
-                                    <input type="submit" value="가입하기" th:onclick="|location.href=''@{/login}|''">
+                                    <input type="submit" value="가입하기" >
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </form>
             </div>
