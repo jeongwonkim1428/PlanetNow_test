@@ -1,128 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"></html>
-<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<script>
-    $(function (){
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout.html}">
 
-        $("#loginBtn").click(function (){
-            let login = {
-                "email" : $("#email").val(),
-                "password" : $("#password").val()
-            }
-            $.ajax({
-                type:"post",
-                url:"/user/login",
-                contentType : "application/json",
-                data:JSON.stringify(login),
-                success : function (data){
-                    if (data== true){
-                        location.href = "/user/home";
-                    }else {
-                        $("#failMsg").html("<span style='color:red;'>아이디와 패스워드를 확인하세요.</span>");
-                    }
+
+<head>
+    <script>
+        $(function (){
+
+            $("#loginBtn").click(function (){
+                let login = {
+                    "email" : $("#email").val(),
+                    "password" : $("#password").val()
+
                 }
+                console.log(login);
+
+                $.ajax({
+                    type:"post",
+                    url:"/user/login",
+                    contentType : "application/json",
+                    data:JSON.stringify(login),
+                    success : function (data){
+                        if (data== true){
+                            location.href = "/user/home";
+                        }else {
+                            $("#failMsg").html("<span style='color:red;'>아이디와 패스워드를 확인하세요.</span>");
+                        }
+                    }
+
+
+                });
 
 
             });
+        })
 
+    </script>
 
-        });
-    })
-
-</script>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Ashion Template">
-    <meta name="keywords" content="Ashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>To Do List</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__close">+</div>
-        <ul class="offcanvas__widget">
-            <li><span class="icon_search search-switch"></span></li>
-            <li><a href="#"><span class="icon_heart_alt"></span>
-                <div class="tip">2</div>
-            </a></li>
-            <li><a href="#"><span class="icon_bag_alt"></span>
-                <div class="tip">2</div>
-            </a></li>
-        </ul>
-        <div class="offcanvas__logo">
-            <a href="../home.html"><img src="/img/logo.png" alt=""></a>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__auth">
-            <a href="./contact.html">Login</a>
-            <a href="#">Register</a>
-        </div>
-    </div>
-    <!-- Offcanvas Menu End -->
-
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-3 col-lg-2">
-                    <div class="header__logo">
-                        <a href="../home.html"><img src="/img/logo.png" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-lg-8">
-                    <nav class="header__menu">
-                        <ul>
-                            <li><a href="../home.html">Home</a></li>
-                            <li><a href="../task/task-list.html">게시글 조회</a></li>
-                            <li><a href="../task/create-task.html">게시글 등록</a></li>
-                            <li><a href="../user/user-list.html">유저 검색</a></li>
-                            <li><a href="profile.html">마이페이지</a>
-                                <ul class="dropdown">
-                                    <li><a href="profile.html">내 정보</a></li>
-                                    <li><a href="profile-update.html">회원정보 수정</a></li>
-                                    <li><a href="profile-remove.html">회원탈퇴</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__right">
-                        <div class="header__right__auth">
-                            <a th:href="@{/user/login}">로그인</a>
-                            <a th:href="@{/user/sign-up}">회원가입</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- Header Section End -->
+<div layout:fragment="content">
 
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
@@ -168,55 +87,7 @@
 </section>
 
 
-<!-- Footer Section Begin -->
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                <div class="footer__copyright__text">
-                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
-                </div>
-                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Footer Section End -->
-
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
 </div>
-<!-- Search End -->
-
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
-
-<!-- Js Plugins -->
-<script src="/js/jquery-3.3.1.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/jquery.magnific-popup.min.js"></script>
-<script src="/js/jquery-ui.min.js"></script>
-<script src="/js/mixitup.min.js"></script>
-<script src="/js/jquery.countdown.min.js"></script>
-<script src="/js/jquery.slicknav.js"></script>
-<script src="/js/owl.carousel.min.js"></script>
-<script src="/js/jquery.nicescroll.min.js"></script>
-<script src="/js/main.js"></script>
 </body>
 
 </html>

@@ -104,7 +104,7 @@ public class UserController {
     public String myProfile(HttpServletRequest request, Model model){
         UserDTO userDTO = userService.getUserFromSession(request);
         if (userDTO == null) {
-            return "/auth/login";
+            return "/user/login";
         }
         model.addAttribute("userDTO", userDTO);
         return "/mypage/profile";
@@ -115,7 +115,7 @@ public class UserController {
     public String profileUpdate(HttpServletRequest request, Model model){
         UserDTO userDTO = userService.getUserFromSession(request);
         if (userDTO == null) {
-            return "/auth/login";
+            return "redirect:/auth/login";
         }
         model.addAttribute("userDTO", userDTO);
         return "/mypage/profile-update";
@@ -167,6 +167,14 @@ public class UserController {
     public Resource thumbnails(@RequestParam("fileName") String fileName) throws MalformedURLException {
         return new UrlResource("file:" + fileRepo + fileName);
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "/task/task-list";
+    }
+
 }
 
 

@@ -11,4 +11,8 @@ public class MainController {
         return "/home";
     }
 
+    @GetMapping("/layout")
+    public String layout() {
+        return "/layout";
+    }
 }
