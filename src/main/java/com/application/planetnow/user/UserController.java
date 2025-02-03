@@ -1,5 +1,6 @@
 package com.application.planetnow.user;
 
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/user")
@@ -45,6 +49,7 @@ public class UserController {
             return false;
         }
 
+
     }
     @GetMapping("/sign-up")
     public String signUp( ){
@@ -55,10 +60,11 @@ public class UserController {
     public String signUp(@RequestParam("myProfile")MultipartFile myProfile,@ModelAttribute UserDTO userDTO) throws IOException {
         userService.signUp(myProfile,userDTO);
         String jsScript = """
-				<script>
-					alert('회원가입 되었습니다.');
-					location.href = '/user/login';
-				</script>""";
+            <script>
+               alert('회원가입 되었습니다.');
+               location.href = '/user/login';
+            </script>""";
+
 
         return jsScript;
     }
@@ -72,9 +78,14 @@ public class UserController {
     public boolean validNickname(@RequestParam("nickname") String nickname){
         return userService.validNicknameResult(nickname);
     }
-    @GetMapping("/search-user")
+    @GetMapping("/search")
     public String searchUser(){
         return "/user/user-list";
+    }
+    @GetMapping("/name")
+    @ResponseBody
+    public List<UserDTO> searchName(@RequestParam("search") String search) {
+        return userService.searchUser(search);
     }
     @GetMapping("/user-detail")
     public String userDetail(@RequestParam("userId")Long userId,Model model ){
@@ -83,6 +94,9 @@ public class UserController {
         model.addAttribute("userDTO",userDTO);
         return "/user/user-detail";
     }
+
+
+
 
 
 
@@ -95,6 +109,7 @@ public class UserController {
         model.addAttribute("userDTO", userDTO);
         return "/mypage/profile";
     }
+
 
     @GetMapping("/profile-update")
     public String profileUpdate(HttpServletRequest request, Model model){
@@ -111,12 +126,13 @@ public class UserController {
         log.info("유저 정보 : " + userDTO);
         userService.updateUserResult(myProfile,userDTO);
         String jsScript = """
-				<script>
-					alert('수정 완료되었습니다.');
-					location.href = '/user/profile';
-				</script>""";
+            <script>
+               alert('수정 완료되었습니다.');
+               location.href = '/user/profile';
+            </script>""";
         return jsScript;
     }
+
 
     @GetMapping("/profile-remove")
     public String profileRemove(HttpServletRequest request, Model model){
@@ -128,10 +144,12 @@ public class UserController {
         return "/mypage/profile-remove";
     }
 
+
     @PostMapping("/profile-remove")
     @ResponseBody
     public boolean profileRemove(@RequestBody UserDTO userDTO, HttpServletRequest request){
         log.info("email : "+ userDTO.getEmail());
+
 
         boolean isUserDel = userService.userRemoveResult(userDTO);
         if (isUserDel){
@@ -143,9 +161,13 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/thumbnails")
     @ResponseBody
     public Resource thumbnails(@RequestParam("fileName") String fileName) throws MalformedURLException {
         return new UrlResource("file:" + fileRepo + fileName);
     }
 }
+
+
+

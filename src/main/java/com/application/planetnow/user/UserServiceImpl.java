@@ -1,5 +1,6 @@
 package com.application.planetnow.user;
 
+
 import com.application.planetnow.user.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -12,12 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private String fileRepo;
     private final PasswordEncoder passwordEncoder;
 
+
     @Override
     public boolean validEmailResult(String email) {
         if (userDAO.validEmailResult(email) == null) {
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
 
     @Override
     public boolean validNicknameResult(String nickname) {
@@ -49,6 +54,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public void updateUserResult(MultipartFile myProfile, UserDTO userDTO) throws IOException {
         if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
@@ -57,16 +63,23 @@ public class UserServiceImpl implements UserService {
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
 
+
         if (!myProfile.isEmpty()){
             new File(fileRepo + userDTO.getProfileUuid()).delete();
+
 
             String originalFilename = myProfile.getOriginalFilename();
             userDTO.setProfileOriginalName(originalFilename);
 
+
             String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
 
             String uploadFile = UUID.randomUUID() + extension;
             userDTO.setProfileUuid(uploadFile);
+
+
+
 
 
 
@@ -75,9 +88,11 @@ public class UserServiceImpl implements UserService {
         }
         else {
 
+
             userDAO.update(userDTO);
         }
     }
+
 
     @Override
     public UserDTO getUserDetailById(Long userId) {
@@ -87,15 +102,28 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public List<UserDTO> searchUser(String name) {
+        return userDAO.searchUser(name);
+
+
+    }
+
+
+
+
+    @Override
     public void signUp(MultipartFile myProfile, UserDTO userDTO) throws IOException {
         if (!myProfile.isEmpty()){
             String originalFilename = myProfile.getOriginalFilename();
             userDTO.setProfileOriginalName(originalFilename);
 
+
             String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
 
             String uuidFile = UUID.randomUUID() + extension;
             userDTO.setProfileUuid(uuidFile);
+
 
             myProfile.transferTo(new File(fileRepo + uuidFile));
         }
@@ -105,6 +133,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setRole("USER");
         userDAO.saveUser(userDTO);
     }
+
 
     @Override
     public boolean loginResult(UserDTO userDTO) {
@@ -152,6 +181,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()-> new NotFoundException("해당 포인트를 찾을 수 없습니다."));
     }
 
+
     public Long getUserTotalPoint(Long userId){
         Long userTotalPoint =  userPointDAO.getUserTotalPoint(userId);
         log.info( "유저 총 포인트 : " + userTotalPoint);
@@ -161,10 +191,12 @@ public class UserServiceImpl implements UserService {
         return levelDAO.getLevelList();
     }
 
+
     @Override
     public UserDTO getUserDetail(String email) {
         return userDAO.getUserDetail(email);
     }
+
 
     @Override
     public boolean userRemoveResult(UserDTO userDTO) {
@@ -176,21 +208,33 @@ public class UserServiceImpl implements UserService {
         return false;
 
 
+
+
     }
+
 
     @Override
     public UserDTO getUserFromSession(HttpServletRequest request) {
 
-            HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("email");
-            if (email == null) {
-                return null;
-            }
-            return getUserDetail(email);
+
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return null;
+        }
+        return getUserDetail(email);
+
 
     }
+
+
+
+
 
 
 
 
 }
+
+
+

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
 <mapper namespace="com.application.planetnow.user.UserDAO">
+
+
 
 
     <select id="validEmailResult" parameterType="String" resultType="String">
@@ -9,13 +12,16 @@
         FROM USER
         WHERE EMAIL = #{email}
 
+
     </select>
     <select id="validNicknameResult" parameterType="String" resultType="String">
         SELECT NICKNAME
         FROM USER
         WHERE NICKNAME = #{nickname}
 
+
     </select>
+
 
     <insert id="saveUser" parameterType="userDTO">
         INSERT INTO USER(NAME,
@@ -37,7 +43,7 @@
                          ENROLLED_AT,
                          MODIFIED_AT,
                          ROLE
-                         )
+        )
         VALUES(#{name},
                #{email},
                #{nickname},
@@ -59,7 +65,10 @@
                #{role}
 
 
+
+
               )
+
 
     </insert>
     <select id="loginResult" parameterType="UserDTO" resultType="UserDTO">
@@ -68,6 +77,7 @@
         WHERE EMAIL =#{email}
 
     </select>
+
 
     <update id="updateUser" parameterType="UserDTO">
         UPDATE USER
@@ -110,22 +120,34 @@
     <update id="update" parameterType="UserDTO">
         UPDATE USER
         SET NICKNAME =#{nickname},
-            PHONE_NUMBER = #{phoneNumber},
-            ZIPCODE = #{zipcode},
-            ROAD_ADDRESS = #{roadAddress},
-            JIBUN_ADDRESS = #{jibunAddress},
-            ETC_ADDRESS = #{etcAddress},
-            PROFILE_ORIGINAL_NAME = #{profileOriginalName},
-            PROFILE_UUID = #{profileUuid},
-            AMBITION_QUOTE = #{ambitionQuote},
-            MODIFIED_AT=NOW()
+        PHONE_NUMBER = #{phoneNumber},
+        ZIPCODE = #{zipcode},
+        ROAD_ADDRESS = #{roadAddress},
+        JIBUN_ADDRESS = #{jibunAddress},
+        ETC_ADDRESS = #{etcAddress},
+        PROFILE_ORIGINAL_NAME = #{profileOriginalName},
+        PROFILE_UUID = #{profileUuid},
+        AMBITION_QUOTE = #{ambitionQuote},
+        MODIFIED_AT=NOW()
         <if test="password != null and password != ''">
             , PASSWORD = #{password}
         </if>
         WHERE USER_ID=#{userId}
 
 
+
+
     </update>
+    <select id="searchUser" parameterType="String" resultType="UserDTO">
+        SELECT *
+        FROM USER
+        WHERE NAME LIKE  CONCAT(#{input}, '%') OR NICKNAME LIKE CONCAT(#{input}, '%')
+
+
+    </select>
+
+
 
 
 </mapper>
+

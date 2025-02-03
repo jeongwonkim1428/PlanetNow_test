@@ -1,6 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<script th:src="@{/jquery/jquety-3.7.1.min.js}"></script>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script>
+    $(function () {
+        $("#search").on("input", function () {  // input 이벤트로 변경
+            let search = $(this).val();
+
+
+            if (search.length > 0) {  // 입력값이 있을 때만 요청
+                $.ajax({
+                    type: "get",
+                    url: "/user/name",
+                    data: { "search": search },  // 파라미터 이름 맞춤
+                    success: function (users) {
+                        let userTable = "";
+                        users.forEach(user => {
+                            let imgSrc = `/user/thumbnails?fileName=${user.profileUuid}`;
+                            userTable += `
+                           <tr>
+                               <td>
+                                   <img src="${imgSrc}" width="90" height="90" alt="프로필 이미지">
+                                   <div>
+                                       <h6>${user.name}</h6>
+                                       <div>${user.ambitionQuote}</div>
+                                   </div>
+                               </td>
+                               <td>${user.postCount}개</td>
+                               <td>${user.commentCount}개</td>
+                               <td>${user.followers}명</td>
+                               <td>
+                                   <input type="button" class="site-btn" value="팔로우">
+                               </td>
+                           </tr>
+                       `;
+                        });
+                        $("tbody").html(userTable);
+                    }
+                });
+            } else {
+                $("tbody").html(`
+               <tr id="noResults">
+                   <td colspan="5" style="text-align: center;">검색하고 싶은 유저를 검색해주세요</td>
+               </tr>
+           `);
+            }
+        });
+    });
+
+
+</script>
+
 
 <head>
     <meta charset="UTF-8">
@@ -10,10 +59,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ashion | Template</title>
 
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+          rel="stylesheet">
+
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
@@ -26,232 +77,208 @@
     <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
 
+
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__close">+</div>
+    <ul class="offcanvas__widget">
+        <li><span class="icon_search search-switch"></span></li>
+        <li><a href="#"><span class="icon_heart_alt"></span>
+            <div class="tip">2</div>
+        </a></li>
+        <li><a href="#"><span class="icon_bag_alt"></span>
+            <div class="tip">2</div>
+        </a></li>
+    </ul>
+    <div class="offcanvas__logo">
+        <a href="./index.html"><img src="/img/logo.png" alt=""></a>
     </div>
-
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__close">+</div>
-        <ul class="offcanvas__widget">
-            <li><span class="icon_search search-switch"></span></li>
-            <li><a href="#"><span class="icon_heart_alt"></span>
-                <div class="tip">2</div>
-            </a></li>
-            <li><a href="#"><span class="icon_bag_alt"></span>
-                <div class="tip">2</div>
-            </a></li>
-        </ul>
-        <div class="offcanvas__logo">
-            <a href="./index.html"><img src="/img/logo.png" alt=""></a>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__auth">
-            <a href="#">Login</a>
-            <a href="#">Register</a>
-        </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__auth">
+        <a href="#">Login</a>
+        <a href="#">Register</a>
     </div>
-    <!-- Offcanvas Menu End -->
+</div>
+<!-- Offcanvas Menu End -->
 
 
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-3 col-lg-2">
-                    <div class="header__logo">
-                        <a href="../home.html"><img src="/img/logo.png" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-lg-8">
-                    <nav class="header__menu">
-                        <ul>
-                            <li><a href="../home.html">Home</a></li>
-                            <li><a href="../task/task-list.html">게시글 조회</a></li>
-                            <li><a href="../task/create-task.html">게시글 등록</a></li>
-                            <li class="active"><a href="./user-list.html">유저 검색</a></li>
-                            <li><a href="../mypage/profile.html">마이페이지</a>
-                                <ul class="dropdown">
-                                    <li><a href="../mypage/profile.html">내 정보</a></li>
-                                    <li><a href="../mypage/profile-update.html">회원정보 수정</a></li>
-                                    <li><a href="../mypage/profile-remove.html">회원탈퇴</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__right">
-                        <div class="header__right__auth">
-                            <a href="../auth/login.html">로그인</a>
-                            <a href="../auth/sign-up.html">회원가입</a>
-                        </div>
-                    </div>
+
+
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <div class="header__logo">
+                    <a href="../home.html"><img src="/img/logo.png" alt=""></a>
                 </div>
             </div>
-        </div>
-    </header>
-    <!-- Header Section End -->
-
-    <!-- Breadcrumb Begin -->
-    <div class="breadcrumb-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__links">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                        <span>유저 검색</span>
+            <div class="col-xl-6 col-lg-8">
+                <nav class="header__menu">
+                    <ul>
+                        <li><a href="../home.html">Home</a></li>
+                        <li><a href="../task/task-list.html">게시글 조회</a></li>
+                        <li><a href="../task/create-task.html">게시글 등록</a></li>
+                        <li class="active"><a href="./user-list.html">유저 검색</a></li>
+                        <li><a href="../mypage/profile.html">마이페이지</a>
+                            <ul class="dropdown">
+                                <li><a href="../mypage/profile.html">내 정보</a></li>
+                                <li><a href="../mypage/profile-update.html">회원정보 수정</a></li>
+                                <li><a href="../mypage/profile-remove.html">회원탈퇴</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__right">
+                    <div class="header__right__auth">
+                        <a href="../auth/login.html">로그인</a>
+                        <a href="../auth/sign-up.html">회원가입</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Breadcrumb End -->
+</header>
+<!-- Header Section End -->
 
-    <!-- Shop Cart Section Begin -->
-    <section class="shop-cart spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="shop__cart__table">
-                        <table>
-                            <legend><strong>유저 검색</strong></legend>
-                            <thead>
-                                <tr align="right">
-                                    <td colspan="5" align="right" >
-                                        <div class="col-lg-6">
-                                            <div class="discount__content">
-                                                <form action="#">
-                                                    <input type="text" placeholder="유저 이름 검색창"><br></br>
-                                                    <button type="submit" class="site-btn">검색</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <thead>
-                                <tr>
-                                    <th>유저</th>
-                                    <th>게시글 개수</th>
-                                    <th>댓글 개수</th>
-                                    <th>팔로우 수</th>
-                                    <th class="row">팔로우 버튼</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img th:src="@{#}" width="90" height="90" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6 >유저1</h6>
-                                            <div >포부에 대한 내용</div>
-                                        </div>
-                                    </td>
-                                    <td >예 : 100개(게시글개수)</td>
-                                    <td >예 : 10개(댓글개수)</td>
-                                    <td >1000(팔로우)</td>
-                                    <td>
-                                        <input type="button" class="site-btn" value="팔로우">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img th:src="@{#}" width="90" height="90" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6 >유저2</h6>
-                                            <div >"새로운 도전과 배움을 통해 성장하고 싶어요."
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>예 : 200개(게시글개수)</td>
-                                    <td >예 : 20개(댓글개수)</td>
-                                    <td>2000(팔로우)</td>
-                                    <td>
-                                        <input type="button" class="site-btn" value="팔로우">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img th:src="@{#}" width="90" height="90" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6 >유저3</h6>
-                                            <div >"목표를 세우고 꾸준히 달성하며 더 나은 내가 되고 싶어요."</div>
-                                        </div>
-                                    </td>
-                                    <td >예 : 300개(게시글개수)</td>
-                                    <td >예 : 30개(댓글개수)</td>
-                                    <td >3000(팔로우)</td>
-                                    <td>
-                                        <input type="button" class="site-btn" value="팔로우">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img src="/img/shop-cart/cp-4.jpg" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6 >유저4</h6>
-                                            <div >"끊임없이 배우고, 더 큰 꿈을 이루고 싶어요."</div>
-                                        </div>
-                                    </td>
-                                    <td >예 : 400개(게시글개수)</td>
-                                    <td >예 : 40개(댓글개수)</td>
-                                    <td>4000(팔로우)</td>
-                                    <td>
-                                        <input type="button" class="site-btn" value="팔로우">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                    <span>유저 검색</span>
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- Shop Cart Section End -->
-
-   
-    <!-- Footer Section Begin -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <div class="footer__copyright__text">
-                        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
-                    </div>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Section End -->
-
-    <!-- Search Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
         </div>
     </div>
-    <!-- Search End -->
+</div>
+<!-- Breadcrumb End -->
 
-    <!-- Js Plugins -->
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.magnific-popup.min.js"></script>
-    <script src="/js/jquery-ui.min.js"></script>
-    <script src="/js/mixitup.min.js"></script>
-    <script src="/js/jquery.countdown.min.js"></script>
-    <script src="/js/jquery.slicknav.js"></script>
-    <script src="/js/owl.carousel.min.js"></script>
-    <script src="/js/jquery.nicescroll.min.js"></script>
-    <script src="/js/main.js"></script>
+
+<!-- Shop Cart Section Begin -->
+<section class="shop-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop__cart__table">
+                    <table>
+                        <legend><strong>유저 검색</strong></legend>
+                        <thead>
+                        <tr align="right">
+                            <td colspan="5" align="right" >
+                                <div class="col-lg-6">
+                                    <div class="discount__content">
+                                        <form action="#">
+                                            <input type="text" id="search" name="search" placeholder="유저 이름 검색창"><br></br>
+
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr>
+                            <th>유저</th>
+                            <th>게시글 개수</th>
+                            <th>댓글 개수</th>
+                            <th>팔로우 수</th>
+                            <th class="row">팔로우 버튼</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="noResults">
+                            <td colspan="5" style="text-align: center;">검색하고 싶은 유저를 검색해주세요</td>
+                        </tr>
+
+
+                        <!--                                <tr>-->
+                        <!--                                    -->
+                        <!--                                    <td class="cart__product__item">-->
+                        <!--                                        <img th:src="@{#}" width="90" height="90" alt="">-->
+                        <!--                                        <div class="cart__product__item__title">-->
+                        <!--                                            <h6 >유저1</h6>-->
+                        <!--                                            <div >포부에 대한 내용</div>-->
+                        <!--                                        </div>-->
+                        <!--                                    </td>-->
+                        <!--                                    <td >예 : 100개(게시글개수)</td>-->
+                        <!--                                    <td >예 : 10개(댓글개수)</td>-->
+                        <!--                                    <td >1000(팔로우)</td>-->
+                        <!--                                    <td>-->
+                        <!--                                        <input type="button" class="site-btn" value="팔로우">-->
+                        <!--                                    </td>-->
+                        <!--                                </tr>-->
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Cart Section End -->
+
+
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                <div class="footer__copyright__text">
+                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
+                </div>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+
+<!-- Js Plugins -->
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script src="/js/mixitup.min.js"></script>
+<script src="/js/jquery.countdown.min.js"></script>
+<script src="/js/jquery.slicknav.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.nicescroll.min.js"></script>
+<script src="/js/main.js"></script>
 </body>
 
+
 </html>
+
