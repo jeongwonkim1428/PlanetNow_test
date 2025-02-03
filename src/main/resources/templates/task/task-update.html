@@ -15,10 +15,18 @@
         }
     </style>
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:inline="javascript">
+        let selectedCategoryId = [[${mainTaskDTO.categoryId}]];  // The categoryId is passed from the controller
+    </script>
     <script>
 
         $(function () {
-            let cnt = 0; // Declare `cnt` outside the click event to maintain its value across multiple clicks
+
+            if (selectedCategoryId != null) {
+                $("select[name='categoryId']").val(selectedCategoryId);
+            }
+
+            let cnt = -1; // Declare `cnt` outside the click event to maintain its value across multiple clicks
 
             $("#addSubTask").click(function () {
                 cnt++; // Increment the counter
@@ -32,20 +40,12 @@
             });
 
             $("#deleteSubTask").click(function () {
-                if (cnt > 0) { // Ensure there are inputs to delete
+
                     $("#subTaskList input:last-child").remove(); // Remove the last input
                     cnt--; // Decrease the counter
-                }
-            });
 
-            $('#startTimestamp').on('input', function() {
-                let startDate = $(this).val();
-                if (startDate) {
-                    $('#endTimestamp').attr('min', startDate);
-                }
             });
         });
-
 
     </script>
     <!-- Google Font -->
@@ -108,7 +108,7 @@
                         <ul>
                             <li><a href="../home.html">Home</a></li>
                             <li><a th:href="@{/task/task-list}">게시글 조회</a></li>
-                            <li class="active"><a th:href="@{/task/create-task}">게시글 등록</a></li>
+                            <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
                             <li><a href="../user/user-list.html">유저 검색</a></li>
                             <li><a href="../profile.html">마이페이지</a>
                                 <ul class="dropdown">
@@ -155,15 +155,15 @@
                 <div class="col-lg-12">
                     <div class="contact__content">
                         <div class="contact__form">
-                            <h5 align="center">게시글 등록</h5>
-                            <form th:action="@{/task/create-task}" method="post">
-                                <strong>Main Subject (제목)</strong>
-                                <input type="text" name ="mainSubject" placeholder="40자 이내(필수)" required>
+                            <h5 align="center">게시글 수정</h5>
+                            <form th:action="@{/task/task-update}" method="post">
+                                <strong>Main Subject</strong>
+                                <input type="text" name ="mainSubject" th:value="${mainTaskDTO.mainSubject}" required>
 
-                                <strong>Period (기한)</strong><br>
-                                <input type="date" name="startTimestamp" id="startTimestamp" class="col-lg-3" required> ~
-                                <input type="date" name="endTimestamp" id="endTimestamp" class="col-lg-3" required> &emsp;&emsp;&emsp;&emsp;
-
+                                <strong>Period</strong><br>
+                                <input type="date" name="startTimestamp" th:value="${mainTaskDTO.startTimestamp}" class="col-lg-3" required /> ~
+                                <input type="date" name="endTimestamp" th:value="${mainTaskDTO.endTimestamp}" class="col-lg-3" required /> &emsp;&emsp;&emsp;&emsp;
+                                
                                 <strong>Category</strong>
                                 <select name="categoryId" required>
                                     <option value="" disabled selected>카테고리 선택</option>
@@ -174,18 +174,18 @@
                                 </select>
                                 <br><br>
 
-                                <strong>Sub Task (서브태스크)</strong>
+                                <strong>Sub Task</strong>
                                 <span id="subTaskList">
-                                    <input type="text" name="subTaskDtoList[0].subSubject" placeholder="40자 이내(필수)" required>
+
                                 </span>
                                 <button type="button" class="site-btn" id="addSubTask">추가</button>
                                 <button type="button" class="site-btn-grey" id="deleteSubTask">삭제</button>
                                 </br></br>
 
-                                <strong>Memo (설명)</strong>
-                                <textarea placeholder="200자 이내" name="memo"></textarea>
-
-                                <button type="submit"  class="site-btn">게시글 등록</button>
+                                <strong>Memo</strong>
+                                <textarea name="memo" th:text="${mainTaskDTO.memo}"></textarea>
+                                <input type="hidden" name="mainTaskId" th:value="${mainTaskDTO.mainTaskId}"/>
+                                <button type="submit"  class="site-btn">게시글 수정</button>
                             </form>
                         </div>
                     </div>

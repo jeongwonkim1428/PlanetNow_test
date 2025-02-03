@@ -179,6 +179,17 @@ ol {
 	padding: 12px 30px;
 	border-radius: 50px;
 }
+.site-btn-grey {
+	font-size: 14px;
+	color: #ffffff;
+	background: darkgrey;
+	font-weight: 600;
+	border: none;
+	text-transform: uppercase;
+	display: inline-block;
+	padding: 12px 30px;
+	border-radius: 50px;
+}
 .site-btn:disabled {
 	font-size: 14px;
 	color: #ffffff;
@@ -2866,6 +2877,7 @@ ol {
 	margin-bottom: 50px;
 }
 
+.blog__details__tags input,
 .blog__details__tags a {
 	display: inline-block;
 	font-size: 13px;
@@ -2877,12 +2889,14 @@ ol {
 	-webkit-transition: all, 0.3s;
 	-o-transition: all, 0.3s;
 	transition: all, 0.3s;
-}
 
+}
+.blog__details__tags input:hover,
 .blog__details__tags a:hover {
 	color: #111111;
 }
 
+.blog__details__tags input:last-child,
 .blog__details__tags a:last-child {
 	margin-right: 0;
 }

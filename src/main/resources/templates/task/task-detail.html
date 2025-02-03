@@ -8,11 +8,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ashion | Template</title>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+
+    <script>
+        $(document).ready(function() {
+            applyTaskStatusColors();
+            function applyTaskStatusColors() {
+                $(".taskStatusSpan").each(function () {
+                    let taskStatus = $(this).data("tstatus"); // Ensure this matches the data attribute in HTML
+
+                    switch (taskStatus) {
+                        case "진행전":
+                            $(this).css("background", "#d3d3d3"); // Light Gray
+                            break;
+                        case "진행중":
+                            $(this).css("background", "#28a745"); // Green
+                            break;
+                        case "완료":
+                            $(this).css("background", "#007bff"); // Blue
+                            break;
+                        case "실패":
+                            $(this).css("background", "#dc3545"); // Red
+                            break;
+                        default:
+                            $(this).css("background", "grey");
+                    }
+                });
+            }
+
+            $(".updateStatus").click(function () {
+                let subTaskId = Number($(this).data("subtaskid"));
+                let taskStatusId = Number($(this).data("taskstatusid"));
+
+                $.ajax({
+                    url: "/sub-task/change-status",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ subTaskId: subTaskId,
+                                           taskStatusId: taskStatusId }),
+                    success: function (response) {
+                        // alert("상태가 업데이트되었습니다");
+                        location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("업데이트 실패: " + error);
+                    }
+                });
+            });
+
+            $(".updateSubTask").click(function () {
+
+                let $parentDiv = $(this).closest(".blog__details__tags");
+                let $form = $parentDiv.find(".subTaskUpdateForm");
+
+                if ($form.is(":visible")) {
+                    $form.hide();
+                    $(this).text("수정하기");
+                } else {
+                    $form.show();
+                    $(this).text("수정하기 취소");
+                }
+            })
+
+            $(".acceptRecommended").click(function () {
+                let recommendedTaskId = Number($(this).data("recommendedtaskid"));
+
+                $.ajax({
+                    url: "/recommended/accept-recommended-task",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ recommendedTaskId: recommendedTaskId}),
+                    success: function (response) {
+                        alert("수락 되었습니다");
+                        location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("수락 실패: " + error);
+                    }
+                });
+            });
+            $(".declineRecommended").click(function () {
+                let recommendedTaskId = Number($(this).data("recommendedtaskid"));
+
+                $.ajax({
+                    url: "/recommended/decline-recommended-task",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ recommendedTaskId: recommendedTaskId}),
+                    success: function (response) {
+                        alert("삭제 되었습니다");
+                        location.reload()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("삭제 실패: " + error);
+                    }
+                });
+            });
+        });
+
+    </script>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+          rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
@@ -69,8 +171,8 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="../home.html">Home</a></li>
-                            <li><a href="task-list.html">게시글 조회</a></li>
-                            <li><a href="create-task.html">게시글 등록</a></li>
+                            <li><a th:href="@{/task/task-list}">게시글 조회</a></li>
+                            <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
                             <li><a href="../user/user-list.html">유저 검색</a></li>
                             <li><a href="../profile.html">마이페이지</a>
                                 <ul class="dropdown">
@@ -120,74 +222,91 @@
                         <div class="blog__details__item">
 <!--                            <img src="img/blog/details/blog-details.jpg" alt="">-->
                             <div class="blog__details__item__title">
-                                <span class="tip">완료?</span>
-                                <h4>게시글 제목</h4>
+                                <span th:text="${mainTaskDetail.taskStatusValue}"
+                                      class="taskStatusSpan"
+                                      th:data-tstatus="${mainTaskDetail.taskStatusValue}"
+                                      style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                </span>
+                                <h4 th:text="${mainTaskDetail.mainSubject}"></h4>
                                 <ul>
-                                    <li>by <span>작성자</span></li>
-                                    <li>등록날짜 <span>2025-01-22</span></li>
-                                    <li>카테고리: <span>ㅎㅇ</span> </li>
-                                    <li>조회수: <span>255</span></li>
+                                    <li>by <span th:text="${mainTaskDetail.nickname}"></span></li>
+                                    <li>등록날짜 <span th:text="${mainTaskDetail.enrolledAt}"></span></li>
+                                    <li>카테고리: <span th:text="${mainTaskDetail.categoryNm}"></span> </li>
+                                    <li>조회수: <span th:text="${mainTaskDetail.viewCnt}"></span></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="blog__details__desc">
-                            <p>Occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                                laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                dolor in reprehenderit in voluptate.</p>
+                            <p th:text="'기한 : ' + ${#dates.format(mainTaskDetail.startTimestamp, 'yyyy-MM-dd')} + ' 부터 ' + ${#dates.format(mainTaskDetail.endTimestamp, 'yyyy-MM-dd') + ' 까지.'}"></p>
+                            <p th:text="|메모 : ${mainTaskDetail.memo}|"></p>
                         </div>
                         <div class="blog__details__desc">
-                            <div><h4>서브테스크</h4></div>
-                            <p>
+                            <div><h4>서브 태스크 : </h4></div>
+                            </br>
+                            <div th:each="subTaskMap : ${subTaskList}">
                                 <div class="blog__feature__item__pic">
-                                    <img src="/img/blog/sidebar/fp-1.jpg" alt="">
+                                    <span th:text="${subTaskMap.taskStatusValue}"
+                                          class="taskStatusSpan"
+                                          th:data-tstatus="${subTaskMap.taskStatusValue}"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                    </span>
                                 </div>
                                 <div class="blog__feature__item__text">
-                                    <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
-                                    <span>Seb 17, 2019</span>
+                                    <h6 th:text="${subTaskMap.subSubject}"></h6>
+                                    <span th:text="|등록일: ${subTaskMap.enrolledAt}|"></span>
                                 </div>
                                 <div class="blog__details__tags">
-                                    <a href="#">진행중</a>
-                                    <a href="#">완료</a>
-                                    <a href="#">실패</a>
-                                    <a href="#">수정하기</a>
+                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="2" value="진행중" />
+                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="3" value="완료" />
+                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="4" value="실패" />
+                                    &nbsp;&nbsp;
+                                    <input type="button" class="updateSubTask" th:data-subtaskid="${subTaskMap.subTaskId}" value="수정하기"/>
+                                    <form th:action="@{/sub-task/update-sub-task}" th:method="post"
+                                          class="subTaskUpdateForm" style="display: none; margin-top: 10px;">
+                                        <input type="text" name="subSubject"
+                                               style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
+                                        <input type="hidden" name="subTaskId" th:value="${subTaskMap.subTaskId}"/>
+                                        <input type="hidden" name="mainTaskId" th:value="${subTaskMap.mainTaskId}"/>
+                                        <input type="submit" style="font-size: 15px; width: 80px; height: 40px;" value="수정하기"/>
+                                    </form>
                                 </div>
-                            </p>
+                            </div>
                         </div>
                         <div class="blog__details__quote">
                             <div class="icon"><i class="fa fa-quote-left"></i></div>
-                            <p>이 유저에게 도움이 될만한 서브테스크를 추천해주세요</p>
+                            <p>이 유저에게 도움이 될만한 서브태스크를 추천해주세요! 추천 해주신 서브태스크는 글쓴이가 수락 또는 거절할 수 있습니다</p>
                         </div>
-                        <div><h4>추천 서브테스크:</h4></div>
+                        <div><h4>추천 서브태스크:</h4></div>
+                        </br>
                         <div class="blog__details__desc">
-                            <p>
-                            <div class="blog__feature__item__pic">
-                                <img src="/img/blog/sidebar/fp-1.jpg" alt="">
-                            </div>
-                            <div class="blog__feature__item__text">
-                                <h6>Amf Cannes Red Carpet Celebrities Kend..asdoifua0owejfwioefjoifjeofwiejfowiejfowiefj.</h6>
-                                <span>Seb 17, 2019</span>
-                            </div>
-                            <div class="blog__details__tags">
-                                <a href="#">수락하기</a>
-                                <a href="#">거절하기</a>
-                            </div>
-                            </p>
-                            <p>
-                                <div>
-                                    <input type="text" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
-                                    <input type="button" class="site-btn" value="등록"></input>
+                            <div th:each="recommendedTaskDTO : ${recommendedTaskList}">
+                                <div class="blog__feature__item__pic">
+                                    <span th:text="|유저 : ${recommendedTaskDTO.userId}|">
+                                    </span>
                                 </div>
+                                <div class="blog__feature__item__text">
+                                    <h6 th:text="${recommendedTaskDTO.subSubject}"></h6>
+                                    <span th:text="|등록일: ${recommendedTaskDTO.enrolledAt}|"></span>
+                                </div>
+                                <div class="blog__details__tags">
+                                    <input type="button" class="acceptRecommended" value="수락하기" th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}"/>
+                                    <input type="button" class="declineRecommended" value="거절하기" th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}">
+                                </div>
+                            </div>
+                            <p>
+                                <form th:action="@{/recommended/create-recommended-task}" method="post">
+                                    <input type="text" name="subSubject" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
+                                    <input type="hidden" name="mainTaskId" th:value="${mainTaskDetail.mainTaskId}"/>
+                                    <input type="submit" class="site-btn" value="추천하기"></input>
+                                </form>
                             </p>
                             </br>
                         </div>
                         <div class="blog__details__tags">
                             <a class="fa fa-heart" href="#"> 좋아요</a>
                             <a class="fa fa-heart-o" href="#"> 좋아요</a>
-                            <a href="#">수정하기</a>
+                            <a th:href="@{/task/task-update(mainTaskId=${mainTaskDetail.mainTaskId})}">수정하기</a>
                             <a href="#">삭제하기</a>
-                            <a href="#"></a>
                         </div>
                         <div class="blog__details__btns">
                             <div class="row">
