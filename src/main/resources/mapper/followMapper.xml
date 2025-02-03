@@ -3,4 +3,103 @@
 
 <mapper namespace="com.application.planetnow.follow.FollowDAO">
 
+	<resultMap id="followerMap" type="hashmap">
+		<result column="USER_ID" 				property="userId"/>
+		<result column="NICKNAME" 				property="nickname"/>
+		<result column="PROFILE_ORIGINAL_NAME" 	property="profileOriginalName"/>
+		<result column="PROFILE_UUID" 			property="profileUuid"/>
+		<result column="AMBITION_QUOTE" 		property="ambitionQuote"/>
+		<result column="FOLLOWER_ID" 			property="followerId"/>
+		<result column="FOLLOWEE_ID" 			property="followeeId"/>
+	</resultMap>
+	
+	<select id="getFollowerList" resultMap="followerMap">
+		SELECT	U.USER_ID					AS USER_ID,
+				U.NICKNAME					AS NICKNAME,
+				U.PROFILE_ORIGINAL_NAME		AS PROFILE_ORIGINAL_NAME,
+				U.PROFILE_UUID				AS PROFILE_UUID,
+				U.AMBITION_QUOTE 			AS AMBITION_QUOTE,
+				F.FOLLOWER_ID				AS FOLLOWER_ID,
+				F.FOLLOWEE_ID				AS FOLLOWEE_ID
+		FROM	USER U
+		LEFT JOIN FOLLOW F
+		ON		U.USER_ID = F.FOLLOWER_ID
+	</select>
+	
+	 <select id="followerMainCnt" resultType="long">
+        SELECT COUNT(*)
+        FROM   MAIN_TASK
+        WHERE  USER_ID = #{followeeId}
+    </select>
+
+    <select id="followerReplyCnt" resultType="long">
+        SELECT COUNT(*)
+        FROM   REPLY
+        WHERE  USER_ID = #{followeeId}
+    </select>
+
+    <select id="followerCnt" resultType="long">
+        SELECT COUNT(*)
+        FROM   FOLLOW
+        WHERE  FOLLOWEE_ID = #{followeeId}
+    </select>
+    
+    <resultMap id="followingMap" type="hashmap">
+		<result column="USER_ID" 				property="userId"/>
+		<result column="NICKNAME" 				property="nickname"/>
+		<result column="PROFILE_ORIGINAL_NAME" 	property="profileOriginalName"/>
+		<result column="PROFILE_UUID" 			property="profileUuid"/>
+		<result column="AMBITION_QUOTE" 		property="ambitionQuote"/>
+		<result column="FOLLOWER_ID" 			property="followerId"/>
+		<result column="FOLLOWEE_ID" 			property="followeeId"/>
+	</resultMap>
+	
+	<select id="getFollowingList" resultMap="followerMap">
+		SELECT	U.USER_ID					AS USER_ID,
+				U.NICKNAME					AS NICKNAME,
+				U.PROFILE_ORIGINAL_NAME		AS PROFILE_ORIGINAL_NAME,
+				U.PROFILE_UUID				AS PROFILE_UUID,
+				U.AMBITION_QUOTE 			AS AMBITION_QUOTE,
+				F.FOLLOWER_ID				AS FOLLOWER_ID,
+				F.FOLLOWEE_ID				AS FOLLOWEE_ID
+		FROM	USER U
+		LEFT JOIN FOLLOW F
+		ON		U.USER_ID = F.FOLLOWEE_ID
+	</select>
+	
+	 <select id="followingMainCnt" resultType="long">
+        SELECT COUNT(*)
+        FROM   MAIN_TASK
+        WHERE  USER_ID = #{followerId}
+    </select>
+
+    <select id="followingReplyCnt" resultType="long">
+        SELECT COUNT(*)
+        FROM   REPLY
+        WHERE  USER_ID = #{followerId}
+    </select>
+
+    <select id="followingCnt" resultType="long">
+        SELECT COUNT(*)
+        FROM   FOLLOW
+        WHERE  FOLLOWER_ID = #{followerId}
+    </select>
+    
+    <insert id="createFollow" parameterType="FollowDTO">
+    	INSERT	INTO FOLLOW(
+    			FOLLOWEE_ID,
+    			FOLLOWER_ID
+    	)
+    	VALUES (
+    		#{followeeId},
+    		#{followerId}
+    	)
+    </insert>
+    
+    <delete id="deleteFollow" parameterType="FollowDTO">
+    	DELETE	FROM FOLLOW
+    	WHERE	FOLLOWER_ID = #{followerId},
+    	AND		FOLLOWEE_ID = #{followeeId}
+    </delete>
+
 </mapper>

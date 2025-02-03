@@ -1,14 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <script th:src="@{/jquery/jquety-3.7.1.min.js}"></script>
+<script>
 
+    $(function(){
+
+        	let param = {
+        		"followeeId" : $("#followeeId").val(),
+        		"followerId" : $("[name='userId']").val()
+        	};
+        	
+        	if (followeeId == followerId) {
+        		$("#followingBtn").prop("disabled", true);
+        	} else {
+		        
+        		$("#followingBtn").prop("disabled", false);
+        		
+        		$("#followingBtn").click(function(){
+		        	if ($("#followingBtn").val() == "팔로우") {
+		        		
+			        	$.ajax({
+			        		url : "/follow/createFollow",
+			        		type : "post",
+			        		contentType : "application/json",
+			        		data : JSON.stringify(param),
+			        		success : function(isSuccess) {
+			        			alert("팔로우 성공");
+			        			$("#followerBtn").val("팔로우 취소");
+			        		}
+			        	});
+		        		
+		        	} else if ($("#followingBtn").val() == "팔로우 취소") {
+		        		
+			        	$.ajax({
+			        		url : "/follow/deleteFollow",
+			        		type : "post",
+			        		contentType : "application/json",
+			        		data : JSON.stringify(param),
+			        		success : function(isSuccess) {
+			        			alert("팔로우 취소");
+			        			$("#followerBtn").val("팔로우");
+			        		}
+			        	});
+		        		
+		        	}
+		        	
+		        });
+        		
+        	}
+        	
+
+    });
+
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Ashion Template">
     <meta name="keywords" content="Ashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ashion | Template</title>
+    <title>Planet Now | following-list</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -85,8 +136,13 @@
             <div class="col-lg-3">
                 <div class="header__right">
                     <div class="header__right__auth">
-                        <a href="../login.html">로그인</a>
-                        <a href="../sign-up.html">회원가입</a>
+                    	<th:block th:if="${session.userId==null}">
+                        	<a href="../login.html">로그인</a>
+                        	<a href="../sign-up.html">회원가입</a>
+                        </th:block>
+                        <th:block th:unless="${session.userId==null}">
+                        	<textarea th:value="|${session.userId}님 환영합니다.|"></textarea>
+                        </th:block>
                     </div>
                 </div>
             </div>
@@ -124,7 +180,7 @@
                                 <div class="col-lg-6">
                                     <div class="discount__content">
                                         <form action="#">
-                                            <input type="text" placeholder="유저 이름 검색창"><br></br>
+                                            <input type="text" name="searchFollowee" placeholder="유저 이름 검색창"><br></br>
                                             <button type="submit" class="site-btn">검색</button>
                                         </form>
                                     </div>
@@ -137,70 +193,33 @@
                             <th>유저</th>
                             <th>게시글 개수</th>
                             <th>댓글 개수</th>
-                            <th>팔로우 수</th>
+                            <th>팔로잉 수</th>
                             <th>팔로우 버튼</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                         <!-- followerId가 로그인한 유저ID와 같아야 함 -->
+                        <tr th:each="followingMap : ${followingListMap}">
                             <td class="cart__product__item">
                                 <img th:src="@{#}" width="90" height="90" alt="">
                                 <div class="cart__product__item__title">
-                                    <h6>유저1</h6>
-                                    <div>포부에 대한 내용</div>
+                                    <input type="hidden" id="followeeId" th:value="${followingMap.userId}">
+                                    <h6><a th:href="@{#}" th:text="${followingMap.nickname}"></a></h6>
+                                    <div th:text="${followingMap.ambitionQuote}"></div>
                                 </div>
                             </td>
-                            <td>예 : 100개(게시글개수)</td>
-                            <td>예 : 10개(댓글개수)</td>
-                            <td>1000(팔로우)</td>
+                            <td th:text="|${followingMap.mainTaskCount}개|"></td>
+                            <td th:text="|${followingMap.replyCount}개|"></td>
+                            <td th:text="|${followingMap.followingCount}명|"></td>
                             <td>
-                                <input type="button" class="site-btn" value="팔로우 취소">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="cart__product__item">
-                                <img th:src="@{#}" width="90" height="90" alt="">
-                                <div class="cart__product__item__title">
-                                    <h6>유저2</h6>
-                                    <div>"새로운 도전과 배움을 통해 성장하고 싶어요."
-                                    </div>
-                                </div>
-                            </td>
-                            <td>예 : 200개(게시글개수)</td>
-                            <td>예 : 20개(댓글개수)</td>
-                            <td>2000(팔로우)</td>
-                            <td>
-                                <input type="button" class="site-btn" value="팔로우 취소">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="cart__product__item">
-                                <img th:src="@{#}" width="90" height="90" alt="">
-                                <div class="cart__product__item__title">
-                                    <h6>유저3</h6>
-                                    <div >"목표를 세우고 꾸준히 달성하며 더 나은 내가 되고 싶어요."</div>
-                                </div>
-                            </td>
-                            <td >예 : 300개(게시글개수)</td>
-                            <td >예 : 30개(댓글개수)</td>
-                            <td >3000(팔로우)</td>
-                            <td>
-                                <input type="button" class="site-btn" value="팔로우 취소">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="cart__product__item">
-                                <img src="/img/shop-cart/cp-4.jpg" alt="">
-                                <div class="cart__product__item__title">
-                                    <h6 >유저4</h6>
-                                    <div >"끊임없이 배우고, 더 큰 꿈을 이루고 싶어요."</div>
-                                </div>
-                            </td>
-                            <td >예 : 400개(게시글개수)</td>
-                            <td >예 : 40개(댓글개수)</td>
-                            <td >4000(팔로우)</td>
-                            <td>
-                                <input type="button" class="site-btn" value="팔로우 취소">
+                            	<th:block th:if="${session.userId != null}">
+                            		<input type="hidden" name="userId" th:value="${session.userId}" />
+                                	<input type="button" id="followingBtn" class="site-btn" value="팔로우">
+                            	</th:block>
+                            	<th:block th:if="${session.userId == null}">
+	                            	<input type="hidden" name="userId" th:value="${session.userId}" />
+	                                <input type="button" id="loginBtn" class="site-btn" value="로그인 후 이용가능" th:onclick="|location.href=@{/auth/login}|">
+	                            </th:block>
                             </td>
                         </tr>
                         </tbody>
