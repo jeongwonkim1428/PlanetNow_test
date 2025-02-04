@@ -2,6 +2,9 @@ package com.application.planetnow.recommendedTask;
 
 import com.application.planetnow.subTask.SubTaskDTO;
 import com.application.planetnow.subTask.SubTaskService;
+import com.application.planetnow.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +19,23 @@ public class RecommendedTaskController {
     @Autowired
     SubTaskService subTaskService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/create-recommended-task")
     @ResponseBody
-    public String createRecommendedTask(@ModelAttribute RecommendedTaskDTO recommendedTaskDTO) {
+    public String createRecommendedTask(@ModelAttribute RecommendedTaskDTO recommendedTaskDTO,
+                                        HttpServletRequest request) {
 
         //세션 받아와서 userId 저장해야함
-        recommendedTaskDTO.setUserId(1L);
+
+        HttpSession session = request.getSession();
+        System.out.println(session.getAttribute("email"));
+
+        userService.getUserDetail((String)session.getAttribute("email")).getUserId();
+
+        recommendedTaskDTO.setUserId(userService.getUserDetail((String)session.getAttribute("email")).getUserId());
+
         recommendedTaskService.createRecommendedTask(recommendedTaskDTO);
 
         String jsScript = "";

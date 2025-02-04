@@ -23,7 +23,7 @@
                     data:JSON.stringify(login),
                     success : function (data){
                         if (data== true){
-                            location.href = "/user/home";
+                            history.go(-1);
                         }else {
                             $("#failMsg").html("<span style='color:red;'>아이디와 패스워드를 확인하세요.</span>");
                         }

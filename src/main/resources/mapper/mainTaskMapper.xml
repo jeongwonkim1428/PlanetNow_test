@@ -17,6 +17,7 @@
         <result column="END_TIMESTAMP"     property="endTimestamp"/>
         <result column="MEMO"              property="memo"/>
         <result column="NICKNAME"          property="nickname"/>
+        <result column="EMAIL"             property="email"/>
 
     </resultMap>
 
@@ -83,7 +84,8 @@
                M.MODIFIED_AT    AS MODIFIED_AT,
                T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
                M.VIEW_CNT       AS VIEW_CNT,
-               U.NICKNAME       AS NICKNAME
+               U.NICKNAME       AS NICKNAME,
+               U.EMAIL          AS EMAIL
         FROM MAIN_TASK M
         JOIN CATEGORY C
         ON M.CATEGORY_ID = C.CATEGORY_ID
@@ -123,6 +125,11 @@
             MODIFIED_AT = NOW()
         WHERE MAIN_TASK_ID = #{mainTaskId}
     </update>
+
+    <delete id="deleteMainTask">
+        DELETE FROM MAIN_TASK
+        WHERE 		MAIN_TASK_ID = #{mainTaskId}
+    </delete>
 
 
 

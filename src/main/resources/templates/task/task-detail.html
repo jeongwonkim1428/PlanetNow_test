@@ -101,9 +101,20 @@
                     }
                 });
             });
+
+            function confirmDelete(element) {
+                if (confirm('정말 삭제하시겠습니까?')) {
+                    location.href = element.getAttribute('data-href');
+                }
+            }
         });
-
-
+    </script>
+    <script>
+        function confirmDelete(event, element) {
+            if (!confirm('정말 삭제하시겠습니까?')) {
+                event.preventDefault();
+            }
+        }
     </script>
 </head>
 
@@ -156,32 +167,59 @@
                         <div class="blog__details__desc">
                             <div><h4>서브 태스크 : </h4></div>
                             </br>
-                            <div th:each="subTaskMap : ${subTaskList}">
-                                <div class="blog__feature__item__pic">
+                            <div th:if="${session.email == mainTaskDetail.email}">
+                                <div th:each="subTaskMap : ${subTaskList}">
+                                    <div class="blog__feature__item__pic">
                                     <span th:text="${subTaskMap.taskStatusValue}"
                                           class="taskStatusSpan"
                                           th:data-tstatus="${subTaskMap.taskStatusValue}"
                                           style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
                                     </span>
+                                    </div>
+                                    <div class="blog__feature__item__text">
+                                        <h6 th:text="${subTaskMap.subSubject}"></h6>
+                                        <span th:text="|등록일: ${subTaskMap.enrolledAt}|"></span>
+                                    </div>
+                                    <div class="blog__details__tags">
+                                        <input type="button" class="updateStatus"
+                                               th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="2"
+                                               value="진행중"/>
+                                        <input type="button" class="updateStatus"
+                                               th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="3"
+                                               value="완료"/>
+                                        <input type="button" class="updateStatus"
+                                               th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="4"
+                                               value="실패"/>
+                                        &nbsp;&nbsp;
+                                        <input type="button" class="updateSubTask"
+                                               th:data-subtaskid="${subTaskMap.subTaskId}" value="수정하기"/>
+                                        <form th:action="@{/sub-task/update-sub-task}" th:method="post"
+                                              class="subTaskUpdateForm" style="display: none; margin-top: 10px;">
+                                            <input type="text" name="subSubject"
+                                                   style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
+                                            <input type="hidden" name="subTaskId" th:value="${subTaskMap.subTaskId}"/>
+                                            <input type="hidden" name="mainTaskId" th:value="${subTaskMap.mainTaskId}"/>
+                                            <input type="submit" style="font-size: 15px; width: 80px; height: 40px;"
+                                                   value="수정하기"/>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="blog__feature__item__text">
-                                    <h6 th:text="${subTaskMap.subSubject}"></h6>
-                                    <span th:text="|등록일: ${subTaskMap.enrolledAt}|"></span>
-                                </div>
-                                <div class="blog__details__tags">
-                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="2" value="진행중" />
-                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="3" value="완료" />
-                                    <input type="button" class="updateStatus" th:data-subtaskid="${subTaskMap.subTaskId}" data-taskStatusId="4" value="실패" />
-                                    &nbsp;&nbsp;
-                                    <input type="button" class="updateSubTask" th:data-subtaskid="${subTaskMap.subTaskId}" value="수정하기"/>
-                                    <form th:action="@{/sub-task/update-sub-task}" th:method="post"
-                                          class="subTaskUpdateForm" style="display: none; margin-top: 10px;">
-                                        <input type="text" name="subSubject"
-                                               style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
-                                        <input type="hidden" name="subTaskId" th:value="${subTaskMap.subTaskId}"/>
-                                        <input type="hidden" name="mainTaskId" th:value="${subTaskMap.mainTaskId}"/>
-                                        <input type="submit" style="font-size: 15px; width: 80px; height: 40px;" value="수정하기"/>
-                                    </form>
+                            </div>
+                            <div th:if="${session.email != mainTaskDetail.email}">
+                                <div th:each="subTaskMap : ${subTaskList}">
+                                    <div class="blog__feature__item__pic">
+                                    <span th:text="${subTaskMap.taskStatusValue}"
+                                          class="taskStatusSpan"
+                                          th:data-tstatus="${subTaskMap.taskStatusValue}"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                    </span>
+                                    </div>
+                                    <div class="blog__feature__item__text">
+                                        <h6 th:text="${subTaskMap.subSubject}"></h6>
+                                        <span th:text="|등록일: ${subTaskMap.enrolledAt}|"></span>
+                                    </div>
+                                    </br>
+                                    </br>
                                 </div>
                             </div>
                         </div>
@@ -192,18 +230,36 @@
                         <div><h4>추천 서브태스크:</h4></div>
                         </br>
                         <div class="blog__details__desc">
-                            <div th:each="recommendedTaskDTO : ${recommendedTaskList}">
-                                <div class="blog__feature__item__pic">
+                            <div th:if="${session.email == mainTaskDetail.email}">
+                                <div th:each="recommendedTaskDTO : ${recommendedTaskList}">
+                                    <div class="blog__feature__item__pic">
                                     <span th:text="|유저 : ${recommendedTaskDTO.userId}|">
                                     </span>
+                                    </div>
+                                    <div class="blog__feature__item__text">
+                                        <h6 th:text="${recommendedTaskDTO.subSubject}"></h6>
+                                        <span th:text="|등록일: ${recommendedTaskDTO.enrolledAt}|"></span>
+                                    </div>
+                                    <div class="blog__details__tags">
+                                        <input type="button" class="acceptRecommended" value="수락하기"
+                                               th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}"/>
+                                        <input type="button" class="declineRecommended" value="거절하기"
+                                               th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}">
+                                    </div>
                                 </div>
-                                <div class="blog__feature__item__text">
-                                    <h6 th:text="${recommendedTaskDTO.subSubject}"></h6>
-                                    <span th:text="|등록일: ${recommendedTaskDTO.enrolledAt}|"></span>
-                                </div>
-                                <div class="blog__details__tags">
-                                    <input type="button" class="acceptRecommended" value="수락하기" th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}"/>
-                                    <input type="button" class="declineRecommended" value="거절하기" th:data-recommendedTaskId="${recommendedTaskDTO.recommendedTaskId}">
+                            </div>
+                            <div th:if="${session.email != mainTaskDetail.email}">
+                                <div th:each="recommendedTaskDTO : ${recommendedTaskList}">
+                                    <div class="blog__feature__item__pic">
+                                    <span th:text="|유저 : ${recommendedTaskDTO.userId}|">
+                                    </span>
+                                    </div>
+                                    <div class="blog__feature__item__text">
+                                        <h6 th:text="${recommendedTaskDTO.subSubject}"></h6>
+                                        <span th:text="|등록일: ${recommendedTaskDTO.enrolledAt}|"></span>
+                                    </div>
+                                    </br>
+                                    </br>
                                 </div>
                             </div>
                             <p>
@@ -215,11 +271,16 @@
                             </p>
                             </br>
                         </div>
-                        <div class="blog__details__tags">
+                        <div th:if="${session.email == mainTaskDetail.email}" class="blog__details__tags">
                             <a class="fa fa-heart" href="#"> 좋아요</a>
                             <a class="fa fa-heart-o" href="#"> 좋아요</a>
                             <a th:href="@{/task/task-update(mainTaskId=${mainTaskDetail.mainTaskId})}">수정하기</a>
-                            <a href="#">삭제하기</a>
+                            <a th:href="@{/task/task-delete(mainTaskId=${mainTaskDetail.mainTaskId})}"
+                               onclick="return confirmDelete(event, this)">삭제하기</a>
+                        </div>
+                        <div th:if="${session.email != mainTaskDetail.email}" class="blog__details__tags">
+                            <a class="fa fa-heart" href="#"> 좋아요</a>
+                            <a class="fa fa-heart-o" href="#"> 좋아요</a>
                         </div>
                         <div class="blog__details__btns">
                             <div class="row">

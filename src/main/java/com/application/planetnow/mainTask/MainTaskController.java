@@ -3,6 +3,7 @@ package com.application.planetnow.mainTask;
 import com.application.planetnow.recommendedTask.RecommendedTaskService;
 import com.application.planetnow.subTask.SubTaskDTO;
 import com.application.planetnow.subTask.SubTaskService;
+import com.application.planetnow.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class MainTaskController {
 
     @Autowired
     RecommendedTaskService recommendedTaskService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/task-list")
     public String getMainTaskList(Model model) {
@@ -55,6 +59,10 @@ public class MainTaskController {
 
         //로그인 확인 필수. 없으면 로그인화면으로 리턴
         HttpSession session = request.getSession();
+        if (session.getAttribute("email") == null) {
+            return "redirect:/user/login";
+        }
+
 
         model.addAttribute("categoryList", mainTaskService.getCategoryList());
 
@@ -63,12 +71,18 @@ public class MainTaskController {
 
     @PostMapping("/create-task")
     @ResponseBody
-    public String createMainTask(@ModelAttribute MainTaskDTO mainTaskDTO) {
+    public String createMainTask(@ModelAttribute MainTaskDTO mainTaskDTO,
+                                 HttpServletRequest request) {
+        HttpSession session = request.getSession();
 
         mainTaskDTO.setTaskStatusId(1);
 
-        //유저 아이디 받아야함 세션 (추가예정)
-        mainTaskDTO.setUserId(1L);
+        System.out.println(session.getAttribute("email"));
+
+        userService.getUserDetail((String)session.getAttribute("email")).getUserId();
+
+        mainTaskDTO.setUserId(userService.getUserDetail((String)session.getAttribute("email")).getUserId());
+
 
         mainTaskService.createMainTask(mainTaskDTO);
 
@@ -96,7 +110,13 @@ public class MainTaskController {
 
 
     @GetMapping("/task-detail")
-    public String getMainTaskDetail(@RequestParam("mainTaskId") Long mainTaskId, Model model) {
+    public String getMainTaskDetail(@RequestParam("mainTaskId") Long mainTaskId, Model model,
+                                    HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("email") == null) {
+            return "redirect:/user/login";
+        }
+
 
         model.addAttribute("mainTaskDetail", mainTaskService.getMainTaskDetail(mainTaskId));
         model.addAttribute("subTaskList", subTaskService.getSubTaskList(mainTaskId));
@@ -137,6 +157,35 @@ public class MainTaskController {
         jsScript += "</script>";
 
         return jsScript;
+    }
+
+    @GetMapping("task-delete")
+    @ResponseBody
+    public String deleteMainTask(@RequestParam("mainTaskId") Long mainTaskId,
+                                 HttpServletRequest request) {
+
+        mainTaskService.getMainTaskDTO(mainTaskId).getUserId();
+        HttpSession session = request.getSession();
+
+        String response = "";
+
+        if (!session.getAttribute("userId").equals(mainTaskService.getMainTaskDTO(mainTaskId).getUserId())) {
+            response = """
+				<script>
+					alert('권한이 없습니다');
+					history.go(-1);
+				</script>""";
+        }
+        else {
+            mainTaskService.deleteMainTask(mainTaskId);
+            response = """
+				<script>
+					alert('삭제가 완료되었습니다');
+					location.href = '/task/task-list';
+				</script>""";
+        }
+
+        return response;
     }
 
 }

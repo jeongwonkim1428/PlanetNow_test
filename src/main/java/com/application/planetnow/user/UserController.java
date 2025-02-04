@@ -44,6 +44,7 @@ public class UserController {
         if (is == true){
             HttpSession session = request.getSession();
             session.setAttribute("email",userDTO.getEmail());
+            session.setAttribute("userId", userService.getUserDetail(userDTO.getEmail()).getUserId());
             return true;
         }else {
             return false;

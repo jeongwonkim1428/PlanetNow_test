@@ -17,4 +17,5 @@ public interface MainTaskService {
 
     public void updateMainTask(MainTaskDTO mainTaskDTO);
 
+    public void deleteMainTask(Long mainTaskId);
 }
