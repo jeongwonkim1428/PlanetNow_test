@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 public interface UserService {
@@ -42,6 +44,12 @@ public interface UserService {
     UserDTO getUserDetailById(Long userId);
 
 
-    List<UserDTO> searchUser(String name);
+    List<Map<String, Object>> searchUser(String name);
+
+    Double getProgress(Long userId);
+
+    Long getFollowerCount(Long userId);
+
+    Long getFollowingCount(Long userId);
 }
 

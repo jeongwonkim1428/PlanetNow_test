@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Controller
@@ -84,14 +86,22 @@ public class UserController {
     }
     @GetMapping("/name")
     @ResponseBody
-    public List<UserDTO> searchName(@RequestParam("search") String search) {
-        return userService.searchUser(search);
+    public List<Map<String, Object>> searchName(@RequestParam("search") String search) {
+        List<Map<String, Object>> users = userService.searchUser(search);
+        users.stream().forEach((user) -> log.info(user.toString()));
+        return users;
     }
     @GetMapping("/user-detail")
     public String userDetail(@RequestParam("userId")Long userId,Model model ){
         UserDTO userDTO = userService.getUserDetailById(userId);
+        Double progress = userService.getProgress(userDTO.getUserId());
+        Long followerCount = userService.getFollowerCount(userDTO.getUserId());
+        Long followingCount = userService.getFollowingCount(userDTO.getUserId());
         log.info("유저 정보: " + userDTO);
         model.addAttribute("userDTO",userDTO);
+        model.addAttribute("progress" , progress);
+        model.addAttribute("followerCount", followerCount);
+        model.addAttribute("followingCount", followingCount);
         return "/user/user-detail";
     }
 
@@ -103,10 +113,17 @@ public class UserController {
     @GetMapping("/profile")
     public String myProfile(HttpServletRequest request, Model model){
         UserDTO userDTO = userService.getUserFromSession(request);
+        Double progress = userService.getProgress(userDTO.getUserId());
+        Long followerCount = userService.getFollowerCount(userDTO.getUserId());
+        Long followingCount = userService.getFollowingCount(userDTO.getUserId());
+
         if (userDTO == null) {
             return "/user/login";
         }
         model.addAttribute("userDTO", userDTO);
+        model.addAttribute("progress" , progress);
+        model.addAttribute("followerCount", followerCount);
+        model.addAttribute("followingCount", followingCount);
         return "/mypage/profile";
     }
 
