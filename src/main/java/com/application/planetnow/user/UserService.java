@@ -51,5 +51,6 @@ public interface UserService {
     Long getFollowerCount(Long userId);
 
     Long getFollowingCount(Long userId);
+    boolean getUserSession(HttpServletRequest request);
 }
 

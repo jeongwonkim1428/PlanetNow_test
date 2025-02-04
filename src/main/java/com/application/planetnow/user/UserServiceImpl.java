@@ -239,6 +239,16 @@ public class UserServiceImpl implements UserService {
 
 
     }
+    @Override
+    public boolean getUserSession(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        log.info("email : " + email);
+        if (email== null){
+            return true;
+        }
+        return false;
+    }
 
 
 

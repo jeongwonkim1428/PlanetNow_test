@@ -34,8 +34,12 @@ public class UserController {
         return "home";
     }
     @GetMapping("/login")
-    public String login(){
-        return "/auth/login";
+    public String login(HttpServletRequest request){
+        if (userService.getUserSession(request)){
+            return "/auth/login";
+        }
+        return "redirect:/home";
+
     }
     @PostMapping("/login")
     @ResponseBody
@@ -54,8 +58,11 @@ public class UserController {
 
     }
     @GetMapping("/sign-up")
-    public String signUp( ){
-        return "/auth/sign-up";
+    public String signUp(HttpServletRequest request ){
+        if (userService.getUserSession(request)){
+            return "/auth/sign-up";
+        }
+        return "redirect:/home";
     }
     @PostMapping("/sign-up")
     @ResponseBody
@@ -189,7 +196,7 @@ public class UserController {
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         session.invalidate();
-        return "/task/task-list";
+        return "redirect:/user/login";
     }
 
 }
