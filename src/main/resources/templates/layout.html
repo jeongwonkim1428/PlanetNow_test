@@ -71,7 +71,7 @@
             <a th:href="@{/user/sign-up}">회원가입</a>
           </div>
           <div th:if="${session.email != null}" class="header__right__auth">
-            <div th:text="|${session.email} 님 환영합니다.|"></div>
+            <div th:text="|${session.nickname} 님 환영합니다.|"></div>
             <a th:href="@{/user/logout}">로그아웃</a>
           </div>
         </div>

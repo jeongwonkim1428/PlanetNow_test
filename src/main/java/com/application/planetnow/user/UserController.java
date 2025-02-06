@@ -1,6 +1,7 @@
 package com.application.planetnow.user;
 
 
+import com.application.planetnow.follow.FollowService;
 import com.application.planetnow.mainTask.MainTaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -27,6 +29,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final MainTaskService mainTaskService;
+    private final FollowService followService;
     @Value("${file.repo.path}")
     private String fileRepo;
     @GetMapping("/home")
@@ -47,6 +50,7 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("email",userDTO.getEmail());
             session.setAttribute("userId", userService.getUserDetail(userDTO.getEmail()).getUserId());
+            session.setAttribute("nickname", userService.getUserDetail(userDTO.getEmail()).getNickname());
             return true;
         }else {
             return false;
@@ -87,7 +91,7 @@ public class UserController {
     }
     @GetMapping("/name")
     @ResponseBody
-    public List<UserDTO> searchName(@RequestParam("search") String search) {
+    public List<Map<String, Object>> searchName(@RequestParam("search") String search) {
         return userService.searchUser(search);
     }
     @GetMapping("/user-detail")
@@ -95,6 +99,9 @@ public class UserController {
         UserDTO userDTO = userService.getUserDetailById(userId);
         log.info("유저 정보: " + userDTO);
         model.addAttribute("userDTO",userDTO);
+        model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskListById(userDTO.getUserId()));
+        model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
+        model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
         return "/user/user-detail";
     }
 
@@ -110,9 +117,9 @@ public class UserController {
             return "/user/login";
         }
         model.addAttribute("userDTO", userDTO);
-        System.out.println(userDTO.getUserId());
-        System.out.println(mainTaskService.getMainTaskListById(userDTO.getUserId()));
         model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskListById(userDTO.getUserId()));
+        model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
+        model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
         return "/mypage/profile";
     }
 
@@ -178,7 +185,7 @@ public class UserController {
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         session.invalidate();
-        return "/task/task-list";
+        return "redirect:/user/login";
     }
 
 }

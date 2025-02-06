@@ -4,9 +4,6 @@
 
 <mapper namespace="com.application.planetnow.user.UserDAO">
 
-
-
-
     <select id="validEmailResult" parameterType="String" resultType="String">
         SELECT EMAIL
         FROM USER
