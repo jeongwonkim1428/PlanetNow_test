@@ -21,7 +21,7 @@
 
                 // Use the counter value in the name attribute dynamically
                 let method = `
-            <input type="text" name="subTaskDtoList[${cnt}].subSubject" placeholder="40자 이내(필수)" required>
+            <input type="text" name="subTaskDtoList[${cnt}].subSubject" placeholder="40자 이내(필수)" required maxlength="40">
         `;
 
                 $("#subTaskList").append(method); // Append the new input element
@@ -79,7 +79,7 @@
                             <h5 align="center">게시글 등록</h5>
                             <form th:action="@{/task/create-task}" method="post">
                                 <strong>Main Subject (제목)</strong>
-                                <input type="text" name ="mainSubject" placeholder="40자 이내(필수)" required>
+                                <input type="text" name ="mainSubject" placeholder="40자 이내(필수)" required maxlength="40">
 
                                 <strong>Period (기한)</strong><br>
                                 <input type="date" name="startTimestamp" id="startTimestamp" class="col-lg-3" required> ~
@@ -97,14 +97,14 @@
 
                                 <strong>Sub Task (서브태스크)</strong>
                                 <span id="subTaskList">
-                                    <input type="text" name="subTaskDtoList[0].subSubject" placeholder="40자 이내(필수)" required>
+                                    <input type="text" name="subTaskDtoList[0].subSubject" placeholder="40자 이내(필수)" required maxlength="40">
                                 </span>
                                 <button type="button" class="site-btn" id="addSubTask">추가</button>
                                 <button type="button" class="site-btn-grey" id="deleteSubTask">삭제</button>
                                 </br></br>
 
                                 <strong>Memo (설명)</strong>
-                                <textarea placeholder="200자 이내" name="memo"></textarea>
+                                <textarea placeholder="200자 이내" name="memo" maxlength="200"></textarea>
 
                                 <button type="submit"  class="site-btn">게시글 등록</button>
                             </form>

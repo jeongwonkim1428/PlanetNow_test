@@ -80,7 +80,7 @@
                             <h5 align="center">게시글 수정</h5>
                             <form th:action="@{/task/task-update}" method="post">
                                 <strong>Main Subject</strong>
-                                <input type="text" name ="mainSubject" th:value="${mainTaskDTO.mainSubject}" required>
+                                <input type="text" name ="mainSubject" th:value="${mainTaskDTO.mainSubject}" required maxlength="40">
 
                                 <strong>Period</strong><br>
                                 <input type="date" name="startTimestamp" th:value="${mainTaskDTO.startTimestamp}" class="col-lg-3" required /> ~
@@ -105,7 +105,7 @@
                                 </br></br>
 
                                 <strong>Memo</strong>
-                                <textarea name="memo" th:text="${mainTaskDTO.memo}"></textarea>
+                                <textarea name="memo" th:text="${mainTaskDTO.memo}" maxlength="200"></textarea>
                                 <input type="hidden" name="mainTaskId" th:value="${mainTaskDTO.mainTaskId}"/>
                                 <button type="submit"  class="site-btn">게시글 수정</button>
                             </form>

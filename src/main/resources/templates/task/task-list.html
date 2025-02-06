@@ -103,7 +103,7 @@
                         <tr align="right">
                             <td colspan="5" align="right">
                                 <div class="col-lg-6">
-                                    <form th:action="@{/task/task-list}" method="post" class="discount__content">
+                                    <form th:action="@{/task/task-list}" method="get" class="discount__content">
                                         <select name="categoryId">
                                             <option value="0" selected>카테고리 전체</option>
                                             <option th:each="category : ${categoryList}"

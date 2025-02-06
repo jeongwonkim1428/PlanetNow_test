@@ -1,6 +1,7 @@
 package com.application.planetnow.user;
 
 
+import com.application.planetnow.mainTask.MainTaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final MainTaskService mainTaskService;
     @Value("${file.repo.path}")
     private String fileRepo;
     @GetMapping("/home")
@@ -44,6 +46,7 @@ public class UserController {
         if (is == true){
             HttpSession session = request.getSession();
             session.setAttribute("email",userDTO.getEmail());
+            session.setAttribute("userId", userService.getUserDetail(userDTO.getEmail()).getUserId());
             return true;
         }else {
             return false;
@@ -107,6 +110,9 @@ public class UserController {
             return "/user/login";
         }
         model.addAttribute("userDTO", userDTO);
+        System.out.println(userDTO.getUserId());
+        System.out.println(mainTaskService.getMainTaskListById(userDTO.getUserId()));
+        model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskListById(userDTO.getUserId()));
         return "/mypage/profile";
     }
 

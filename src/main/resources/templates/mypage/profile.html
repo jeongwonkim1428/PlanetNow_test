@@ -55,6 +55,67 @@
         text-align: center; /* 가운데 정렬 */
       }
     </style>
+    <script>
+      function confirmDelete(event, element) {
+        if (!confirm('정말 삭제하시겠습니까?')) {
+          event.preventDefault();
+        }
+      }
+    </script>
+    <script>
+      $(document).ready(function() {
+        applyTaskStatusColors();
+        function applyTaskStatusColors() {
+          $(".taskStatusSpan").each(function () {
+            let taskStatus = $(this).data("tstatus"); // Ensure this matches the data attribute in HTML
+
+            switch (taskStatus) {
+              case "진행전":
+                $(this).css("background", "#d3d3d3"); // Light Gray
+                break;
+              case "진행중":
+                $(this).css("background", "#28a745"); // Green
+                break;
+              case "완료":
+                $(this).css("background", "#007bff"); // Blue
+                break;
+              case "실패":
+                $(this).css("background", "#dc3545"); // Red
+                break;
+              default:
+                $(this).css("background", "grey");
+            }
+          });
+        }
+
+        $(".categoryNmSpan").each(function () {
+          // Get the category name from the data attribute
+          let categoryNm = $(this).data('category').trim();
+          // Change the background color based on the category name
+          switch (categoryNm) {
+            case "학업":
+              $(this).css("background", "#ED2A2AFF");
+              break;
+            case "건강":
+              $(this).css("background", "green");
+              break;
+            case "자격증":
+              $(this).css("background", "purple");
+              break;
+            case "취미":
+              $(this).css("background", "blue");
+              break;
+            case "기타":
+              $(this).css("background", "lightgray");
+              break;
+            default:
+              $(this).css("background", "lightgray");
+          }
+        });
+
+      });
+
+    </script>
   </head>
 
   <body>
@@ -153,59 +214,41 @@
                               <th>status</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            <tr>
-                              <td class="cart__product__item">
-                                <div class="cart__product__item__title">
-                                  <h6>Todo Title</h6>
-                                </div>
-                              </td>
-                              <td class="cart__price">category</td>
-                              <td class="cart__total">LikeCnt</td>
-                              <td class="cart__total">status</td>
-                              <td class="cart__close">
-                                <span class="icon_close"></span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="cart__product__item">
-                                <div class="cart__product__item__title">
-                                  <h6>Todo Title</h6>
-                                </div>
-                              </td>
-                              <td class="cart__price">category</td>
-                              <td class="cart__total">LikeCnt</td>
-                              <td class="cart__total">status</td>
-                              <td class="cart__close">
-                                <span class="icon_close"></span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="cart__product__item">
-                                <div class="cart__product__item__title">
-                                  <h6>Todo Title</h6>
-                                </div>
-                              </td>
-                              <td class="cart__price">category</td>
-                              <td class="cart__total">LikeCnt</td>
-                              <td class="cart__total">status</td>
-                              <td class="cart__close">
-                                <span class="icon_close"></span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="cart__product__item">
-                                <div class="cart__product__item__title">
-                                  <h6>Todo Title</h6>
-                                </div>
-                              </td>
-                              <td class="cart__price">category</td>
-                              <td class="cart__total">LikeCnt</td>
-                              <td class="cart__total">status</td>
-                              <td class="cart__close">
-                                <span class="icon_close"></span>
-                              </td>
-                            </tr>
+                          <tbody th:if="${not #lists.isEmpty(mainTaskListMap)}">
+                          <tr th:each="mainTaskMap : ${mainTaskListMap}">
+                            <td class="cart__product__item">
+                              <div class="cart__product__item__title">
+                                <a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId})}" th:text="${mainTaskMap.mainSubject}"></a>
+                              </div>
+                            </td>
+                            <td class="cart__price">
+                              <span th:text="${mainTaskMap.categoryNm}"
+                                    class="categoryNmSpan"
+                                    th:data-category="${mainTaskMap.categoryNm}"
+                                    style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
+                              </span>
+                            </td>
+                            <td class="cart__total">LikeCnt</td>
+                            <td class="cart__total" >
+                                <span th:text="${mainTaskMap.taskStatusValue}"
+                                      class="taskStatusSpan"
+                                      th:data-tstatus="${mainTaskMap.taskStatusValue}"
+                                      style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                </span>
+                            </td>
+                            <td class="blog__details__tags">
+                              <a th:href="@{/task/my-profile/task-delete(mainTaskId=${mainTaskMap.mainTaskId})}" onclick="return confirmDelete(event, this)">X</a>
+                            </td>
+                          </tr>
+                          </tbody>
+                          <tbody th:if="${#lists.isEmpty(mainTaskListMap)}">
+                          <tr>
+                            <td class="cart__product__item">이 유저가 작성한 게시글이 없습니다.</td>
+                            <td class="cart__price"></td>
+                            <td class="cart__total"> </td>
+                            <td class="cart__total"> </td>
+                            <td class="blog__details__tags"> </td>
+                          </tr>
                           </tbody>
                         </table>
                       </div>
