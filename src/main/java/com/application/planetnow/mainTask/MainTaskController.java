@@ -1,6 +1,7 @@
 package com.application.planetnow.mainTask;
 
 import com.application.planetnow.recommendedTask.RecommendedTaskService;
+import com.application.planetnow.reply.ReplyService;
 import com.application.planetnow.subTask.SubTaskDTO;
 import com.application.planetnow.subTask.SubTaskService;
 import com.application.planetnow.user.UserService;
@@ -31,6 +32,12 @@ public class MainTaskController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private ReplyService replyService;
+
+    @Autowired
+    private LikeService likeService;
 
     @GetMapping("/task-list")
     public String getMainTaskList(Model model,
@@ -114,10 +121,14 @@ public class MainTaskController {
             return "redirect:/user/login";
         }
 
-
+        System.out.println(request.getSession().getAttribute("userId"));
+        Long userId = (Long)request.getSession().getAttribute("userId");
         model.addAttribute("mainTaskDetail", mainTaskService.getMainTaskDetail(mainTaskId));
         model.addAttribute("subTaskList", subTaskService.getSubTaskList(mainTaskId));
         model.addAttribute("recommendedTaskList", recommendedTaskService.getRecommendedTaskList(mainTaskId));
+        model.addAttribute("replyList", replyService.getReplyList(mainTaskId));
+        model.addAttribute("mainTaskId", mainTaskId);
+        model.addAttribute("likeStatus", likeService.getLikeStatus(mainTaskId,userId));
         return "/task/task-detail";
     }
 
@@ -211,6 +222,20 @@ public class MainTaskController {
 				</script>""";
         }
         return response;
+    }
+
+    @PostMapping("/createHeart")
+    @ResponseBody
+    public String createHeart(@RequestBody LikeDTO likeDTO) {
+        likeService.createHeart(likeDTO);
+        return "성공";
+    }
+
+    @PostMapping("/deleteHeart")
+    @ResponseBody
+    public String deleteHeart(@RequestBody LikeDTO likeDTO) {
+        likeService.deleteHeart(likeDTO);
+        return "성공";
     }
 
 }

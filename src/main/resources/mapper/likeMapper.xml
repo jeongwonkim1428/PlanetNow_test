@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.application.planetnow.mainTask.LikeDAO">
+
+	<select id="getLikeStatus" resultType="LikeDTO" parameterType="LikeDTO">
+		SELECT	*
+		FROM	LIKES
+		WHERE	MAIN_TASK_ID = #{mainTaskId}
+		AND		USER_ID	= #{userId}
+	
+	</select>
+	
+	<insert id="createHeart" parameterType="LikeDTO">
+		INSERT INTO LIKES (USER_ID, MAIN_TASK_ID)
+		VALUES	(#{userId} , #{mainTaskId})
+	</insert>
+	
+	<delete id="deleteHeart" parameterType="LikeDTO">
+		DELETE FROM LIKES
+		WHERE	MAIN_TASK_ID = #{mainTaskId}
+		AND		USER_ID = #{userId}
+	</delete>
+	
+	<select id="getLikeCnt" resultType="int" parameterType="Long">
+		SELECT	COUNT(*)
+		FROM	LIKES
+		WHERE	MAIN_TASK_ID = #{mainTaskId}
+	</select>
+
+</mapper>

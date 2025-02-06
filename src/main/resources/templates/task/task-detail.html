@@ -102,6 +102,93 @@
                 });
             });
 
+            $(".updatebutton").click(function (){
+
+                const contentElement = $(this).closest(".blog__comment__item__text").find("#content");
+                const replyId = $(this).closest(".blog__comment__item").find("input[name='replyId']").val();
+                console.log(replyId);
+
+                contentElement.html(
+                    "<input type='text' name='content' id='edit-content' placeholder='수정 댓글을 입력하세요.' " +
+                    "style='font-size: 15px; width: 80%; max-width: 800px; height: 40px;'>" +
+                    "<input type='hidden' name='replyId' value='" + replyId + "'>" +
+                    "<input type='button' id='btn' class='site-btn' value='등록하기'>" );
+            });
+            $(document).on("click", "#btn", function () {
+
+                console.log("누름");
+                const editContent = $(this).siblings("#edit-content").val();
+                console.log(editContent);
+                const replyId = $(this).siblings("input[name='replyId']").val();
+                console.log(replyId);
+
+                $.ajax({
+                    url : "/reply/updateReply",
+                    type : "post",
+                    contentType : "application/json",
+                    data : JSON.stringify({
+                        "replyId" : replyId ,
+                        "content" : editContent
+                    }),
+                    success : function(response){
+                        if (response == true ){
+                            alert("수정되었습니다.");
+                            history.go(-1);
+                        }
+                        else {
+                            alert("수정실패되었습니다.");
+                            history.go(-1);
+                        }
+                    }
+                });
+            });
+
+            $("#heartX").click(function (){
+
+                let mainTaskId = $("#mainTaskId").val();
+                let userId = "[[${session.userId}]]";
+                console.log(userId);
+
+
+                $.ajax({
+                    url : "/task/createHeart",
+                    type : "post",
+                    contentType : "application/json",
+                    data : JSON.stringify({
+                        "userId" : userId,
+                        "mainTaskId" : mainTaskId
+                    }),
+                    success : function (response) {
+                        location.reload();
+                    }
+
+
+                });
+            });
+            $("#heartO").click(function (){
+
+                let mainTaskId = $("#mainTaskId").val();
+                let userId = "[[${session.userId}]]";
+                console.log(userId);
+
+
+                $.ajax({
+                    url : "/task/deleteHeart",
+                    type : "post",
+                    contentType : "application/json",
+                    data : JSON.stringify({
+                        "userId" : userId,
+                        "mainTaskId" : mainTaskId
+                    }),
+                    success : function (response) {
+                        location.reload();
+                    }
+
+
+                });
+            });
+
+
             function confirmDelete(element) {
                 if (confirm('정말 삭제하시겠습니까?')) {
                     location.href = element.getAttribute('data-href');
@@ -271,18 +358,15 @@
                             </p>
                             </br>
                         </div>
-                        <div th:if="${session.email == mainTaskDetail.email}" class="blog__details__tags">
-                            <a class="fa fa-heart" href="#"> 좋아요</a>
-                            <a class="fa fa-heart-o" href="#"> 좋아요</a>
+                        <div class="blog__details__tags">
+                            <input type="hidden" th:value="${mainTaskId}" id="mainTaskId">
+                            <a th:if="${likeStatus == true}" class="fa fa-heart" id="heartO" style="cursor: pointer;"> 좋아요</a>
+                            <a th:if="${likeStatus == false}" class="fa fa-heart-o" id="heartX" style="cursor: pointer;"> 좋아요</a>
                             <a th:href="@{/task/task-update(mainTaskId=${mainTaskDetail.mainTaskId})}">수정하기</a>
                             <a th:href="@{/task/task-delete(mainTaskId=${mainTaskDetail.mainTaskId})}"
                                onclick="return confirmDelete(event, this)">삭제하기</a>
                         </div>
-                        <div th:if="${session.email != mainTaskDetail.email}" class="blog__details__tags">
-                            <a class="fa fa-heart" href="#"> 좋아요</a>
-                            <a class="fa fa-heart-o" href="#"> 좋아요</a>
-                        </div>
-                        <div class="blog__details__btns">
+                        <!-- <div class="blog__details__btns">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="blog__details__btn__item">
@@ -295,59 +379,50 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="blog__details__comment">
-                            <h5>3 Comment</h5>
-                            <a href="#" class="leave-btn">Leave a comment</a>
-                            <div class="blog__comment__item">
+                            <!-- 댓글 개수 표시 -->
+                            <h5 th:text="|댓글 개수 ${replyList.size()}|"></h5>
+                            <!-- 로그인 여부 확인 (세션에서 email 값 확인) -->
+                            <th:block th:if="${session.email}">
+                                <p>
+                                <form th:action="@{/reply/createReply}" method="post">
+                                    <input type="text" name="content" placeholder="댓글을 입력하세요."
+                                           style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
+                                    <input type="hidden" name="mainTaskId" th:value="${mainTaskDetail.mainTaskId}"/>
+                                    <input type="submit" class="site-btn" value="등록하기">
+                                </form>
+                                </p>
+                            </th:block>
+                            <!-- 로그인하지 않은 경우 -->
+                            <!-- <th:block th:unless="${session.email}">
+                                <p><a class="site-btn">로그인 후 댓글을 작성하세요</a></p>
+                            </th:block>
+                            <br> -->
+                        </div>
+                        <!-- 댓글 목록 -->
+                        <div th:each="replyMap : ${replyList}" class="blog__comment__item">
+                            <div>
                                 <div class="blog__comment__item__pic">
-                                    <img src="/img/blog/details/comment-1.jpg" alt="">
+                                    <img th:src="@{/user/thumbnails(fileName=${replyMap.profileUUID})}" width="50" height="50" alt="댓글 작성자 프로필">
                                 </div>
                                 <div class="blog__comment__item__text">
-                                    <h6>Brandon Kelley</h6>
-                                    <p>Duis voluptatum. Id vis consequat consetetur dissentiet, ceteros commune perpetua
-                                    mei et. Simul viderer facilisis egimus tractatos splendi.</p>
+                                    <h6 th:text="${replyMap.nickname}">사용자 이름</h6>
+                                    <p th:text="${replyMap.content}" id="content" name="content">댓글 내용</p>
+                                    <input type="hidden" name="replyId" th:value="${replyMap.replyId}">
                                     <ul>
-                                        <li><i class="fa fa-clock-o"></i> Seb 17, 2019</li>
-                                        <li><i class="fa fa-heart-o"></i> 12</li>
-                                        <li><i class="fa fa-share"></i> 1</li>
+                                        <li><i class="fa fa-clock-o"></i> <span th:text="${replyMap.enrolledAt}">작성 날짜</span></li>
                                     </ul>
-                                </div>
-                            </div>
-                            <div class="blog__comment__item blog__comment__item--reply">
-                                <div class="blog__comment__item__pic">
-                                    <img src="/img/blog/details/comment-2.jpg" alt="">
-                                </div>
-                                <div class="blog__comment__item__text">
-                                    <h6>Brandon Kelley</h6>
-                                    <p>Consequat consetetur dissentiet, ceteros commune perpetua mei et. Simul viderer
-                                    facilisis egimus ulla mcorper.</p>
-                                    <ul>
-                                        <li><i class="fa fa-clock-o"></i> Seb 17, 2019</li>
-                                        <li><i class="fa fa-heart-o"></i> 12</li>
-                                        <li><i class="fa fa-share"></i> 1</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="blog__comment__item">
-                                <div class="blog__comment__item__pic">
-                                    <img src="/img/blog/details/comment-3.jpg" alt="">
-                                </div>
-                                <div class="blog__comment__item__text">
-                                    <h6>Brandon Kelley</h6>
-                                    <p>Duis voluptatum. Id vis consequat consetetur dissentiet, ceteros commune perpetua
-                                    mei et. Simul viderer facilisis egimus tractatos splendi.</p>
-                                    <ul>
-                                        <li><i class="fa fa-clock-o"></i> Seb 17, 2019</li>
-                                        <li><i class="fa fa-heart-o"></i> 12</li>
-                                        <li><i class="fa fa-share"></i> 1</li>
-                                    </ul>
+                                    <div th:if="${session.email == replyMap.email}" >
+                                        <a class="updatebutton" name="updatebutton">수정하기</a>
+                                        <a th:href="@{/reply/deleteReply(replyId=${replyMap.replyId})}">삭제하기</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+    </section>
 </div>
 </body>
 </html>

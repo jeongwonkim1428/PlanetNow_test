@@ -3,4 +3,60 @@
 
 <mapper namespace="com.application.planetnow.reply.ReplyDAO">
 
+    <resultMap id="replyMap" type="hashmap" >
+        <result column="REPLY_ID"  	   property="replyId"/>
+        <result column="USER_ID"  	   property="userId"/>
+        <result column="MAIN_TASK_ID"   property="mainTaskId"/>
+        <result column="CONTENT" 	   property="content"/>
+        <result column="ENROLLED_AT" 	   property="enrolledAt"/>
+        <result column="NICKNAME"     property="nickname"/>
+        <result column="EMAIL"			property="email"/>
+        <result column="PROFILE_UUID"  property="profileUUID"/>
+    </resultMap>
+
+
+    <select id="getReplyList" resultMap="replyMap" parameterType="Long">
+        SELECT  R.REPLY_ID      AS REPLY_ID,
+                R.MAIN_TASK_ID  AS MAIN_TASK_ID,
+                R.USER_ID       AS USER_ID,
+                R.CONTENT       AS CONTENT,
+                R.ENROLLED_AT   AS ENROLLED_AT,
+                U.NICKNAME      AS NICKNAME,
+                U.EMAIL			AS EMAIL,
+                U.PROFILE_UUID  AS PROFILE_UUID
+        FROM 	REPLY R
+                    JOIN    USER U
+                            ON    U.USER_ID = R.USER_ID
+        WHERE	R.MAIN_TASK_ID = #{mainTaskId}
+    </select>
+
+    <select id="getReplyCnt" parameterType="Long" resultType="int">
+        SELECT	COUNT(*)
+        FROM	REPLY
+                    WHER	MAIN_TASK_ID = #{mainTaskId}
+    </select>
+
+    <select id="getReplyDetail" parameterType="Long" resultType="ReplyDTO">
+        SELECT	*
+        FROM	REPLY
+        WHERE	REPLY_ID = #{replyId}
+    </select>
+
+    <insert id="createReply" parameterType="ReplyDTO">
+        INSERT INTO REPLY (USER_ID , MAIN_TASK_ID , CONTENT , ENROLLED_AT , MODIFIED_AT)
+        VALUES	(#{userId} , #{mainTaskId} , #{content} , NOW() , NOW() )
+
+    </insert>
+
+    <update id="updateReply" parameterType="ReplyDTO">
+        UPDATE	REPLY
+        SET		CONTENT = #{content}
+        WHERE	REPLY_ID = #{replyId}
+    </update>
+
+    <delete id="deleteReply" parameterType="Long">
+        DELETE FROM	REPLY
+        WHERE	REPLY_ID = #{replyId}
+    </delete>
+
 </mapper>
