@@ -1,6 +1,7 @@
 package com.application.planetnow.user;
 
 
+import com.application.planetnow.mainTask.MainTaskDTO;
 import com.application.planetnow.user.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -16,9 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -67,21 +66,13 @@ public class UserServiceImpl implements UserService {
         if (!myProfile.isEmpty()){
             new File(fileRepo + userDTO.getProfileUuid()).delete();
 
-
             String originalFilename = myProfile.getOriginalFilename();
             userDTO.setProfileOriginalName(originalFilename);
 
-
             String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-
 
             String uploadFile = UUID.randomUUID() + extension;
             userDTO.setProfileUuid(uploadFile);
-
-
-
-
-
 
             myProfile.transferTo(new File(fileRepo + uploadFile));
             userDAO.update(userDTO);
@@ -102,13 +93,35 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDTO> searchUser(String name) {
+    public List<Map<String, Object>> searchUser(String name) {
         return userDAO.searchUser(name);
 
 
     }
 
+    @Override
+    public Double getProgress(Long userId) {
+        List<MainTaskDTO> userTaskList = userDAO.getUserProgressRate(userId);
+        if (userTaskList.isEmpty()){
+            return (double) 0;
+        }
+        Integer userTaskCount = userTaskList.size();
+        Integer userCompleted =userTaskList.stream()
+                .filter((task) -> task.getTaskStatusId().equals(3))
+                .toList().size();
+        return (double)userTaskCount / userCompleted * 100;
+    }
 
+    @Override
+    public Long getFollowerCount(Long userId) {
+        return userDAO.getFollowerCount(userId);
+
+    }
+
+    @Override
+    public Long getFollowingCount(Long userId) {
+        return userDAO.getFollowingCount(userId);
+    }
 
 
     @Override
@@ -225,6 +238,16 @@ public class UserServiceImpl implements UserService {
         return getUserDetail(email);
 
 
+    }
+    @Override
+    public boolean getUserSession(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        log.info("email : " + email);
+        if (email== null){
+            return true;
+        }
+        return false;
     }
 
 

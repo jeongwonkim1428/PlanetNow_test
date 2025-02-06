@@ -63,10 +63,6 @@
                NOW(),
                NOW(),
                #{role}
-
-
-
-
               )
 
 
@@ -138,14 +134,54 @@
 
 
     </update>
-    <select id="searchUser" parameterType="String" resultType="UserDTO">
-        SELECT *
-        FROM USER
-        WHERE NAME LIKE  CONCAT(#{input}, '%') OR NICKNAME LIKE CONCAT(#{input}, '%')
+    <resultMap id="userOtherInfo" type="hashmap" >
+        <result column="USER_ID"  	       property="userId"/>
+        <result column="NAME"              property="name"/>
+        <result column="NICKNAME"          property="nickname"/>
+        <result column="PROFILE_UUID"      property="profileUuid"/>
+        <result column="AMBITION_QUOTE"    property="ambitionQuote"/>
+        <result column="POST_COUNT"        property="postCount"/>
+        <result column="FOLLOWER_COUNT"    property="followerCount"/>
+        <result column="FOLLOWING_COUNT"   property="followingCount"/>
+        <result column="MAIN_TASK_ID"      property="mainTaskId"/>
 
+    </resultMap>
+    <select id="searchUser" parameterType="String" resultMap="userOtherInfo">
+        SELECT
+            U.USER_ID AS USER_ID,
+            U.NAME AS NAME,
+            U.NICKNAME AS NICKNAME,
+            U.PROFILE_UUID AS PROFILE_UUID,
+            U.AMBITION_QUOTE AS AMBITION_QUOTE,
+            COUNT(DISTINCT MT.MAIN_TASK_ID) AS POST_COUNT,
+            COUNT(DISTINCT F1.FOLLOWER_ID) AS FOLLOWER_COUNT,
+            COUNT(DISTINCT F2.FOLLOWEE_ID) AS FOLLOWING_COUNT
+        FROM USER U
+            LEFT JOIN MAIN_TASK MT ON U.USER_ID = MT.USER_ID
+            LEFT JOIN FOLLOW F1 ON U.USER_ID = F1.FOLLOWEE_ID
+            LEFT JOIN FOLLOW F2 ON U.USER_ID = F2.FOLLOWER_ID
+        WHERE U.NAME LIKE CONCAT(#{input}, '%')
+           OR U.NICKNAME LIKE CONCAT(#{input}, '%')
+        GROUP BY U.USER_ID, U.NAME, U.NICKNAME, U.PROFILE_UUID, U.AMBITION_QUOTE
+    </select>
+    <select id="getUserProgressRate" parameterType="Long" resultType="MainTaskDTO">
+        SELECT *
+        FROM MAIN_TASK
+        WHERE USER_ID = #{userId}
 
     </select>
 
+    <select id="getFollowerCount" parameterType="Long" resultType="Long">
+        SELECT COUNT(*)
+        FROM FOLLOW
+        WHERE FOLLOWER_ID = #{userId}
+    </select>
+
+    <select id="getFollowingCount" parameterType="Long" resultType="Long">
+        SELECT COUNT(*)
+        FROM FOLLOW
+        WHERE FOLLOWEE_ID = #{userId}
+    </select>
 
 
 

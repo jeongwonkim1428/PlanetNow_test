@@ -183,8 +183,8 @@
                       <th style="font-size: 24px">팔로잉</th>
                     </tr>
                     <tr>
-                      <th style="font-size: 24px">180명</th>
-                      <th style="font-size: 24px">67명</th>
+                      <th style="font-size: 24px" th:text="|${followerCount} 명|"></th>
+                      <th style="font-size: 24px" th:text="|${followingCount} 명|"></th>
                     </tr>
                   </table>
                 </div>
@@ -192,7 +192,7 @@
                 <br />
                 <p class="bebas-font" th:text="${userDTO.ambitionQuote}"></p>
                 <br />
-                <h5 class="oswald-font center-align">67.8%</h5>
+                <h5 class="oswald-font center-align" th:text="${progress}" ></h5>
               </div>
               <!-- Shop Cart Section Begin -->
               <section class="shop-cart spad">
