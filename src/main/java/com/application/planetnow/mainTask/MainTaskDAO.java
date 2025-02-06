@@ -2,6 +2,7 @@ package com.application.planetnow.mainTask;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,8 @@ import java.util.Map;
 @Mapper
 public interface MainTaskDAO {
    public List<Map<String, Object>> getMainTaskList();
-   public List<Map<String, Object>> getMainTaskList(String keyword, Long categoryId);
+   public List<Map<String, Object>> getMainTaskList(@Param("keyword") String keyword, @Param("categoryId") Long categoryId);
+
 
    public List<CategoryDTO> getCategoryList();
 
@@ -26,4 +28,6 @@ public interface MainTaskDAO {
    public void updateMainTask(MainTaskDTO mainTaskDTO);
 
    public void deleteMainTask(Long mainTaskId);
+
+   public List<Map<String, Object>> getMainTaskListById(Long userId);
 }

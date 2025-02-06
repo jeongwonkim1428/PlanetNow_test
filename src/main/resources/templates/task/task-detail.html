@@ -58,10 +58,10 @@
 
                 if ($form.is(":visible")) {
                     $form.hide();
-                    $(this).text("수정하기");
+                    $(this).val("수정하기");
                 } else {
                     $form.show();
-                    $(this).text("수정하기 취소");
+                    $(this).val("수정하기 취소");
                 }
             })
 
@@ -195,7 +195,7 @@
                                                th:data-subtaskid="${subTaskMap.subTaskId}" value="수정하기"/>
                                         <form th:action="@{/sub-task/update-sub-task}" th:method="post"
                                               class="subTaskUpdateForm" style="display: none; margin-top: 10px;">
-                                            <input type="text" name="subSubject"
+                                            <input type="text" name="subSubject" maxlength="40"
                                                    style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;"/>
                                             <input type="hidden" name="subTaskId" th:value="${subTaskMap.subTaskId}"/>
                                             <input type="hidden" name="mainTaskId" th:value="${subTaskMap.mainTaskId}"/>
@@ -264,7 +264,7 @@
                             </div>
                             <p>
                                 <form th:action="@{/recommended/create-recommended-task}" method="post">
-                                    <input type="text" name="subSubject" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
+                                    <input type="text" name="subSubject" required maxlength="40" style="font-size: 15px; width: 80%; max-width: 800px; height: 40px;">
                                     <input type="hidden" name="mainTaskId" th:value="${mainTaskDetail.mainTaskId}"/>
                                     <input type="submit" class="site-btn" value="추천하기"></input>
                                 </form>

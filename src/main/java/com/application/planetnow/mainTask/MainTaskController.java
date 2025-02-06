@@ -33,21 +33,18 @@ public class MainTaskController {
     UserService userService;
 
     @GetMapping("/task-list")
-    public String getMainTaskList(Model model) {
-
-        model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList());
-        model.addAttribute("categoryList", mainTaskService.getCategoryList());
-
-        return "/task/task-list";
-    }
-
-    @PostMapping("/task-list")
     public String getMainTaskList(Model model,
-                                  @RequestParam("keyword") String keyword,
-                                  @RequestParam("categoryId") Long categoryId) {
+                                  @RequestParam(value = "keyword", required = false) String keyword,
+                                  @RequestParam(value = "categoryId", required = false) Long categoryId) {
 
-        model.addAttribute("selectedCategoryId", categoryId);
-        model.addAttribute("mainTaskListMap" ,  mainTaskService.getMainTaskList(keyword, categoryId));
+
+        if (keyword == null && categoryId == null) {
+            model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList());
+        } else {
+            model.addAttribute("selectedCategoryId", categoryId);
+            model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList(keyword, categoryId));
+        }
+
         model.addAttribute("categoryList", mainTaskService.getCategoryList());
 
         return "/task/task-list";
@@ -159,7 +156,7 @@ public class MainTaskController {
         return jsScript;
     }
 
-    @GetMapping("task-delete")
+    @GetMapping("/task-delete")
     @ResponseBody
     public String deleteMainTask(@RequestParam("mainTaskId") Long mainTaskId,
                                  HttpServletRequest request) {
@@ -185,6 +182,34 @@ public class MainTaskController {
 				</script>""";
         }
 
+        return response;
+    }
+
+    @GetMapping("/my-profile/task-delete")
+    @ResponseBody
+    public String deleteMainTaskFromMyProfile(@RequestParam("mainTaskId") Long mainTaskId,
+                                 HttpServletRequest request) {
+
+        mainTaskService.getMainTaskDTO(mainTaskId).getUserId();
+        HttpSession session = request.getSession();
+
+        String response = "";
+
+        if (!session.getAttribute("userId").equals(mainTaskService.getMainTaskDTO(mainTaskId).getUserId())) {
+            response = """
+				<script>
+					alert('권한이 없습니다');
+					history.go(-1);
+				</script>""";
+        }
+        else {
+            mainTaskService.deleteMainTask(mainTaskId);
+            response = """
+				<script>
+					alert('삭제가 완료되었습니다');
+					history.go(-1);
+				</script>""";
+        }
         return response;
     }
 

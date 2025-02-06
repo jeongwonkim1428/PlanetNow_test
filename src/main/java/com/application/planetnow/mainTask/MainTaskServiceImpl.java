@@ -29,6 +29,12 @@ public class MainTaskServiceImpl implements MainTaskService {
     }
 
     @Override
+    public List<Map<String, Object>> getMainTaskListById(Long userId) {
+        return mainTaskDAO.getMainTaskListById(userId);
+    }
+
+
+    @Override
     public List<CategoryDTO> getCategoryList() {
         return mainTaskDAO.getCategoryList();
     }

@@ -38,5 +38,13 @@ class PlanetNowApplicationTests {
 
     }
 
+    @Test
+    void getMainTaskListById() {
+        List<Map<String, Object>> getMAinTaskListById = mainTaskDAO.getMainTaskListById(1L);
+        for (Map<String, Object> map : getMAinTaskListById) {
+            System.out.println(map);
+        }
+    }
+
 
 }
