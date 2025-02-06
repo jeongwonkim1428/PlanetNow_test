@@ -5,16 +5,19 @@ import java.util.Map;
 
 public interface FollowService {
 
-	public List<Map<String, Object>> getFollowerList();
+	public List<Map<String, Object>> getFollowerList(Map<String, Object> temp);
 	public Long followerMainCnt(Long followeeId);
 	public Long followerReplyCnt(Long followeeId);
 	public Long followerCnt(Long followeeId);
 
-	public List<Map<String, Object>> getFollowingList();
+	public List<Map<String, Object>> getFollowingList(Long followerId);
+	public List<Map<String, Object>> getFollowingList(String searchFollowee);
 	public Long followingMainCnt(Long followerId);
 	public Long followingReplyCnt(Long followerId);
 	public Long followingCnt(Long followerId);
 	
 	public void createFollow(FollowDTO followDTO);
-	public void deleteFollow(FollowDTO followDTO);
+	public void deleteFollow(Long followeeId, Long followerId);
+	public Integer check(Long followeeId, Long followerId);
+
 }

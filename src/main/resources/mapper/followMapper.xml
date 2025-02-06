@@ -11,6 +11,7 @@
 		<result column="AMBITION_QUOTE" 		property="ambitionQuote"/>
 		<result column="FOLLOWER_ID" 			property="followerId"/>
 		<result column="FOLLOWEE_ID" 			property="followeeId"/>
+		<result column="EMAIL" 					property="email"/>
 	</resultMap>
 	
 	<select id="getFollowerList" resultMap="followerMap">
@@ -20,10 +21,17 @@
 				U.PROFILE_UUID				AS PROFILE_UUID,
 				U.AMBITION_QUOTE 			AS AMBITION_QUOTE,
 				F.FOLLOWER_ID				AS FOLLOWER_ID,
-				F.FOLLOWEE_ID				AS FOLLOWEE_ID
-		FROM	USER U
-		LEFT JOIN FOLLOW F
+				F.FOLLOWEE_ID				AS FOLLOWEE_ID,
+				U.EMAIL						AS EMAIL
+		FROM	FOLLOW F
+		LEFT JOIN USER U
 		ON		U.USER_ID = F.FOLLOWER_ID
+		<where>
+			F.FOLLOWEE_ID = #{followeeId}
+			<if test="searchFollower != null and searchFollower != ''">
+				AND U.NICKNAME LIKE CONCAT('%',#{searchFollower},'%')
+			</if>
+		</where>
 	</select>
 	
 	 <select id="followerMainCnt" resultType="long">
@@ -65,6 +73,7 @@
 		FROM	USER U
 		LEFT JOIN FOLLOW F
 		ON		U.USER_ID = F.FOLLOWEE_ID
+		WHERE	F.FOLLOWER_ID = #{followerId}
 	</select>
 	
 	 <select id="followingMainCnt" resultType="long">
@@ -85,21 +94,32 @@
         WHERE  FOLLOWER_ID = #{followerId}
     </select>
     
-    <insert id="createFollow" parameterType="FollowDTO">
-    	INSERT	INTO FOLLOW(
-    			FOLLOWEE_ID,
-    			FOLLOWER_ID
-    	)
+    <insert id="createFollow" parameterType="Long">
+    	INSERT INTO FOLLOW (
+    						FOLLOWEE_ID, 
+    						FOLLOWER_ID
+    						)
     	VALUES (
     		#{followeeId},
     		#{followerId}
     	)
     </insert>
     
-    <delete id="deleteFollow" parameterType="FollowDTO">
+    <delete id="deleteFollow" parameterType="Long">
     	DELETE	FROM FOLLOW
-    	WHERE	FOLLOWER_ID = #{followerId},
+    	WHERE	FOLLOWER_ID = #{followerId}
     	AND		FOLLOWEE_ID = #{followeeId}
     </delete>
+
+	<select id="check" parameterType="FollowDTO" resultType="long">
+    SELECT FOLLOW_ID
+    FROM FOLLOW
+    WHERE FOLLOWER_ID = #{followerId} AND FOLLOWEE_ID = #{followeeId}
+    AND EXISTS (
+        SELECT *
+        FROM FOLLOW
+        WHERE FOLLOWER_ID = #{followeeId} AND FOLLOWEE_ID = #{followerId}
+    )
+    </select>
 
 </mapper>
