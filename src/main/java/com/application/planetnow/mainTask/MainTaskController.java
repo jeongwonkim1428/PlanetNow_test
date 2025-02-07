@@ -44,17 +44,35 @@ public class MainTaskController {
                                   @RequestParam(value = "keyword", required = false) String keyword,
                                   @RequestParam(value = "categoryId", required = false) Long categoryId) {
 
-
+        Integer size = 5;
         if (keyword == null && categoryId == null) {
-            model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList());
+            model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList(size, 1));
+            model.addAttribute("nOfPages", mainTaskService.getTotalOfMainTask());
         } else {
-            model.addAttribute("selectedCategoryId", categoryId);
-            model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList(keyword, categoryId));
+            model.addAttribute("categoryId", categoryId);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList(keyword, categoryId, size, 1));
+            model.addAttribute("nOfPages", mainTaskService.getTotalOfMainTaskBySearch(keyword, categoryId));
         }
 
         model.addAttribute("categoryList", mainTaskService.getCategoryList());
 
         return "/task/task-list";
+    }
+
+    @PostMapping("/task-list-nextpage")
+    @ResponseBody
+    public List<Map<String, Object>> getTaskListNextPage(Model model,
+                                                         @RequestParam(value = "keyword", required = false) String keyword,
+                                                         @RequestParam(value = "categoryId", required = false) Long categoryId,
+                                                         @RequestParam("page") Integer page) {
+        Integer size = 5;
+        if (keyword == null && categoryId == null) {
+            return mainTaskService.getMainTaskList(size, page);
+        } else {
+            return mainTaskService.getMainTaskList(keyword, categoryId, size, page);
+        }
+
     }
 
     @GetMapping("/create-task")
