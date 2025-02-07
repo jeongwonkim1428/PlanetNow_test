@@ -2,6 +2,7 @@ package com.application.planetnow.user;
 
 
 import com.application.planetnow.follow.FollowService;
+import com.application.planetnow.mainTask.LikeService;
 import com.application.planetnow.mainTask.MainTaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,7 @@ public class UserController {
     private final UserService userService;
     private final MainTaskService mainTaskService;
     private final FollowService followService;
+    private final LikeService likeService;
     @Value("${file.repo.path}")
     private String fileRepo;
     @GetMapping("/home")
@@ -99,7 +101,12 @@ public class UserController {
         UserDTO userDTO = userService.getUserDetailById(userId);
         log.info("유저 정보: " + userDTO);
         model.addAttribute("userDTO",userDTO);
-        model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskListById(userDTO.getUserId()));
+        List<Map<String, Object>> mainTaskList = mainTaskService.getMainTaskListById(userDTO.getUserId());
+        for (Map<String, Object> mainTask : mainTaskList) {
+            Long mainTaskId = (Long) mainTask.get("mainTaskId");
+            mainTask.put("likeCnt", likeService.getLikeCnt(mainTaskId));
+        }
+        model.addAttribute("mainTaskListMap", mainTaskList);
         model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
         model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
         return "/user/user-detail";
@@ -117,9 +124,15 @@ public class UserController {
             return "/user/login";
         }
         model.addAttribute("userDTO", userDTO);
-        model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskListById(userDTO.getUserId()));
+        List<Map<String, Object>> mainTaskList = mainTaskService.getMainTaskListById(userDTO.getUserId());
+            for (Map<String, Object> mainTask : mainTaskList) {
+                Long mainTaskId = (Long) mainTask.get("mainTaskId");
+                mainTask.put("likeCnt", likeService.getLikeCnt(mainTaskId));
+            }
+        model.addAttribute("mainTaskListMap", mainTaskList);
         model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
         model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
+
         return "/mypage/profile";
     }
 
