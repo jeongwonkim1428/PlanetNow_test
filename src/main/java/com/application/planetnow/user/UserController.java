@@ -116,6 +116,24 @@ public class UserController {
         return "/user/user-detail";
     }
 
+    @PostMapping("/user-detail-nextpage")
+    @ResponseBody
+    public List<Map<String, Object>> taskListNextPage(@RequestParam("userId")Long userId,
+                                                      @RequestParam("page") Integer page) {
+
+        Integer size = 5;
+        System.out.println(page);
+
+        List<Map<String, Object>> mainTaskList = mainTaskService.getMainTaskListById(size, page, userId);
+        for (Map<String, Object> mainTask : mainTaskList) {
+            Long mainTaskId = (Long) mainTask.get("mainTaskId");
+            mainTask.put("likeCnt", likeService.getLikeCnt(mainTaskId));
+        }
+        System.out.println(mainTaskList);
+
+        return mainTaskList;
+    }
+
 
 
 

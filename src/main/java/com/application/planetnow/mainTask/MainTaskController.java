@@ -50,6 +50,7 @@ public class MainTaskController {
             model.addAttribute("nOfPages", mainTaskService.getTotalOfMainTask());
         } else {
             model.addAttribute("categoryId", categoryId);
+            model.addAttribute("selectedCategoryId", categoryId);
             model.addAttribute("keyword", keyword);
             model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskList(keyword, categoryId, size, 1));
             model.addAttribute("nOfPages", mainTaskService.getTotalOfMainTaskBySearch(keyword, categoryId));
