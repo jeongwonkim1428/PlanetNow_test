@@ -8,4 +8,6 @@ public interface UserPointDAO {
     Long getUserTotalPoint(Long userId);
 
     void userPointSave(UserPointDTO userPointDTO);
+
+
 }

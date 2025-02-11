@@ -150,9 +150,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean loginResult(UserDTO userDTO) {
-        UserDTO loginUser = userDAO.loginResult(userDTO);
-        log.info("암호화 패스워드: " + loginUser.getPassword());
-        log.info("내 비밀번호: " + userDTO.getPassword());
+            UserDTO loginUser = userDAO.loginResult(userDTO);
+
         if (loginUser != null){
             if( passwordEncoder.matches(userDTO.getPassword(),loginUser.getPassword()) ){
                 //포인트 리스트 조회
@@ -161,6 +160,8 @@ public class UserServiceImpl implements UserService {
                 //UserPointDTO 생성
                 UserPointDTO userPointDTO = UserPointDTO.of(loginUser.getUserId(),loginPointDTO.getPointId());
                 log.info("유저 포인트 DTO 객체 : " +userPointDTO);
+
+
                 //UserPoint 객체 DB에 저장
                 userPointDAO.userPointSave(userPointDTO);
                 //유저가 가지고 있는 포인트 조회
