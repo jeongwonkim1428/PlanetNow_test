@@ -313,7 +313,7 @@
                     <div class="pagination__option">
                       <th:block th:if="${nOfPages > 0}">
                         <th:block th:each="page : ${#numbers.sequence(1, nOfPages)}">
-                          <a class="page-link" th:data-page="${page}" th:text="${page}"></a>
+                          <a class="page-link" th:data-page="${page}" th:text="${page}" style="cursor: pointer;"></a>
                         </th:block>
                       </th:block>
                   </div>
