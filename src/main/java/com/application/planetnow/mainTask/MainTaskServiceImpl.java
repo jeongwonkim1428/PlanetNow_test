@@ -1,9 +1,12 @@
 package com.application.planetnow.mainTask;
 
 import com.application.planetnow.subTask.SubTaskDAO;
+import com.application.planetnow.user.UserDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +18,6 @@ public class MainTaskServiceImpl implements MainTaskService {
 
     @Autowired
     SubTaskDAO subTaskDAO;
-
-
 
     @Override
     public List<Map<String, Object>> getMainTaskList() {
@@ -108,5 +109,34 @@ public class MainTaskServiceImpl implements MainTaskService {
         mainTaskDAO.deleteMainTask(mainTaskId);
     }
 
+    
+    // home (top3, best5)
+	@Override
+	public List<MainTaskDTO> getTopViewCnt() {
+		return mainTaskDAO.getTopViewCnt();
+	}
+
+	@Override
+	public List<MainTaskDTO> getTopReplyCnt() {
+		return mainTaskDAO.getTopReplyCnt();
+	}
+
+	@Override
+	public List<MainTaskDTO> getTopLikeCnt() {
+		return mainTaskDAO.getTopLikeCnt();
+	}
+
+	@Override
+	public List<MainTaskDTO> getBestUserCnt() {
+		return mainTaskDAO.getBestUserCnt();
+	}
+
+	@Override
+	public List<MainTaskDTO> getBestCnt() {
+		return mainTaskDAO.getBestCnt();
+	}
+
+
+	
 
 }

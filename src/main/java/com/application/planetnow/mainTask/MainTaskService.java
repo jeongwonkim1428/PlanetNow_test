@@ -3,8 +3,10 @@ package com.application.planetnow.mainTask;
 import java.util.List;
 import java.util.Map;
 
-public interface MainTaskService {
+import com.application.planetnow.user.UserDTO;
 
+public interface MainTaskService {
+	
     public List<Map<String,Object>> getMainTaskList();
     public List<Map<String,Object>> getMainTaskList(String keyword, Long categoryId);
 
@@ -21,4 +23,14 @@ public interface MainTaskService {
     public void updateMainTask(MainTaskDTO mainTaskDTO);
 
     public void deleteMainTask(Long mainTaskId);
+    
+    // home (top3, best5)
+    public List<MainTaskDTO> getTopViewCnt();
+	public List<MainTaskDTO> getTopReplyCnt();
+	public List<MainTaskDTO> getTopLikeCnt();
+	public List<MainTaskDTO> getBestUserCnt();
+	public List<MainTaskDTO> getBestCnt();
+    
+    
+
 }

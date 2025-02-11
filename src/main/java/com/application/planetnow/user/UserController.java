@@ -102,6 +102,7 @@ public class UserController {
         model.addAttribute("mainTaskListMap", mainTaskService.getMainTaskListById(userDTO.getUserId()));
         model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
         model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
+        
         return "/user/user-detail";
     }
 

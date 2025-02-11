@@ -4,14 +4,16 @@ package com.application.planetnow.mainTask;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.application.planetnow.user.UserDTO;
+
 import java.util.List;
 import java.util.Map;
 
 @Mapper
 public interface MainTaskDAO {
+
    public List<Map<String, Object>> getMainTaskList();
    public List<Map<String, Object>> getMainTaskList(@Param("keyword") String keyword, @Param("categoryId") Long categoryId);
-
 
    public List<CategoryDTO> getCategoryList();
 
@@ -30,4 +32,13 @@ public interface MainTaskDAO {
    public void deleteMainTask(Long mainTaskId);
 
    public List<Map<String, Object>> getMainTaskListById(Long userId);
+   
+   // home (top3, best5)
+   public List<MainTaskDTO> getTopViewCnt();
+   public List<MainTaskDTO> getTopLikeCnt();
+   public List<MainTaskDTO> getTopReplyCnt();
+   public List<MainTaskDTO> getBestUserCnt();
+   public List<MainTaskDTO> getBestCnt();
+   
+   
 }
