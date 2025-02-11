@@ -231,15 +231,15 @@
                 <div class="footer__logo">
                   <table class="custom-table">
                     <tr>
-                      <th th rowspan="2">
+                      <th rowspan="2">
                         <a><img th:src="@{/user/thumbnails(fileName=${userDTO.profileUuid})}"  width="100" height="100"/></a>
                       </th>
-                      <th style="font-size: 24px">팔로워</th>
-                      <th style="font-size: 24px">팔로잉</th>
+                      <th style="font-size: 24px; cursor: pointer;" th:onclick="|location.href='@{/follow/follower-list(userId=${userDTO.userId})}'|">팔로워</th>
+                      <th style="font-size: 24px; cursor: pointer;" th:onclick="|location.href='@{/follow/following-list(userId=${userDTO.userId})}'|">팔로잉</th>
                     </tr>
                     <tr>
-                      <th style="font-size: 24px" th:text="|${followerCount} 명|"></th>
-                      <th style="font-size: 24px" th:text="|${followingCount} 명|"></th>
+                      <th style="font-size: 24px; cursor: pointer;" th:text="|${followerCount} 명|" th:onclick="|location.href='@{/follow/follower-list(userId=${userDTO.userId})}'|" ></th>
+                      <th style="font-size: 24px; cursor: pointer;" th:text="|${followingCount} 명|" th:onclick="|location.href='@{/follow/following-list(userId=${userDTO.userId})}'|"></th>
                     </tr>
                   </table>
                 </div>

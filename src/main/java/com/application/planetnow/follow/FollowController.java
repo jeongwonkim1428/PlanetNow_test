@@ -34,9 +34,14 @@ public class FollowController {
 
     @GetMapping("/follower-list")
     public String followerList(Model model, @RequestParam("userId") Long userId,
-    						   @RequestParam(value = "searchFollower", required = false) String searchFollower) {
+    						   @RequestParam(value = "searchFollower", required = false) String searchFollower,
+    						   HttpServletRequest request) {
         
     	List<Map<String, Object>> followerList = new ArrayList<>();
+    	HttpSession session = request.getSession();
+    	Long loginId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
+//    	System.out.println(loginId);
+    	
     	
     	// 맵생성 
     	Map<String, Object> temp = new HashMap<String, Object>();
@@ -59,9 +64,9 @@ public class FollowController {
             follower.put("replyCount", followService.followerReplyCnt((Long)follower.get("followerId")));
             follower.put("followerCount", followService.followerCnt((Long)follower.get("followerId")));
 //            System.out.println(follower.get("followerId"));
-            follower.put("check", followService.check(userId, (Long)follower.get("followerId")));
+            follower.put("check", followService.check((Long)follower.get("followerId"), loginId));
             
-//        	System.out.println(follower);
+        	System.out.println("follower: " + follower);
         }
 //        System.out.println(searchFollower);
 //        System.out.println("userId: " + userId);
@@ -73,30 +78,47 @@ public class FollowController {
     }
     
     @GetMapping("/following-list")
-    public String followingList(Model model, HttpServletRequest request) {
+    public String followingList(Model model, HttpServletRequest request,
+    							@RequestParam(value = "searchFollower", required = false) String searchFollower,
+    							@RequestParam("userId") Long userId) {
     	
+    	List<Map<String, Object>> followingList = new ArrayList<>();
     	HttpSession session = request.getSession();
-    	Long followerId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
-    	List<Map<String, Object>> followingList = followService.getFollowingList(followerId);
+    	Long loginId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
+    	
+    	System.out.println("loginId: " + loginId);
+    	System.out.println("userId: " +userId);
+    	
+    	// 맵생성 
+    	Map<String, Object> temp = new HashMap<String, Object>();
+    	
+    	if (searchFollower == null || searchFollower.isEmpty()) {
+    		// ID만
+    		temp.put("followerId", userId);
+    	}
+    	else {
+    		//ID, 검색
+    		temp.put("followerId", userId);
+    		temp.put("searchFollower", searchFollower);
+    	}
+    	// 무조건 맵으로 전송
+    	followingList = followService.getFollowingList(temp);
         
         for (Map<String, Object> following : followingList) {
 //            Long followerId = (Long) following.get("userId");
-            following.put("mainTaskCount", followService.followingMainCnt(followerId));
-            following.put("replyCount", followService.followingReplyCnt(followerId));
-            following.put("followingCount", followService.followingCnt(followerId));
+            following.put("mainTaskCount", followService.followingMainCnt((Long)following.get("followeeId")));
+            following.put("replyCount", followService.followingReplyCnt((Long)following.get("followeeId")));
+            following.put("followingCount", followService.followingCnt((Long)following.get("followeeId")));
+            following.put("check", followService.check((Long)following.get("followeeId"), loginId));
+//            System.out.println("followeeId1: "+  following.get("followeeId"));
+            System.out.println("following: " + following);
         }
         
+        model.addAttribute("userId", userId);
         model.addAttribute("followingListMap", followingList);
     	
     	return "follow/following-list";
     	
-    }
-    
-    @PostMapping("/following-list")
-    public String getFollowingList(Model model,
-    							   @RequestParam("searchFollowee") String searchFollowee) {
-    	model.addAttribute("followingMap", followService.getFollowingList(searchFollowee));
-    	return "/follow/following-list";
     }
     
     @PostMapping("/createFollow")
@@ -119,11 +141,11 @@ public class FollowController {
     @PostMapping("/deleteFollow")
     @ResponseBody
     public String deleteFollower(@RequestParam("followeeId") Long followeeId, 
-			   				  @RequestParam("followerEmail") String followerEmail) {
-    	Long followerId = userService.getUserDetail(followerEmail).getUserId();
+			   				  @RequestParam("followerId") Long followerId) {
     	followService.deleteFollow(followeeId, followerId);
     	System.out.println(followeeId);
     	System.out.println(followerId);
+    	
     	return "";
     }
 //    

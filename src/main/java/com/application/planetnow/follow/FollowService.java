@@ -10,8 +10,7 @@ public interface FollowService {
 	public Long followerReplyCnt(Long followeeId);
 	public Long followerCnt(Long followeeId);
 
-	public List<Map<String, Object>> getFollowingList(Long followerId);
-	public List<Map<String, Object>> getFollowingList(String searchFollowee);
+	public List<Map<String, Object>> getFollowingList(Map<String, Object> temp);
 	public Long followingMainCnt(Long followerId);
 	public Long followingReplyCnt(Long followerId);
 	public Long followingCnt(Long followerId);

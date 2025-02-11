@@ -103,7 +103,8 @@ public class UserController {
     }
 
     @GetMapping("/user-detail")
-    public String userDetail(@RequestParam("userId")Long userId,Model model ){
+    public String userDetail(@RequestParam("userId")Long userId,Model model){
+    	
         UserDTO userDTO = userService.getUserDetailById(userId);
         log.info("유저 정보: " + userDTO);
         model.addAttribute("userDTO",userDTO);
@@ -151,6 +152,7 @@ public class UserController {
     @GetMapping("/profile")
     public String myProfile(HttpServletRequest request, Model model){
         UserDTO userDTO = userService.getUserFromSession(request);
+        
         if (userDTO == null) {
             return "/user/login";
         }

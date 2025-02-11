@@ -14,8 +14,7 @@ public interface FollowDAO {
 	public Long followerReplyCnt(Long followeeId);
 	public Long followerCnt(Long followeeId);
 
-	public List<Map<String, Object>> getFollowingList(Long followerId0);
-	public List<Map<String, Object>> getFollowingList(String searchFollowee);
+	public List<Map<String, Object>> getFollowingList(Map<String, Object> temp);
 	public Long followingMainCnt(Long followerId);
 	public Long followingReplyCnt(Long followerId);
 	public Long followingCnt(Long followerId);
@@ -23,6 +22,6 @@ public interface FollowDAO {
 	public void createFollow(FollowDTO followDTO);
 	
 	public void deleteFollow(Map<String, Long> list);
-	public Long check(FollowDTO followDTO);
+	public Integer check(FollowDTO followDTO);
 
 }

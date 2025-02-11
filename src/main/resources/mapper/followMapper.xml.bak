@@ -3,7 +3,7 @@
 
 <mapper namespace="com.application.planetnow.follow.FollowDAO">
 
-	<resultMap id="followMap" type="hashmap">
+	<resultMap id="followerMap" type="hashmap">
 		<result column="USER_ID" 				property="userId"/>
 		<result column="NICKNAME" 				property="nickname"/>
 		<result column="PROFILE_ORIGINAL_NAME" 	property="profileOriginalName"/>
@@ -14,7 +14,7 @@
 		<result column="EMAIL" 					property="email"/>
 	</resultMap>
 	
-	<select id="getFollowerList" resultMap="followMap">
+	<select id="getFollowerList" resultMap="followerMap">
 		SELECT	U.USER_ID					AS USER_ID,
 				U.NICKNAME					AS NICKNAME,
 				U.PROFILE_ORIGINAL_NAME		AS PROFILE_ORIGINAL_NAME,
@@ -52,24 +52,28 @@
         WHERE  FOLLOWEE_ID = #{followeeId}
     </select>
     
-	<select id="getFollowingList" resultMap="followMap">
+    <resultMap id="followingMap" type="hashmap">
+		<result column="USER_ID" 				property="userId"/>
+		<result column="NICKNAME" 				property="nickname"/>
+		<result column="PROFILE_ORIGINAL_NAME" 	property="profileOriginalName"/>
+		<result column="PROFILE_UUID" 			property="profileUuid"/>
+		<result column="AMBITION_QUOTE" 		property="ambitionQuote"/>
+		<result column="FOLLOWER_ID" 			property="followerId"/>
+		<result column="FOLLOWEE_ID" 			property="followeeId"/>
+	</resultMap>
+	
+	<select id="getFollowingList" resultMap="followerMap">
 		SELECT	U.USER_ID					AS USER_ID,
 				U.NICKNAME					AS NICKNAME,
 				U.PROFILE_ORIGINAL_NAME		AS PROFILE_ORIGINAL_NAME,
 				U.PROFILE_UUID				AS PROFILE_UUID,
 				U.AMBITION_QUOTE 			AS AMBITION_QUOTE,
 				F.FOLLOWER_ID				AS FOLLOWER_ID,
-				F.FOLLOWEE_ID				AS FOLLOWEE_ID,
-				U.EMAIL						AS EMAIL
-		FROM	FOLLOW F
-		LEFT JOIN USER U
+				F.FOLLOWEE_ID				AS FOLLOWEE_ID
+		FROM	USER U
+		LEFT JOIN FOLLOW F
 		ON		U.USER_ID = F.FOLLOWEE_ID
-		<where>
-			F.FOLLOWER_ID = #{followerId}
-			<if test="searchFollower != null and searchFollower != ''">
-				AND U.NICKNAME LIKE CONCAT('%',#{searchFollower},'%')
-			</if>
-		</where>
+		WHERE	F.FOLLOWER_ID = #{followerId}
 	</select>
 	
 	 <select id="followingMainCnt" resultType="long">
@@ -109,14 +113,14 @@
 
 	<select id="check" parameterType="FollowDTO" resultType="integer">
     SELECT 
-    CASE 
-        WHEN SUM(CASE WHEN FOLLOWER_ID = #{followerId} AND FOLLOWEE_ID = #{followeeId} THEN 1 ELSE 0 END) > 0
-             AND SUM(CASE WHEN FOLLOWER_ID = #{followeeId} AND FOLLOWEE_ID = #{followerId} THEN 1 ELSE 0 END) > 0 THEN 2
-        WHEN SUM(CASE WHEN FOLLOWER_ID = #{followerId} AND FOLLOWEE_ID = #{followeeId} THEN 1 ELSE 0 END) > 0 THEN 1
-        WHEN SUM(CASE WHEN FOLLOWER_ID = #{followeeId} AND FOLLOWEE_ID = #{followerId} THEN 1 ELSE 0 END) > 0 THEN -1
-        ELSE -2
-    END AS CASE_RESULT
-	FROM FOLLOW
+        CASE 
+            WHEN SUM(CASE WHEN FOLLOWER_ID = #{followerId} AND FOLLOWEE_ID = #{followeeId} THEN 1 ELSE 0 END) > 0
+                 AND SUM(CASE WHEN FOLLOWER_ID = #{followeeId} AND FOLLOWEE_ID = #{followerId} THEN 1 ELSE 0 END) > 0 THEN 2
+            WHEN SUM(CASE WHEN FOLLOWER_ID = #{followerId} AND FOLLOWEE_ID = #{followeeId} THEN 1 ELSE 0 END) > 0 THEN 1
+            WHEN SUM(CASE WHEN FOLLOWER_ID = #{followeeId} AND FOLLOWEE_ID = #{followeeId} THEN 1 ELSE 0 END) > 0 THEN -1
+            ELSE -2
+        END AS CASE_RESULT
+    FROM FOLLOW
     </select>
 
 </mapper>

@@ -8,11 +8,57 @@
 <head>
     <script>
         $(function () {
+        	
+        	$(document).on("click", "#followerBtn", function(){
+                let param = {
+                    "followeeId" : $("[name='followeeId']").val(),
+                    "followerId" : $("#followerId").val()			// 로그인한 유저ID
+                };
+                
+                if ($("#followerBtn").val() == "팔로우") {
+	                console.log(param);
+                	$.ajax({
+        	            url : "/follow/createFollow",
+        	            type : "post",
+        	            data : $.param(param),
+        	            success : function(isSuccess) {
+        	                alert("팔로우 성공");
+        	                $("#followerBtn").val("팔로우 취소");
+        	            },
+        	            error: function (xhr, status, error) {
+        	                alert("이미 팔로우 중");
+        	                $("#followerBtn").val("팔로우 취소");
+        	            }
+        	        });
+                }
+                
+                else if ($("#followerBtn").val() == "팔로우 취소") {
+	                console.log(param);
+                	$.ajax({
+        	            url : "/follow/deleteFollow",
+        	            type : "post",
+        	            data : $.param(param),
+        	            success : function(isSuccess) {
+        	                alert("팔로우 취소");
+        	                $("#followerBtn").val("팔로우");
+        	            },
+        	            error: function (xhr, status, error) {
+        	                alert("이미 팔로우 취소");
+        	                $("#followerBtn").val("팔로우");
+        	            }
+        	        });
+                }
+                
+            });
+        	
+        	let followerId = $("#followerId").val();
+        	console.log(followerId);
+        	
             $("#search").on("input", function () {  // input 이벤트로 변경
                 let search = $(this).val();
 
-
                 if (search.length > 0) {  // 입력값이 있을 때만 요청
+                	
                     $.ajax({
                         type: "get",
                         url: "/user/name",
@@ -26,18 +72,27 @@
                                <td>
                                    <img src="${imgSrc}" width="90" height="90" alt="프로필 이미지">
                                    <div>
-                                       <h6>${user.name}</h6>
+                                       <h6><a href="/user/user-detail?userId=${user.userId}">${user.name}</a></h6>
+                                       <input type="hidden" value="${user.userId}" name="followeeId"/>
                                        <div>${user.ambitionQuote}</div>
                                    </div>
                                </td>
                                <td>${user.postCount}개</td>
                                <td>${user.followerCount}명</td>
                                <td>${user.followingCount}명</td>
-                               <td>
-                                   <input type="button" class="site-btn" value="팔로우">
-                               </td>
-                           </tr>
-                       `;
+                               <td>`;
+                               if (followerId == "") {
+	                               		userTable += `로그인 후 팔로우 가능
+	                               </td>
+	                           </tr>
+	                       `;
+                               }
+                               else {
+	                               		userTable += `<input type="button" class="site-btn" value="팔로우" id="followerBtn" >
+	                               </td>
+	                           </tr>
+	                       `;
+                               }
                             });
                             $("tbody").html(userTable);
                         }
@@ -49,7 +104,11 @@
                </tr>
            `);
                 }
+                
+                
+                
             });
+            
         });
 
 
@@ -99,8 +158,8 @@
                                 <div class="col-lg-6">
                                     <div class="discount__content">
                                         <form action="#">
+											<input type="hidden" th:value="${session.userId}" id="followerId"/>
                                             <input type="text" id="search" name="search" placeholder="유저 이름 검색창"><br></br>
-
 
                                         </form>
                                     </div>

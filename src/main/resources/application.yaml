@@ -27,4 +27,5 @@ server:
       max-request-size: 100MB
 file:
   repo:
-    path: /Users/jeongminji/member_profile_repository/
+    path: /Users/syoo/member_profile_repository/
+
