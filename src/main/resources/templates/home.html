@@ -101,9 +101,9 @@
 	                    <div class="categories__item categories__large__item set-bg"
 	                    th:data-setbg="@{/user/thumbnails(fileName=${topBest.profileUuid})}">
 	                    <div class="categories__text">
-	                        <h1 th:text="${topBest.nickname}">유저1</h1>
-	                        <p th:text="${topBest.ambitionQuote}">유저 포부.</p>
-	                        <a th:href="@{/user/user-detail(userId=${topBest.userId})}">User details</a>
+	                        <h1 th:text="${topBest.nickname}" style="color: white; text-shadow: 2px 2px 2px black;">유저1</h1>
+	                        <p th:text="${topBest.ambitionQuote}" style="color: white; text-shadow: 2px 2px 2px black;">유저 포부.</p>
+	                        <a th:href="@{/user/user-detail(userId=${topBest.userId})}" style="color: white; text-shadow: 2px 2px 2px black;">User details</a>
 	                    </div>
 	                </div>
                 </div>
@@ -113,9 +113,9 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0" th:each="topBestUser : ${bestUserList}">
                         <div class="categories__item set-bg" th:data-setbg="@{/user/thumbnails(fileName=${topBestUser.profileUuid})}">
                             <div class="categories__text">
-                                <h4 th:text="${topBestUser.nickname}">유저2</h4>
-                                <p th:text="${topBestUser.ambitionQuote}">유저 포부.</p>
-                                <a th:href="@{/user/user-detail(userId=${topBestUser.userId})}">User details</a>
+                                <h4 th:text="${topBestUser.nickname}" style="color: white; text-shadow: 2px 2px 2px black;">유저2</h4>
+                                <p th:text="${topBestUser.ambitionQuote}" style="color: white; text-shadow: 2px 2px 2px black;">유저 포부.</p>
+                                <a th:href="@{/user/user-detail(userId=${topBestUser.userId})}" style="color: white; text-shadow: 2px 2px 2px black;">User details</a>
                             </div>
                         </div>
                     </div>

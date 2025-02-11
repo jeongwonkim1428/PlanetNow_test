@@ -248,7 +248,8 @@
                 <br />
                 <p class="bebas-font" th:text="${userDTO.ambitionQuote}"></p>
                 <br />
-                <h5 class="oswald-font center-align" th:text="${progress}" ></h5>
+                <h6 class="oswald-font center-align" >완료율</h6>
+                <h5 class="oswald-font center-align" th:text="|${progress} % |" ></h5>
               </div>
               <!-- Shop Cart Section Begin -->
               <section class="shop-cart spad">
@@ -317,6 +318,7 @@
                           <a class="page-link" th:data-page="${page}" th:text="${page}" style="cursor: pointer;"></a>
                         </th:block>
                       </th:block>
+                    </div>
                   </div>
                 </div>
               </section>

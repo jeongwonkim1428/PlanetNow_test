@@ -8,57 +8,84 @@
 <head>
     <script>
         $(function () {
-        	
-        	$(document).on("click", "#followerBtn", function(){
+
+            $(document).on("click", "#followerBtn", function(){
                 let param = {
                     "followeeId" : $("[name='followeeId']").val(),
-                    "followerId" : $("#followerId").val()			// 로그인한 유저ID
+                    "followerId" : $("#followerId").val()         // 로그인한 유저ID
                 };
-                
+
                 if ($("#followerBtn").val() == "팔로우") {
-	                console.log(param);
-                	$.ajax({
-        	            url : "/follow/createFollow",
-        	            type : "post",
-        	            data : $.param(param),
-        	            success : function(isSuccess) {
-        	                alert("팔로우 성공");
-        	                $("#followerBtn").val("팔로우 취소");
-        	            },
-        	            error: function (xhr, status, error) {
-        	                alert("이미 팔로우 중");
-        	                $("#followerBtn").val("팔로우 취소");
-        	            }
-        	        });
+                    console.log(param);
+                    $.ajax({
+                        url : "/follow/createFollow",
+                        type : "post",
+                        data : $.param(param),
+                        success : function(isSuccess) {
+                            alert("팔로우 성공");
+                            searchUsers();
+                        },
+                        error: function (xhr, status, error) {
+                            alert("이미 팔로우 중");
+                        }
+                    });
                 }
-                
+
                 else if ($("#followerBtn").val() == "팔로우 취소") {
-	                console.log(param);
-                	$.ajax({
-        	            url : "/follow/deleteFollow",
-        	            type : "post",
-        	            data : $.param(param),
-        	            success : function(isSuccess) {
-        	                alert("팔로우 취소");
-        	                $("#followerBtn").val("팔로우");
-        	            },
-        	            error: function (xhr, status, error) {
-        	                alert("이미 팔로우 취소");
-        	                $("#followerBtn").val("팔로우");
-        	            }
-        	        });
+                    console.log(param);
+                    $.ajax({
+                        url : "/follow/deleteFollow",
+                        type : "post",
+                        data : $.param(param),
+                        success : function(isSuccess) {
+                            alert("팔로우 취소");
+                            searchUsers();
+                        },
+                        error: function (xhr, status, error) {
+                            alert("이미 팔로우 취소");
+                        }
+                    });
                 }
-                
+                else if ($("#followerBtn").val() == "맞팔로우") {
+                    $.ajax({
+                        url : "/follow/createFollow",
+                        type : "post",
+                        data : $.param(param),
+                        success : function(isSuccess) {
+                            alert("팔로우 성공");
+                            searchUsers();
+                        },
+                        error: function (xhr, status, error) {
+                            alert("이미 팔로우 중");
+                        }
+                    });
+                }
+                else if ($("#followerBtn").val() == "맞팔로우 취소") {
+                    console.log(param);
+                    $.ajax({
+                        url : "/follow/deleteFollow",
+                        type : "post",
+                        data : $.param(param),
+                        success : function(isSuccess) {
+                            alert("팔로우 취소");
+                            searchUsers();
+                        },
+                        error: function (xhr, status, error) {
+                            alert("이미 팔로우 취소");
+                        }
+                    });
+                }
+
             });
-        	
-        	let followerId = $("#followerId").val();
-        	console.log(followerId);
-        	
-            $("#search").on("input", function () {  // input 이벤트로 변경
-                let search = $(this).val();
+
+            let followerId = $("#followerId").val();
+            console.log(followerId);
+
+            function searchUsers() {
+                let search = $("#search").val();
 
                 if (search.length > 0) {  // 입력값이 있을 때만 요청
-                	
+
                     $.ajax({
                         type: "get",
                         url: "/user/name",
@@ -68,47 +95,78 @@
                             users.forEach(user => {
                                 let imgSrc = `/user/thumbnails?fileName=${user.profileUuid}`;
                                 userTable += `
-                           <tr>
-                               <td>
-                                   <img src="${imgSrc}" width="90" height="90" alt="프로필 이미지">
-                                   <div>
-                                       <h6><a href="/user/user-detail?userId=${user.userId}">${user.name}</a></h6>
-                                       <input type="hidden" value="${user.userId}" name="followeeId"/>
-                                       <div>${user.ambitionQuote}</div>
-                                   </div>
-                               </td>
-                               <td>${user.postCount}개</td>
-                               <td>${user.followerCount}명</td>
-                               <td>${user.followingCount}명</td>
-                               <td>`;
-                               if (followerId == "") {
-	                               		userTable += `로그인 후 팔로우 가능
-	                               </td>
-	                           </tr>
-	                       `;
-                               }
-                               else {
-	                               		userTable += `<input type="button" class="site-btn" value="팔로우" id="followerBtn" >
-	                               </td>
-	                           </tr>
-	                       `;
-                               }
+                               <tr>
+                                   <td>
+                                       <img src="${imgSrc}" width="90" height="90" alt="프로필 이미지">
+                                       <div>
+                                           <h6><a href="/user/user-detail?userId=${user.userId}">${user.name} / ${user.nickname}</a></h6>
+                                           <input type="hidden" value="${user.userId}" name="followeeId"/>
+                                           <div>${user.ambitionQuote}</div>
+                                       </div>
+                                   </td>
+                                   <td>${user.postCount}개</td>
+                                   <td>${user.followingCount}명</td>
+                                   <td>${user.followerCount}명</td>
+                                   <td>`;
+                                if (followerId == "") {
+                                    userTable += `로그인 후 팔로우 가능
+                                      </td>
+                                  </tr>
+                              `;
+                                }
+                                else if (followerId == user.userId) {
+                                    userTable += `본인
+                                         </td>
+                                     </tr>
+                                 `;
+                                }
+                                else {
+                                    // 맞팔로우
+                                    if (user.check == -1) {
+                                        userTable += `<input type="button" class="site-btn" value="맞팔로우" id="followerBtn" >
+                                            </td>
+                                        </tr>
+                                    `;
+                                    }
+                                    // 맞팔로우 취소
+                                    else if (user.check == 2) {
+                                        userTable += `<input type="button" class="site-btn" value="맞팔로우 취소" id="followerBtn" >
+                                            </td>
+                                        </tr>
+                                    `;
+                                    }
+                                    // 팔로우
+                                    else if (user.check == -2) {
+                                        userTable += `<input type="button" class="site-btn" value="팔로우" id="followerBtn" >
+                                            </td>
+                                        </tr>
+                                    `;
+                                    }
+                                    // 팔로우 취소
+                                    else if (user.check == 1) {
+                                        userTable += `<input type="button" class="site-btn" value="팔로우 취소" id="followerBtn" >
+                                            </td>
+                                        </tr>
+                                    `;
+                                    }
+                                }
                             });
                             $("tbody").html(userTable);
                         }
                     });
                 } else {
                     $("tbody").html(`
-               <tr id="noResults">
-                   <td colspan="5" style="text-align: center;">검색하고 싶은 유저를 검색해주세요</td>
-               </tr>
-           `);
+                   <tr id="noResults">
+                       <td colspan="5" style="text-align: center;">검색하고 싶은 유저를 검색해주세요</td>
+                   </tr>
+               `);
                 }
-                
-                
-                
-            });
-            
+            }
+
+            $("#search").on("input", function () {  // input 이벤트로 변경
+                searchUsers();
+                });
+
         });
 
 
@@ -128,88 +186,68 @@
 <body>
 <div layout:fragment="content">
 
-<!-- Breadcrumb Begin -->
-<div class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__links">
-                    <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                    <span>유저 검색</span>
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <span>유저 검색</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Breadcrumb End -->
+    <!-- Breadcrumb End -->
 
 
-<!-- Shop Cart Section Begin -->
-<section class="shop-cart spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shop__cart__table">
-                    <table>
-                        <legend><strong>유저 검색</strong></legend>
-                        <thead>
-                        <tr align="right">
-                            <td colspan="5" align="right" >
-                                <div class="col-lg-6">
-                                    <div class="discount__content">
-                                        <form action="#">
-											<input type="hidden" th:value="${session.userId}" id="followerId"/>
-                                            <input type="text" id="search" name="search" placeholder="유저 이름 검색창"><br></br>
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <legend><strong>유저 검색</strong></legend>
+                            <thead>
+                            <tr align="right">
+                                <td colspan="5" align="right" >
+                                    <div class="col-lg-6">
+                                        <div class="discount__content">
+                                            <form action="#">
+                                                <input type="hidden" th:value="${session.userId}" id="followerId"/>
+                                                <input type="text" id="search" name="search" placeholder="유저 이름 검색창"><br></br>
 
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </thead>
-                        <thead>
-                        <tr>
-                            <th>유저</th>
-                            <th>게시글 개수</th>
-                            <th>팔로잉 수</th>
-                            <th>팔로워 수</th>
-                            <th class="row">팔로우 버튼</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr id="noResults">
-                            <td colspan="5" style="text-align: center;">검색하고 싶은 유저를 검색해주세요</td>
-                        </tr>
+                                </td>
+                            </tr>
+                            </thead>
+                            <thead>
+                            <tr>
+                                <th>유저</th>
+                                <th>게시글 개수</th>
+                                <th>팔로잉 수</th>
+                                <th>팔로워 수</th>
+                                <th class="row">팔로우 버튼</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr id="noResults">
+                                <td colspan="5" style="text-align: center;">검색하고 싶은 유저를 검색해주세요</td>
+                            </tr>
+                            </tbody>
+                        </table>
 
 
-                        <!--                                <tr>-->
-                        <!--                                    -->
-                        <!--                                    <td class="cart__product__item">-->
-                        <!--                                        <img th:src="@{#}" width="90" height="90" alt="">-->
-                        <!--                                        <div class="cart__product__item__title">-->
-                        <!--                                            <h6 >유저1</h6>-->
-                        <!--                                            <div >포부에 대한 내용</div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </td>-->
-                        <!--                                    <td >예 : 100개(게시글개수)</td>-->
-                        <!--                                    <td >예 : 10개(댓글개수)</td>-->
-                        <!--                                    <td >1000(팔로우)</td>-->
-                        <!--                                    <td>-->
-                        <!--                                        <input type="button" class="site-btn" value="팔로우">-->
-                        <!--                                    </td>-->
-                        <!--                                </tr>-->
-
-
-                        </tbody>
-                    </table>
-
-
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Shop Cart Section End -->
+    </section>
+    <!-- Shop Cart Section End -->
 
 
 </div>

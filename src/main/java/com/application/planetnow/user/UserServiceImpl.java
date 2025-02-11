@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Double getProgress(Long userId) {
+    public double getProgress(Long userId) {
         List<MainTaskDTO> userTaskList = userDAO.getUserProgressRate(userId);
         if (userTaskList.isEmpty()){
             return (double) 0;
@@ -109,7 +109,9 @@ public class UserServiceImpl implements UserService {
         Integer userCompleted =userTaskList.stream()
                 .filter((task) -> task.getTaskStatusId().equals(3))
                 .toList().size();
-        return (double)userTaskCount / userCompleted * 100;
+
+
+        return (double) Math.round((double) userCompleted / userTaskCount * 10000) / 100 ;
     }
 
     @Override

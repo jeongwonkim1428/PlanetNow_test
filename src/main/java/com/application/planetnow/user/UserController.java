@@ -98,8 +98,17 @@ public class UserController {
     }
     @GetMapping("/name")
     @ResponseBody
-    public List<Map<String, Object>> searchName(@RequestParam("search") String search) {
-        return userService.searchUser(search);
+    public List<Map<String, Object>> searchName(@RequestParam("search") String search,
+                                                HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long loginId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
+        List<Map<String, Object>> searches = userService.searchUser(search);
+
+        for (Map<String, Object> temp : searches) {
+            temp.put("check", followService.check((Long) temp.get("userId"), loginId));
+        }
+
+        return searches;
     }
 
     @GetMapping("/user-detail")

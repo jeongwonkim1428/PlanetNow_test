@@ -123,17 +123,14 @@ public class FollowController {
     
     @PostMapping("/createFollow")
     @ResponseBody
-    public String createFollower(@RequestParam("followeeId") Long followeeId, 
+    public String createFollower(@RequestParam("followeeId") Long followeeId,
     						   @RequestParam("followerId") Long followerId) {
-//    	Long followerId = userService.getUserDetail(followerEmail).getUserId();
-//    	System.out.println(followeeId);
-//    	System.out.println(followerId);
+
     	FollowDTO followDTO = new FollowDTO();
     	followDTO.setFolloweeId(followeeId);
     	followDTO.setFollowerId(followerId);
     	followService.createFollow(followDTO);
     	System.out.println(followDTO);
-//    	System.out.println(result);
     	
     	return "";
     }

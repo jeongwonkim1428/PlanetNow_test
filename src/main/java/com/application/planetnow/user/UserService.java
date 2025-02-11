@@ -46,7 +46,7 @@ public interface UserService {
 
     List<Map<String, Object>> searchUser(String name);
 
-    Double getProgress(Long userId);
+    double getProgress(Long userId);
 
     Long getFollowerCount(Long userId);
 
