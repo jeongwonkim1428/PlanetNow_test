@@ -151,8 +151,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean loginResult(UserDTO userDTO) {
         UserDTO loginUser = userDAO.loginResult(userDTO);
-        log.info("암호화 패스워드: " + loginUser.getPassword());
-        log.info("내 비밀번호: " + userDTO.getPassword());
+
         if (loginUser != null){
             if( passwordEncoder.matches(userDTO.getPassword(),loginUser.getPassword()) ){
                 //포인트 리스트 조회
