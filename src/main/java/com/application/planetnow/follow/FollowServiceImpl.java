@@ -41,15 +41,10 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getFollowingList(Long followerId) {
-		return followDAO.getFollowingList(followerId);
+	public List<Map<String, Object>> getFollowingList(Map<String, Object> temp) {
+		return followDAO.getFollowingList(temp);
 	}
 	
-	@Override
-	public List<Map<String, Object>> getFollowingList(String searchFollowee) {
-		return followDAO.getFollowingList(searchFollowee);
-	}
-
 	@Override
 	public Long followingMainCnt(Long followerId) {
 		return followDAO.followingMainCnt(followerId);
@@ -94,21 +89,14 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	public Integer check(Long followeeId, Long followerId) {
 		
-		Integer isTrue = 0;
-		
 		FollowDTO followDTO = new FollowDTO();
 		followDTO.setFolloweeId(followeeId);
 		followDTO.setFollowerId(followerId);
+		System.out.println("followerId: " + followerId);
+		System.out.println("followeeId: " + followeeId);
 		
-		followDAO.check(followDTO);
-		if (followDAO.check(followDTO) == null) {
-			isTrue = 1;
-		}
-		else {
-			isTrue = -1;
-		}
+		return followDAO.check(followDTO);
 
-		return isTrue;
 	}
 
 
