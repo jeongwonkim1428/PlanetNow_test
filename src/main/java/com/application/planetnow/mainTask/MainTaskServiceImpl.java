@@ -1,8 +1,15 @@
 package com.application.planetnow.mainTask;
 
 import com.application.planetnow.subTask.SubTaskDAO;
+import com.application.planetnow.user.UserDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
+import java.util.ArrayList;
+
+import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
@@ -16,21 +23,25 @@ public class MainTaskServiceImpl implements MainTaskService {
     @Autowired
     SubTaskDAO subTaskDAO;
 
-
-
     @Override
-    public List<Map<String, Object>> getMainTaskList() {
-        return mainTaskDAO.getMainTaskList();
+    public List<Map<String, Object>> getMainTaskList(Integer size, Integer page) {
+        Integer offset = page * size - 5;
+        Map<String, Object> map = new HashMap<>();
+        map.put("size", size);
+        map.put("offset", offset);
+        return mainTaskDAO.getMainTaskList(map);
     }
 
     @Override
-    public List<Map<String, Object>> getMainTaskList(String keyword, Long categoryId) {
-        return mainTaskDAO.getMainTaskList(keyword, categoryId);
+    public List<Map<String, Object>> getMainTaskList(String keyword, Long categoryId, Integer size, Integer page) {
+        Integer offset = page * size - 5;
+        return mainTaskDAO.getMainTaskList(keyword, categoryId, size, offset);
     }
 
     @Override
-    public List<Map<String, Object>> getMainTaskListById(Long userId) {
-        return mainTaskDAO.getMainTaskListById(userId);
+    public List<Map<String, Object>> getMainTaskListById(Integer size, Integer page, Long userId) {
+        Integer offset = page * size - 5;
+        return mainTaskDAO.getMainTaskListById(size, offset, userId);
     }
 
 
@@ -107,6 +118,55 @@ public class MainTaskServiceImpl implements MainTaskService {
     public void deleteMainTask(Long mainTaskId) {
         mainTaskDAO.deleteMainTask(mainTaskId);
     }
+    
+      // home (top3, best5)
+    @Override
+    public List<MainTaskDTO> getTopViewCnt() {
+      return mainTaskDAO.getTopViewCnt();
+    }
+
+    @Override
+    public List<MainTaskDTO> getTopReplyCnt() {
+      return mainTaskDAO.getTopReplyCnt();
+    }
+
+    @Override
+    public List<MainTaskDTO> getTopLikeCnt() {
+      return mainTaskDAO.getTopLikeCnt();
+    }
+
+    @Override
+    public List<MainTaskDTO> getBestUserCnt() {
+      return mainTaskDAO.getBestUserCnt();
+    }
+
+    @Override
+    public List<MainTaskDTO> getBestCnt() {
+      return mainTaskDAO.getBestCnt();
+    }
+
+
+    @Override
+    public int getTotalOfMainTaskByUserId(Long userId) {
+        int totalOfMainTask = mainTaskDAO.getTotalOfMainTaskByUserId(userId);
+        int nOfPages = (int) Math.ceil((double) totalOfMainTask / 5);
+        return nOfPages;
+    }
+
+    @Override
+    public int getTotalOfMainTask() {
+        int totalOfMainTask = mainTaskDAO.getTotalOfMainTask();
+        int nOfPages = (int) Math.ceil((double) totalOfMainTask / 5);
+        return nOfPages;
+    }
+
+    @Override
+    public int getTotalOfMainTaskBySearch(String keyword, Long categoryId) {
+        int totalOfMainTask = mainTaskDAO.getTotalOfMainTaskBySearch(keyword, categoryId);
+        int nOfPages = (int) Math.ceil((double) totalOfMainTask / 5);
+        return nOfPages;
+    }
+
 
 
 }

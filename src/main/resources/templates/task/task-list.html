@@ -12,6 +12,7 @@
 
     <script th:inline="javascript">
         let selectedCategoryId = [[${selectedCategoryId}]];  // The categoryId is passed from the controller
+        let keyword = [[${keyword}]];
     </script>
     <script>
         $(document).ready(function () {
@@ -19,53 +20,120 @@
             if (selectedCategoryId != null) {
                 $("select[name='categoryId']").val(selectedCategoryId);
             }
+            if(keyword != null) {
+                $("#searchBoxKeyword").val(keyword);
+            }
 
-            $(".categoryNmSpan").each(function () {
-                // Get the category name from the data attribute
-                let categoryNm = $(this).data('category').trim();
-                // Change the background color based on the category name
-                switch (categoryNm) {
-                    case "학업":
-                        $(this).css("background", "#ED2A2AFF");
-                        break;
-                    case "건강":
-                        $(this).css("background", "green");
-                        break;
-                    case "자격증":
-                        $(this).css("background", "purple");
-                        break;
-                    case "취미":
-                        $(this).css("background", "blue");
-                        break;
-                    case "기타":
-                        $(this).css("background", "lightgray");
-                        break;
-                    default:
-                        $(this).css("background", "lightgray");
-                }
-            });
+            applyTaskStatusColors();
+            function applyTaskStatusColors() {
+                $(".taskStatusSpan").each(function () {
+                    let taskStatus = $(this).data("tstatus"); // Ensure this matches the data attribute in HTML
 
-            $(".taskStatusSpan").each(function () {
-                // Get the task status from the data attribute
-                let taskStatus = $(this).data("tstatus");  // Replace "task-status" with the actual attribute
+                    switch (taskStatus) {
+                        case "진행전":
+                            $(this).css("background", "#d3d3d3"); // Light Gray
+                            break;
+                        case "진행중":
+                            $(this).css("background", "#28a745"); // Green
+                            break;
+                        case "완료":
+                            $(this).css("background", "#007bff"); // Blue
+                            break;
+                        case "실패":
+                            $(this).css("background", "#dc3545"); // Red
+                            break;
+                        default:
+                            $(this).css("background", "grey");
+                    }
+                });
+            }
 
-                // Apply background color based on the task status value
-                switch (taskStatus) {
-                    case "진행전":
-                        $(this).css("background", "#d3d3d3"); // Light Gray
-                        break;
-                    case "진행중":
-                        $(this).css("background", "#28a745"); // Green
-                        break;
-                    case "완료":
-                        $(this).css("background", "#007bff"); // Blue
-                        break;
-                    case "실패":
-                        $(this).css("background", "#dc3545"); // Red
-                        break;
-                    default:
-                        $(this).css("background", "grey");
-                }
+            applyCategoryColor();
+            function applyCategoryColor() {
+                $(".categoryNmSpan").each(function () {
+                    // Get the category name from the data attribute
+                    let categoryNm = $(this).data('category').trim();
+                    // Change the background color based on the category name
+                    switch (categoryNm) {
+                        case "학업":
+                            $(this).css("background", "#ED2A2AFF");
+                            break;
+                        case "건강":
+                            $(this).css("background", "green");
+                            break;
+                        case "자격증":
+                            $(this).css("background", "purple");
+                            break;
+                        case "취미":
+                            $(this).css("background", "blue");
+                            break;
+                        case "기타":
+                            $(this).css("background", "lightgray");
+                            break;
+                        default:
+                            $(this).css("background", "lightgray");
+                    }
+                });
+            }
+
+            $(".page-link").click(function () {
+                let page = $(this).data('page');
+                let keyword = "[[${keyword}]]";
+                let categoryId = "[[${categoryId}]]";
+                console.log("카테고리 + " + categoryId);
+                $.ajax({
+                    url: "/task/task-list-nextpage",
+                    type: "POST",
+                    data: { page: page,
+                            keyword: keyword,
+                            categoryId: categoryId},
+                    success: function (mainTaskList) {
+                        // Assuming `mainTaskList` is an array of objects containing the task details
+                        let tableBody = $("#taskList"); // Target the table body (adjust selector as needed)
+
+                        // Iterate over the response and append rows
+                        let taskListHtml = "";
+                        mainTaskList.forEach(task => {
+
+                            taskListHtml += `
+                            <tr>
+                                <td class="cart__product__item">
+                                    <div class="cart__product__item__title">
+                                        <a href="/task/task-detail?mainTaskId=${task.mainTaskId}"
+                                           >${task.mainSubject}</a>
+                                    </div>
+                                    <span
+                                          class="categoryNmSpan"
+                                          data-category="${task.categoryNm}"
+                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
+                                        ${task.categoryNm}</span>
+                                </td>
+                                <td>${task.nickname}</td>
+                                <td>${task.enrolledAt}</td>
+                                <td>
+                                        <span
+                                              class="taskStatusSpan"
+                                              data-tstatus="${task.taskStatusValue}"
+                                              style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
+                                        ${task.taskStatusValue}</span>
+                                </td>
+                                <td>
+                                    <span>조회수: ${task.viewCnt}</span>
+                                    <span>댓글수: ${task.replyCnt}</span>
+                                </td>
+                            </tr>
+
+                `;
+                        });
+                        tableBody.html(taskListHtml);
+                        applyTaskStatusColors();
+                        applyCategoryColor();
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
             });
 
         });
@@ -111,7 +179,7 @@
                                                     th:text="${category.categoryNm}">
                                             </option>
                                         </select>
-                                        <input type="text" placeholder="제목 검색" name="keyword"/>
+                                        <input type="text" id="searchBoxKeyword" placeholder="제목 검색" name="keyword"/>
                                         <input type="submit" class="site-btn" value="검색"/>
                                     </form>
                                 </div>
@@ -125,8 +193,7 @@
                             <th>기타</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <div th:fragment="taskRows">
+                        <tbody id="taskList">
                             <tr th:each="mainTaskMap : ${mainTaskListMap}">
                                 <td class="cart__product__item">
                                     <div class="cart__product__item__title">
@@ -153,16 +220,25 @@
                                     <span th:text="'댓글수: ' + ${mainTaskMap.replyCnt}"></span>
                                 </td>
                             </tr>
-                        </div>
-                        <th:block>
-                            <tr align="center">
-                                <td colspan="2">
-                                    <a th:href="@{/task/create-task}">게시물 등록</a>
-                                </td>
-                            </tr>
-                        </th:block>
                         </tbody>
                     </table>
+                    <th:block>
+                        </br>
+                        <tr align="center">
+                            <td colspan="2">
+                                <a th:href="@{/task/create-task}">게시물 등록</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </br>
+                    </br>
+                    <div class="pagination__option">
+                        <th:block th:if="${nOfPages > 0}">
+                            <th:block th:each="page : ${#numbers.sequence(1, nOfPages)}">
+                                <a class="page-link" th:data-page="${page}" th:text="${page}" style="cursor: pointer;"></a>
+                            </th:block>
+                        </th:block>
+                    </div>
                 </div>
             </div>
         </div>

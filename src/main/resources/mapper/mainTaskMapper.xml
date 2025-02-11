@@ -18,14 +18,18 @@
         <result column="MEMO"              property="memo"/>
         <result column="NICKNAME"          property="nickname"/>
         <result column="EMAIL"             property="email"/>
-
+        <result column="LIKE_CNT"          property="likeCnt"/>
+        <result column="POST_CNT" 	   	   property="postCnt"/>
+        <result column="AMBITION_QUOTE"    property="ambitionQuote"/>
+        <result column="PROFILE_UUID" 	   property="profileUuid"/>
+        
     </resultMap>
 
     <!-- 게시글 전체조회 -->
     <select id="getMainTaskList" resultMap="mainTaskMap">
         SELECT  U.NICKNAME          AS NICKNAME,
                 M.MAIN_SUBJECT      AS MAIN_SUBJECT,
-                M.ENROLLED_AT       AS ENROLLED_AT,
+                DATE_FORMAT(M.ENROLLED_AT, '%Y-%m-%d')      AS ENROLLED_AT,
                 T.TASK_STATUS_VALUE AS TASK_STATUS_VALUE,
                 M.VIEW_CNT          AS VIEW_CNT,
                 COUNT(R.REPLY_ID)   AS REPLY_CNT,
@@ -58,6 +62,7 @@
                 M.MAIN_TASK_ID
         ORDER BY
                 M.ENROLLED_AT DESC
+        LIMIT #{size} OFFSET #{offset}
     </select>
 
     <select id="getCategoryList" resultType="CategoryDTO">
@@ -146,6 +151,124 @@
         WHERE U.USER_ID = #{userId}
         ORDER BY
             M.MAIN_TASK_ID DESC
+        LIMIT #{size} OFFSET #{offset}
     </select>
+
+    <select id="getTotalOfMainTaskByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM MAIN_TASK
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="getTotalOfMainTask" resultType="int">
+        SELECT COUNT(*)
+        FROM MAIN_TASK
+    </select>
+
+    <select id="getTotalOfMainTaskBySearch" resultType="int">
+        SELECT COUNT(*)
+        FROM MAIN_TASK M
+        JOIN CATEGORY C
+        ON M.CATEGORY_ID = C.CATEGORY_ID
+        <where>
+            <if test="keyword != null and keyword != ''">
+                M.MAIN_SUBJECT LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="categoryId != null and categoryId !=0">
+                AND C.CATEGORY_ID = #{categoryId}
+            </if>
+        </where>
+    </select>
+    
+   <!-- 조회수 top3 -->
+   <select id="getTopViewCnt" resultMap="mainTaskMap">
+  		SELECT	  M.MAIN_TASK_ID   		AS MAIN_TASK_ID
+  			 ,	  M.MAIN_SUBJECT		AS MAIN_SUBJECT
+  			 ,	  M.VIEW_CNT			AS VIEW_CNT
+  			 ,	  U.NICKNAME		    AS NICKNAME
+  			 ,	  U.PROFILE_UUID		AS PROFILE_UUID
+  		  FROM	  MAIN_TASK M
+  		  JOIN	  USER U
+  		    ON    M.USER_ID = U.USER_ID
+  		 ORDER BY M.VIEW_CNT DESC 
+    	 LIMIT    3
+    </select>
+    
+    <!-- 좋아요 top3 -->
+	<select id="getTopLikeCnt" resultMap="mainTaskMap">
+	    SELECT 	M.MAIN_TASK_ID       AS MAIN_TASK_ID
+		     ,	M.MAIN_SUBJECT       AS MAIN_SUBJECT
+		     ,  COALESCE(L.LIKE_CNT, 0) AS LIKE_CNT
+		     ,  U.NICKNAME           AS NICKNAME
+		     ,	U.PROFILE_UUID       AS PROFILE_UUID
+	      FROM 
+	        	MAIN_TASK M
+	      JOIN 
+	        	USER U 
+	        ON 	M.USER_ID = U.USER_ID
+	      LEFT JOIN (
+		        SELECT 
+		            MAIN_TASK_ID, COUNT(*) AS LIKE_CNT
+		          FROM LIKES L
+		       	GROUP BY MAIN_TASK_ID
+		    ) L   
+		    ON M.MAIN_TASK_ID = L.MAIN_TASK_ID
+	     ORDER BY LIKE_CNT DESC, 
+	       		  M.MAIN_TASK_ID DESC
+	     LIMIT 3    
+	</select>
+
+	<!-- 댓글 top3 -->
+    <select id="getTopReplyCnt" resultMap="mainTaskMap">
+	    SELECT 	M.MAIN_TASK_ID       		AS MAIN_TASK_ID
+	         , 	M.MAIN_SUBJECT      		AS MAIN_SUBJECT
+	         , 	COALESCE(R.REPLY_CNT, 0)	AS REPLY_CNT
+	         , 	U.NICKNAME          		AS NICKNAME
+	         , 	U.PROFILE_UUID      		AS PROFILE_UUID
+	      FROM 	MAIN_TASK M
+	      JOIN 	USER U 
+	        ON 	M.USER_ID = U.USER_ID
+	      LEFT JOIN (
+	        	SELECT MAIN_TASK_ID, COUNT(*) AS REPLY_CNT
+	             FROM REPLY R
+	            GROUP BY MAIN_TASK_ID
+	         ) R 
+	        ON M.MAIN_TASK_ID = R.MAIN_TASK_ID
+	     ORDER BY REPLY_CNT DESC
+	     LIMIT	3  
+	</select>
+	
+	<!-- 베스트 top1 -->
+	<select id="getBestUserCnt" resultMap="mainTaskMap">
+		SELECT	COUNT(M.MAIN_TASK_ID) 	AS POST_CNT
+			 ,	U.AMBITION_QUOTE		AS AMBITION_QUOTE	
+		     ,	U.NICKNAME 				AS NICKNAME
+		     ,	U.PROFILE_UUID 			AS PROFILE_UUID
+		     ,	U.USER_ID				AS USER_ID
+		  FROM 	MAIN_TASK M
+		  JOIN 	USER U 
+		    ON 	M.USER_ID = U.USER_ID  
+		 GROUP BY U.NICKNAME, U.PROFILE_UUID, U.AMBITION_QUOTE, U.USER_ID
+		 ORDER BY POST_CNT DESC, NICKNAME DESC 
+		LIMIT 	1
+	</select>
+	
+	<!-- 베스트 top2-5 -->
+	<select id="getBestCnt" resultMap="mainTaskMap">
+		SELECT	COUNT(M.MAIN_TASK_ID) 	AS POST_CNT
+			 ,	U.AMBITION_QUOTE		AS AMBITION_QUOTE
+		     ,	U.NICKNAME 				AS NICKNAME
+		     ,	U.PROFILE_UUID 			AS PROFILE_UUID
+		     ,	U.USER_ID				AS USER_ID
+		  FROM 	MAIN_TASK M
+		  JOIN 	USER U 
+		    ON 	M.USER_ID = U.USER_ID  
+		 GROUP BY U.NICKNAME, U.PROFILE_UUID , U.AMBITION_QUOTE, U.USER_ID
+		 ORDER BY POST_CNT DESC, NICKNAME DESC 
+		LIMIT 	4 OFFSET 1 <!-- 첫번째 제외하고 두번째부터 -->
+	</select>
+   
+   
+    
 
 </mapper>

@@ -20,6 +20,7 @@ public class MainTaskDTO {
     private Integer taskStatusId;
     private Long viewCnt;
     private List<SubTaskDTO> subTaskDtoList;
-
+    private Long likeCnt;
+    
 
 }

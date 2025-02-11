@@ -15,6 +15,7 @@
 
 <body>
 <div layout:fragment="content">
+<!-- <div th:text="${topViewList}"></div> -->
     <!-- Trend Section Begin -->
     <section class="trend spad">
         <div class="container">
@@ -25,41 +26,23 @@
                             <h4>조회수 top 3</h4>
                         </div>
                         <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/ht-1.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-<!--                                <div class="rating">-->
-<!--                                    <i class="fa fa-star"></i>-->
-<!--                                    <i class="fa fa-star"></i>-->
-<!--                                    <i class="fa fa-star"></i>-->
-<!--                                    <i class="fa fa-star"></i>-->
-<!--                                    <i class="fa fa-star"></i>-->
-<!--                                </div>-->
-                                <h5>작성자</h5>
-                                <h6>조회수</h6>
-                            </div>
-                        </div>
-                        <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/ht-2.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
-                        </div>
-                        <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/ht-3.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
+                        	<div th:each="topView : ${topViewList}">
+	                            <div class="trend__item__pic">
+	                                <img th:src="@{/user/thumbnails(fileName=${topView.profileUuid})}" width="80" height="80" alt="" style="cursor: pointer;" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topView.mainTaskId})}'|">
+	                            </div>
+	                            <div class="trend__item__text">
+	                                <h3 class="product__price" style="cursor: pointer;" th:text="${topView.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topView.mainTaskId})}'|">제목</h3>
+	<!--                                <div class="rating">-->
+	<!--                                    <i class="fa fa-star"></i>-->
+	<!--                                    <i class="fa fa-star"></i>-->
+	<!--                                    <i class="fa fa-star"></i>-->
+	<!--                                    <i class="fa fa-star"></i>-->
+	<!--                                    <i class="fa fa-star"></i>-->
+	<!--                                </div>-->
+	                                <h5 th:text="|작성자: ${topView.nickname}|"></h5>
+	                                <h6 th:text="|조회수: ${topView.viewCnt}|"></h6><br><br>
+	                            </div>
+                        	</div>
                         </div>
                     </div>
                 </div>
@@ -69,34 +52,16 @@
                             <h4>좋아요 top 3</h4>
                         </div>
                         <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/bs-1.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>좋아요</h6>
-                            </div>
-                        </div>
-                        <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/bs-2.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
-                        </div>
-                        <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/bs-3.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
+                        	<div th:each="topLike : ${topLikeList}">
+	                            <div class="trend__item__pic">
+	                                <img th:src="@{/user/thumbnails(fileName=${topLike.profileUuid})}" width="80" height="80" alt="" style="cursor: pointer;" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topLike.mainTaskId})}'|">
+	                            </div>
+	                            <div class="trend__item__text">
+	                                <h3 class="product__price" style="cursor: pointer;" th:text="${topLike.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topLike.mainTaskId})}'|">제목</h3>
+	                                <h5 th:text="|작성자: ${topLike.nickname}|"></h5>
+	                                <h6 th:text="|좋아요: ${topLike.likeCnt}|"></h6><br><br>
+	                            </div>
+                        	</div>
                         </div>
                     </div>
                 </div>
@@ -106,34 +71,16 @@
                             <h4>댓글 top 3</h4>
                         </div>
                         <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/f-1.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
-                        </div>
-                        <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/f-2.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
-                        </div>
-                        <div class="trend__item">
-                            <div class="trend__item__pic">
-                                <img src="../static/img/trend/f-3.jpg" alt="">
-                            </div>
-                            <div class="trend__item__text">
-                                <h3 class="product__price">제목</h3>
-                                <h5>작성자</h5>
-                                <h6>댓글수</h6>
-                            </div>
+                       		<div th:each="topReply : ${topReplyList}">
+	                            <div class="trend__item__pic">
+	                                <img th:src="@{/user/thumbnails(fileName=${topReply.profileUuid})}" width="80" height="80" alt="" style="cursor: pointer;" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topReply.mainTaskId})}'|">
+	                            </div>
+	                            <div class="trend__item__text">
+	                                <h3 class="product__price" style="cursor: pointer;" th:text="${topReply.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topReply.mainTaskId})}'|" > 제목</h3>
+	                                <h5 th:text="|작성자: ${topReply.nickname}|"></h5>
+	                                <h6 th:text="|댓글수: ${topReply.replyCnt}|"></h6><br><br>
+	                            </div>
+                       		</div>
                         </div>
                     </div>
                 </div>
@@ -144,57 +91,31 @@
 
     <!-- Categories Section Begin -->
     <section class="categories">
-        <div class="section-title col-lg-4 col-md-4 col-sm-6" >
+        <div class="section-title col-lg-4 col-md-4 col-sm-6">
             <h4>베스트 유저</h4>
         </div>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 p-0">
-                    <div class="categories__item categories__large__item set-bg"
-                    data-setbg="../static/img/categories/category-1.jpg">
-                    <div class="categories__text">
-                        <h1>유저1</h1>
-                        <p>Sitamet, consectetur adipiscing elit, sed do eiusmod tempor incidid-unt labore
-                        edolore magna aliquapendisse ultrices gravida.</p>
-                        <a href="#">Show details</a>
-                    </div>
+                	<div th:each="topBest : ${bestUser}">
+	                    <div class="categories__item categories__large__item set-bg"
+	                    th:data-setbg="@{/user/thumbnails(fileName=${topBest.profileUuid})}">
+	                    <div class="categories__text">
+	                        <h1 th:text="${topBest.nickname}">유저1</h1>
+	                        <p th:text="${topBest.ambitionQuote}">유저 포부.</p>
+	                        <a th:href="@{/user/user-detail(userId=${topBest.userId})}">User details</a>
+	                    </div>
+	                </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="img/categories/category-2.jpg">
+                    <div class="col-lg-6 col-md-6 col-sm-6 p-0" th:each="topBestUser : ${bestUserList}">
+                        <div class="categories__item set-bg" th:data-setbg="@{/user/thumbnails(fileName=${topBestUser.profileUuid})}">
                             <div class="categories__text">
-                                <h4>유저2</h4>
-                                <p>358 items</p>
-                                <a href="#">Show details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="img/categories/category-3.jpg">
-                            <div class="categories__text">
-                                <h4>유저3</h4>
-                                <p>273 items</p>
-                                <a href="#">Show details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="img/categories/category-4.jpg">
-                            <div class="categories__text">
-                                <h4>유저4</h4>
-                                <p>159 items</p>
-                                <a href="#">Show details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="img/categories/category-5.jpg">
-                            <div class="categories__text">
-                                <h4>유저5</h4>
-                                <p>792 items</p>
-                                <a href="#">Show details</a>
+                                <h4 th:text="${topBestUser.nickname}">유저2</h4>
+                                <p th:text="${topBestUser.ambitionQuote}">유저 포부.</p>
+                                <a th:href="@{/user/user-detail(userId=${topBestUser.userId})}">User details</a>
                             </div>
                         </div>
                     </div>
