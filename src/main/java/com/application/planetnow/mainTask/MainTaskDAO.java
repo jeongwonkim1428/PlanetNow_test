@@ -12,8 +12,9 @@ import java.util.Map;
 @Mapper
 public interface MainTaskDAO {
 
-   public List<Map<String, Object>> getMainTaskList();
-   public List<Map<String, Object>> getMainTaskList(@Param("keyword") String keyword, @Param("categoryId") Long categoryId);
+   public List<Map<String, Object>> getMainTaskList(Map<String, Object> map);
+   public List<Map<String, Object>> getMainTaskList(@Param("keyword") String keyword, @Param("categoryId") Long categoryId, @Param("size") Integer size, @Param("offset") Integer offset);
+
 
    public List<CategoryDTO> getCategoryList();
 
@@ -31,6 +32,7 @@ public interface MainTaskDAO {
 
    public void deleteMainTask(Long mainTaskId);
 
+
    public List<Map<String, Object>> getMainTaskListById(Long userId);
    
    // home (top3, best5)
@@ -40,5 +42,13 @@ public interface MainTaskDAO {
    public List<MainTaskDTO> getBestUserCnt();
    public List<MainTaskDTO> getBestCnt();
    
-   
+
+   public List<Map<String, Object>> getMainTaskListById(@Param("size") Integer size,@Param("offset") Integer offset,@Param("userId") Long userId);
+
+   int getTotalOfMainTaskByUserId(Long userId);
+
+   int getTotalOfMainTask();
+
+   int getTotalOfMainTaskBySearch(String keyword, Long categoryId);
+
 }
