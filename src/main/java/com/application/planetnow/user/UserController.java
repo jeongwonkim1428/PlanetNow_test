@@ -39,14 +39,17 @@ public class UserController {
         return "home";
     }
     @GetMapping("/login")
-    public String login(){
+    public String login(HttpServletRequest request){
+        UserDTO userDTO = userService.getUserFromSession(request);
+        if (userDTO != null) {
+            return "redirect:/home";
+        }
         return "/auth/login";
     }
     @PostMapping("/login")
     @ResponseBody
     public boolean login(@RequestBody UserDTO userDTO, HttpServletRequest request){
-        log.info("email: "+userDTO.getEmail());
-        log.info("password: "+userDTO.getPassword());
+
         boolean is = userService.loginResult(userDTO);
         if (is == true){
             HttpSession session = request.getSession();
@@ -61,7 +64,11 @@ public class UserController {
 
     }
     @GetMapping("/sign-up")
-    public String signUp( ){
+    public String signUp(HttpServletRequest request ){
+        UserDTO userDTO = userService.getUserFromSession(request);
+        if (userDTO != null) {
+            return "redirect:/home";
+        }
         return "/auth/sign-up";
     }
     @PostMapping("/sign-up")
@@ -73,8 +80,6 @@ public class UserController {
                alert('회원가입 되었습니다.');
                location.href = '/user/login';
             </script>""";
-
-
         return jsScript;
     }
     @PostMapping("/valid-email")
@@ -113,8 +118,10 @@ public class UserController {
         model.addAttribute("mainTaskListMap", mainTaskList);
         model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
         model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
+        model.addAttribute("progress", userService.getProgress(userDTO.getUserId()));
         return "/user/user-detail";
     }
+
 
     @PostMapping("/user-detail-nextpage")
     @ResponseBody
@@ -133,6 +140,7 @@ public class UserController {
 
         return mainTaskList;
     }
+
 
 
 
@@ -161,6 +169,8 @@ public class UserController {
         model.addAttribute("mainTaskListMap", mainTaskList);
         model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
         model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
+
+        model.addAttribute("progress", userService.getProgress(userDTO.getUserId()));
 
         return "/mypage/profile";
     }

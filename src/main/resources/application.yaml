@@ -5,8 +5,8 @@ spring:
 # Database Connectivity
   datasource:
     url: jdbc:mysql://localhost:3306/PLANET_NOW?serverTimezone=Asia/Seoul
-    username: root
-    password: 12341234
+    username: ${USERNAME}
+    password: ${PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 # MyBatis
@@ -18,7 +18,7 @@ mybatis:
 
 # Server Port
 server:
-  port: 80
+  port: 8080
 
 # File
   servlet:
