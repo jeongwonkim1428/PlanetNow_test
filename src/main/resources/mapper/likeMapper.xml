@@ -25,7 +25,7 @@
 	<select id="getLikeCnt" resultType="int" parameterType="Long">
 		SELECT	COUNT(*)
 		FROM	LIKES
-		WHERE	MAIN_TASK_ID = #{mainTaskId}
+		WHERE	MAIN_TASK_ID = #{mainTaskId} 
 	</select>
 
 </mapper>

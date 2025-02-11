@@ -119,6 +119,7 @@ public class UserController {
         model.addAttribute("followerCount", followService.followerCnt(userDTO.getUserId()));
         model.addAttribute("followingCount", followService.followingCnt(userDTO.getUserId()));
         model.addAttribute("progress", userService.getProgress(userDTO.getUserId()));
+
         return "/user/user-detail";
     }
 

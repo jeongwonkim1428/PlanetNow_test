@@ -44,5 +44,6 @@ public interface UserDAO {
     Long getFollowerCount(Long userId);
 
     Long getFollowingCount(Long userId);
+    
 }
 
