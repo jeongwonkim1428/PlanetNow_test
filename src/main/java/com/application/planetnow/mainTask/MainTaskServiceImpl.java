@@ -6,6 +6,8 @@ import com.application.planetnow.user.*;
 import com.application.planetnow.user.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
@@ -210,6 +212,20 @@ public class MainTaskServiceImpl implements MainTaskService {
         int nOfPages = (int) Math.ceil((double) totalOfMainTask / 5);
         return nOfPages;
     }
+
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void updateExpiredMainTaskStatus() {
+        List<MainTaskDTO> expiredMainTasks = mainTaskDAO.getExpiredMainTasks(new Date());
+        for (MainTaskDTO mainTaskDTO : expiredMainTasks) {
+            mainTaskDTO.setTaskStatusId(4);
+        }
+        mainTaskDAO.updateExpiredMainTaskStatus(expiredMainTasks);
+    }
+
+
+
+
 
 
 

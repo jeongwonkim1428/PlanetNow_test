@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.application.planetnow.user.UserDTO;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,4 +53,7 @@ public interface MainTaskDAO {
 
    int getTotalOfMainTaskBySearch(String keyword, Long categoryId);
 
+   List<MainTaskDTO> getExpiredMainTasks(Date now);
+
+   void updateExpiredMainTaskStatus(List<MainTaskDTO> expiredMainTasks);
 }

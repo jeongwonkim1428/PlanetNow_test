@@ -4,10 +4,13 @@ import com.application.planetnow.follow.FollowDAO;
 import com.application.planetnow.follow.FollowDTO;
 import com.application.planetnow.mainTask.CategoryDTO;
 import com.application.planetnow.mainTask.MainTaskDAO;
+import com.application.planetnow.mainTask.MainTaskDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +61,16 @@ class PlanetNowApplicationTests {
 //    	followDTO.setFolloweeId(5L);
 //    	System.out.println(followDAO.check(followDTO));
 //    }
+
+    @Test
+    void getExpiredMainTasks() {
+        Date now = new Date();
+
+        List<MainTaskDTO> mainTaskDTOS = mainTaskDAO.getExpiredMainTasks(now);
+        for (MainTaskDTO mainTaskDTO : mainTaskDTOS) {
+            System.out.println(mainTaskDTO);
+        }
+    }
 
 
 
