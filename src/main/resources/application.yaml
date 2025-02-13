@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: PlanetNow
+
+# Database Connectivity
+  datasource:
+    url: jdbc:mysql://localhost:3306/PLANET_NOW?serverTimezone=Asia/Seoul
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# MyBatis
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.application.planetnow
+  configuration:
+    map-underscore-to-camel-case: true
+
+# Server Port
+server:
+  port: 80
+
+# File
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 100MB
+file:
+  repo:
+    path: ${REPOSITORY}
