@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.application.planetnow.user.LevelDAO;
+import com.application.planetnow.user.LevelDTO;
 import com.application.planetnow.user.PointDAO;
 import com.application.planetnow.user.PointDTO;
 import com.application.planetnow.user.UserDAO;
@@ -40,7 +41,7 @@ public class FollowServiceImpl implements FollowService {
 //		System.out.println(searchFollower);
 		List<Map<String,Object>> a = followDAO.getFollowerList(temp);
 		for (Map<String, Object> map : a) {
-			System.out.println(map);
+//			System.out.println(map);
 		}
 		return a;
 	}
@@ -107,8 +108,17 @@ public class FollowServiceImpl implements FollowService {
 			Long point = userPointDAO.getUserTotalPoint(followerId);
 //			System.out.println("Point: " + point);
 			
-			Long compareLevel = (point / 100) * 100;
-			Long level = levelDAO.getLevel(compareLevel);
+			List<LevelDTO> levelList = levelDAO.getLevelList();
+			Long level = (long) 0;
+			
+			for (LevelDTO levelDTO : levelList) {
+				if (point < levelDTO.getLevelValue()) {
+					level = levelDTO.getLevelId() - 1;
+					break;
+				}
+			}
+			
+			
 //			System.out.println("Level: " + level);
 			
 			
@@ -130,7 +140,7 @@ public class FollowServiceImpl implements FollowService {
 		list.put("followeeId", followeeId);
 		list.put("followerId", followerId);
 		for (Map.Entry<String, Long> entry : list.entrySet()) {
-			System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+//			System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
 		}
 		
 		followDAO.deleteFollow(list);
@@ -141,8 +151,8 @@ public class FollowServiceImpl implements FollowService {
 		FollowDTO followDTO = new FollowDTO();
 		followDTO.setFolloweeId(followeeId);
 		followDTO.setFollowerId(followerId);
-		System.out.println("followerId: " + followerId);
-		System.out.println("followeeId: " + followeeId);
+//		System.out.println("followerId: " + followerId);
+//		System.out.println("followeeId: " + followeeId);
 		
 		return followDAO.check(followDTO);
 

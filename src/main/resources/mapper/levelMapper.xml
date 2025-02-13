@@ -7,11 +7,5 @@
         FROM LEVEL
 
     </select>
-    
-    <select id="getLevel" parameterType="Long" resultType="Long">
-    	SELECT	LEVEL_ID
-    	FROM	LEVEL
-    	WHERE	LEVEL_VALUE = #{point}
-    </select>
 
 </mapper>
