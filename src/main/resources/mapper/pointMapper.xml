@@ -6,5 +6,5 @@
         SELECT *
         FROM POINT
     </select>
-
+    
 </mapper>

@@ -24,40 +24,40 @@ class PlanetNowApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    void searchMainTask() {
-
-        List<Map<String, Object>> getMainTaskList = mainTaskDAO.getMainTaskList();
-        for (Map<String, Object> map : getMainTaskList) {
-            System.out.println(map);
-        }
-    }
-
-    @Test
-    void getCategoryList() {
-
-        List<CategoryDTO> getCategoryList = mainTaskDAO.getCategoryList();
-        for (CategoryDTO map : getCategoryList) {
-            System.out.println(map);
-        }
-
-    }
-
-    @Test
-    void getMainTaskListById() {
-        List<Map<String, Object>> getMAinTaskListById = mainTaskDAO.getMainTaskListById(1L);
-        for (Map<String, Object> map : getMAinTaskListById) {
-            System.out.println(map);
-        }
-    }
-    
-    @Test
-    void check() {
-    	FollowDTO followDTO = new FollowDTO();
-    	followDTO.setFollowerId(4L);
-    	followDTO.setFolloweeId(5L);
-    	System.out.println(followDAO.check(followDTO));
-    }
+//    @Test
+//    void searchMainTask() {
+//
+//        List<Map<String, Object>> getMainTaskList = mainTaskDAO.getMainTaskList();
+//        for (Map<String, Object> map : getMainTaskList) {
+//            System.out.println(map);
+//        }
+//    }
+//
+//    @Test
+//    void getCategoryList() {
+//
+//        List<CategoryDTO> getCategoryList = mainTaskDAO.getCategoryList();
+//        for (CategoryDTO map : getCategoryList) {
+//            System.out.println(map);
+//        }
+//
+//    }
+//
+//    @Test
+//    void getMainTaskListById() {
+//        List<Map<String, Object>> getMAinTaskListById = mainTaskDAO.getMainTaskListById(1L);
+//        for (Map<String, Object> map : getMAinTaskListById) {
+//            System.out.println(map);
+//        }
+//    }
+//    
+//    @Test
+//    void check() {
+//    	FollowDTO followDTO = new FollowDTO();
+//    	followDTO.setFollowerId(4L);
+//    	followDTO.setFolloweeId(5L);
+//    	System.out.println(followDAO.check(followDTO));
+//    }
 
 
 

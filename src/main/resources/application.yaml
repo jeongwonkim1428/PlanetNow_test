@@ -5,8 +5,8 @@ spring:
 # Database Connectivity
   datasource:
     url: jdbc:mysql://localhost:3306/PLANET_NOW?serverTimezone=Asia/Seoul
-    username: ${USERNAME}
-    password: ${PASSWORD}
+    username: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 # MyBatis
@@ -27,5 +27,4 @@ server:
       max-request-size: 100MB
 file:
   repo:
-    path: /Users/syoo/member_profile_repository/
-
+    path: C:/spring_file_test/

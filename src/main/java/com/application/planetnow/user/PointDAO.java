@@ -7,4 +7,5 @@ import java.util.List;
 @Mapper
 public interface PointDAO {
     List<PointDTO> getPointList();
+    public PointDTO getFollowPoint();
 }
