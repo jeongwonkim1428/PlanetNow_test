@@ -265,7 +265,7 @@
 		    ON 	M.USER_ID = U.USER_ID  
 		 GROUP BY U.NICKNAME, U.PROFILE_UUID , U.AMBITION_QUOTE, U.USER_ID
 		 ORDER BY POST_CNT DESC, NICKNAME DESC 
-		LIMIT 	4 OFFSET 1 <!-- 첫번째 제외하고 두번째부터 -->
+		LIMIT 	5 OFFSET 0 <!-- 첫번째 제외하고 두번째부터 -->
 	</select>
    
    

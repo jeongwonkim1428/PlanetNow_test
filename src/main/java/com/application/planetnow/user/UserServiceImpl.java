@@ -203,6 +203,7 @@ public class UserServiceImpl implements UserService {
         log.info( "유저 총 포인트 : " + userTotalPoint);
         return userTotalPoint;
     }
+
     public List<LevelDTO> levelList(){
         return levelDAO.getLevelList();
     }

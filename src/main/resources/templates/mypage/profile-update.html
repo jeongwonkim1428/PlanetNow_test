@@ -214,7 +214,17 @@
                                     <div class="checkout__form__input">
                                         <p>닉네임</p>
                                         <input type="text" id="nickname" name="nickname" th:value="${userDTO.nickname}" placeholder="닉네임" required>
-                                        <input type="button" id="isValidNickname" value="중복확인">
+                                        <input type="button" id="isValidNickname" value="중복확인" style="
+                                                                                font-size: 14px;
+                                                                                color: #ffffff;
+                                                                                background: lightgrey;
+                                                                                font-weight: 600;
+                                                                                border: none;
+                                                                                text-transform: uppercase;
+                                                                                display: inline-block;
+                                                                                padding: 12px 30px;
+                                                                                border-radius: 50px;
+                                                                            ">
                                         <input type="hidden" id="originalNickname" th:value="${userDTO.nickname}">
                                         <span id="isValidNicknameMsg"></span>
                                     </div>
@@ -253,7 +263,17 @@
                                     <div class="checkout__form__input">
                                         <p>주소</p>
                                         <input type="text" th:value ="${userDTO.zipcode}" placeholder="우편번호 입력" id="zipcode" name="zipcode" required>
-                                        <input type="button" th:onclick="execDaumPostcode()" value="검색" />
+                                        <input type="button" th:onclick="execDaumPostcode()" value="검색" style="
+                                                                                font-size: 14px;
+                                                                                color: #ffffff;
+                                                                                background: lightgrey;
+                                                                                font-weight: 600;
+                                                                                border: none;
+                                                                                text-transform: uppercase;
+                                                                                display: inline-block;
+                                                                                padding: 12px 30px;
+                                                                                border-radius: 50px;
+                                                                            "/>
                                         <input type="text" name="roadAddress" id="roadAddress" th:value ="${userDTO.roadAddress}" placeholder="도로명 주소" required>
                                         <input type="text" name="jibunAddress" id="jibunAddress" th:value ="${userDTO.jibunAddress}"  placeholder="지번 주소" required>
                                            <input type="text" name="etcAddress" id="namujiAddress" th:value ="${userDTO.etcAddress}" placeholder="나머지 주소" >
@@ -269,8 +289,18 @@
                                         <input type="text" name="ambitionQuote" th:value="${userDTO.ambitionQuote}" placeholder="예 : 끊임없는 노력을 통해 목표를 이루겠습니다" required maxlength="50">
                                     </div>
     
-                                    <div class="checkout__form__input col-lg-6">
-                                        <input type="submit" value="수정하기" />
+                                    <div class="checkout__form__input col-lg-12">
+                                        <input type="submit" value="수정하기" style="
+                                                                                font-size: 14px;
+                                                                                color: #ffffff;
+                                                                                background: #ca1515;
+                                                                                font-weight: 600;
+                                                                                border: none;
+                                                                                text-transform: uppercase;
+                                                                                display: inline-block;
+                                                                                padding: 12px 30px;
+                                                                                border-radius: 50px;
+                                                                            "/>
                                     </div>
                                 </div>
                             </div>

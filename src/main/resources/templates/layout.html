@@ -45,8 +45,8 @@
         <nav class="header__menu">
           <ul>
             <li><a th:href="@{/home}">Home</a></li>
-            <li><a th:href="@{/task/task-list}">게시글 조회</a></li>
-            <li><a th:href="@{/task/create-task}">게시글 등록</a></li>
+            <li><a th:href="@{/task/task-list}">플랜 게시판</a></li>
+            <li><a th:href="@{/task/create-task}">플랜 등록</a></li>
             <li><a th:href="@{/user/search}">유저 검색</a></li>
 
             <li th:if="${session.email == null}">

@@ -1,20 +1,18 @@
 package com.application.planetnow.mainTask;
 
 import com.application.planetnow.subTask.SubTaskDAO;
-import com.application.planetnow.user.UserDTO;
+import com.application.planetnow.user.*;
 
+import com.application.planetnow.user.exception.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-
-import java.util.HashMap;
-
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
+@Slf4j
 public class MainTaskServiceImpl implements MainTaskService {
 
     @Autowired
@@ -22,6 +20,18 @@ public class MainTaskServiceImpl implements MainTaskService {
 
     @Autowired
     SubTaskDAO subTaskDAO;
+
+    @Autowired
+    UserPointDAO userPointDAO;
+
+    @Autowired
+    LevelDAO levelDAO;
+
+    @Autowired
+    PointDAO pointDAO;
+
+    @Autowired
+    UserDAO userDAO;
 
     @Override
     public List<Map<String, Object>> getMainTaskList(Integer size, Integer page) {
@@ -53,6 +63,40 @@ public class MainTaskServiceImpl implements MainTaskService {
     @Override
     public void createMainTask(MainTaskDTO mainTaskDTO) {
         mainTaskDAO.createMainTask(mainTaskDTO);
+
+
+        //포인트 리스트 조회
+        List<PointDTO> pointList = pointDAO.getPointList();
+        PointDTO addPoint = pointList.stream()
+                .filter((p)->p.getAction().equals("게시글 등록"))
+                .findFirst()
+                .orElseThrow(()-> new NotFoundException("해당 포인트를 찾을 수 없습니다."));
+
+        //UserPointDTO 생성
+        UserPointDTO userPointDTO = UserPointDTO.of(mainTaskDTO.getUserId(), addPoint.getPointId());
+        log.info("유저 포인트 DTO 객체 : " +userPointDTO);
+
+        //UserPoint 객체 DB에 저장
+        userPointDAO.userPointSave(userPointDTO);
+
+        //유저가 가지고 있는 포인트 조회
+        Long userTotalPoint = userPointDAO.getUserTotalPoint(mainTaskDTO.getUserId());
+
+        //레벨 리스트 조회
+        List<LevelDTO> levelDTOList = levelDAO.getLevelList();
+        //레벨 지정
+        Long userLevel = levelDTOList.stream()
+                .filter(level -> userTotalPoint >= level.getLevelValue())  // 포인트가 levelValue보다 크거나 같은 레벨만 필터링
+                .max(Comparator.comparingLong(LevelDTO::getLevelId))  // levelId가 가장 큰 값을 선택
+                .map(LevelDTO::getLevelId)  // 해당 LevelDTO의 levelId만 추출
+                .orElse(1L);
+
+        //변경사항 저장
+        UserDTO userDTO = userDAO.getUserDetailById(mainTaskDTO.getUserId());
+        userDTO.setLevelId(userLevel);
+        userDTO.setTotalPoint(userTotalPoint);
+        userDAO.updateUser(userDTO);
+
     }
 
     @Override

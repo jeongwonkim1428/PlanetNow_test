@@ -9,6 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
+
 
     <script th:inline="javascript">
         let selectedCategoryId = [[${selectedCategoryId}]];  // The categoryId is passed from the controller
@@ -97,16 +103,20 @@
 
                             taskListHtml += `
                             <tr>
-                                <td class="cart__product__item">
-                                    <div class="cart__product__item__title">
-                                        <a href="/task/task-detail?mainTaskId=${task.mainTaskId}"
-                                           >${task.mainSubject}</a>
-                                    </div>
+                                <td>
                                     <span
                                           class="categoryNmSpan"
                                           data-category="${task.categoryNm}"
-                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
-                                        ${task.categoryNm}</span>
+                                          style="font-family: 'Cute Font', cursive; font-size: 20px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 0px 10px 0px; border-radius: 10px;">
+                                        ${task.categoryNm}
+                                    </span>
+                                </td>
+                                <td class="cart__product__item">
+                                    <div class="cart__product__item__title">
+                                        <h2 style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;"><a href="/task/task-detail?mainTaskId=${task.mainTaskId}"
+                                           style="color: black">${task.mainSubject}</a></h2>
+                                    </div>
+
                                 </td>
                                 <td>${task.nickname}</td>
                                 <td>${task.enrolledAt}</td>
@@ -151,7 +161,7 @@
             <div class="col-lg-12">
                 <div class="breadcrumb__links">
                     <a href="../home.html"><i class="fa fa-home"></i> Home</a>
-                    <span>게시글 조회</span>
+                    <span>플랜 게시판</span>
                 </div>
             </div>
         </div>
@@ -164,12 +174,12 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="contact__form"><h5 align="center">전체 게시판</h5></div>
+                <div class="contact__form"><h5 align="center">전체 플랜 게시판</h5></div>
                 <div class="shop__cart__table">
                     <table>
                         <thead>
                         <tr align="right">
-                            <td colspan="5" align="right">
+                            <td colspan="6" align="right">
                                 <div class="col-lg-6">
                                     <form th:action="@{/task/task-list}" method="get" class="discount__content">
                                         <select name="categoryId">
@@ -186,7 +196,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>제목 / 카테고리</th>
+                            <th>카테고리</th>
+                            <th>제목</th>
                             <th>유저</th>
                             <th>등록날짜</th>
                             <th>진행여부</th>
@@ -195,16 +206,19 @@
                         </thead>
                         <tbody id="taskList">
                             <tr th:each="mainTaskMap : ${mainTaskListMap}">
+                                <td>
+                                    </br>
+                                       <span th:text="${mainTaskMap.categoryNm}"
+                                             class="categoryNmSpan"
+                                             th:data-category="${mainTaskMap.categoryNm}"
+                                             style="font-family: 'Cute Font', cursive; font-size: 20px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 0px 10px 0px; border-radius: 10px;">
+                                        </span>
+                                </td>
                                 <td class="cart__product__item">
                                     <div class="cart__product__item__title">
-                                        <a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId})}"
-                                           th:text="${mainTaskMap.mainSubject}"></a>
+                                        <h2 style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;"><a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId})}"
+                                              th:text="${mainTaskMap.mainSubject}" style="color: black"></a></h2>
                                     </div>
-                                    <span th:text="${mainTaskMap.categoryNm}"
-                                          class="categoryNmSpan"
-                                          th:data-category="${mainTaskMap.categoryNm}"
-                                          style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
-                                        </span>
                                 </td>
                                 <td th:text="${mainTaskMap.nickname}"></td>
                                 <td th:text="${mainTaskMap.enrolledAt}"></td>
@@ -222,17 +236,17 @@
                             </tr>
                         </tbody>
                     </table>
-                    <th:block>
+                    <div class="col-lg-12 text-center">
                         </br>
                         <tr align="center">
-                            <td colspan="2">
-                                <a th:href="@{/task/create-task}">게시물 등록</a>
+                            <td colspan="12" align="center">
+                                <h1 class="site-btn" style="background-color: lightsteelblue"><a th:href="@{/task/create-task}" style="color: white; font-size: 28px;">Click here to Plan it now!</a></h1>
                             </td>
                         </tr>
-                    </th:block>
+                    </div>
                     </br>
                     </br>
-                    <div class="pagination__option">
+                    <div class="pagination__option text-center">
                         <th:block th:if="${nOfPages > 0}">
                             <th:block th:each="page : ${#numbers.sequence(1, nOfPages)}">
                                 <a class="page-link" th:data-page="${page}" th:text="${page}" style="cursor: pointer;"></a>

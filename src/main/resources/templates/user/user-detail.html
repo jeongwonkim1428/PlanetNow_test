@@ -6,6 +6,12 @@
 
 <head>
 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
+
 
     <!-- Google Font -->
     <link
@@ -140,12 +146,12 @@
                     <tr>
                         <td class="cart__product__item">
                             <div class="cart__product__item__title">
-                                <a href="/task/task-detail?mainTaskId=${task.mainTaskId}">${task.mainSubject}</a>
+                                <h2 style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;"><a href="/task/task-detail?mainTaskId=${task.mainTaskId}" style="color: black">${task.mainSubject}</a></h2>
                             </div>
                         </td>
                         <td class="cart__price">
                             <span class="categoryNmSpan"
-                                  style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;"
+                                          style="font-family: 'Cute Font', cursive; font-size: 20px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 0px 10px 0px; border-radius: 10px;"
                                   data-category="${task.categoryNm}">
                                 ${task.categoryNm}
                             </span>
@@ -237,7 +243,7 @@
                             <table class="custom-table">
                                 <tr>
                                     <th rowspan="2">
-                                        <a><img th:src="@{/user/thumbnails(fileName=${userDTO.profileUuid})}" alt="" width="100" height="100"/></a>
+                                        <a class="blog__comment__item__pic"><img th:src="@{/user/thumbnails(fileName=${userDTO.profileUuid})}" alt="" width="100" height="100"/></a>
                                     </th>
                                     <th:block th:if="${session.userId == null}">
 	                                    <th style="font-size: 24px; cursor: pointer;" th:onclick="|location.href='@{/user/login}'|">팔로워</th>
@@ -266,7 +272,7 @@
                         <p style="font-size: 24px" class="bebas-font" th:text="${userDTO.name}"></p>
                         <p style="font-size: 24px" class="bebas-font" th:text="|${userDTO.levelId} LV|"></p>
                         <br />
-                        <p class="bebas-font" th:text="${userDTO.ambitionQuote}"></p>
+                        <p class="bebas-font" th:text="${userDTO.ambitionQuote}" style="font-family: 'Nanum Pen Script', cursive; font-size: 30px"></p>
                         <br />
                         <h6 class="oswald-font center-align" >완료율</h6>
                         <h5 class="oswald-font center-align" th:text="|${progress} % |" ></h5>
@@ -295,14 +301,14 @@
                                             <tr th:each="mainTaskMap : ${mainTaskListMap}">
                                                 <td class="cart__product__item">
                                                     <div class="cart__product__item__title">
-                                                        <a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId})}" th:text="${mainTaskMap.mainSubject}"></a>
+                                                        <h2 style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;"><a th:href="@{/task/task-detail(mainTaskId=${mainTaskMap.mainTaskId})}" th:text="${mainTaskMap.mainSubject}" style="color: black"></a></h2>
                                                     </div>
                                                 </td>
                                                 <td class="cart__price">
                                                   <span th:text="${mainTaskMap.categoryNm}"
                                                         class="categoryNmSpan"
                                                         th:data-category="${mainTaskMap.categoryNm}"
-                                                        style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 2px 11px 1px; border-radius: 10px;">
+                                                        style="font-family: 'Cute Font', cursive; font-size: 20px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 0px 10px 0px; border-radius: 10px;">
                                                   </span>
                                                 </td>
                                                 <td class="cart__total" th:text="${mainTaskMap.likeCnt}"></td>
