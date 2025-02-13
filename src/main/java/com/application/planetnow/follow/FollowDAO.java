@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.application.planetnow.user.PointDTO;
+
 @Mapper
 public interface FollowDAO {
 

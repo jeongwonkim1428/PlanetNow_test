@@ -9,5 +9,4 @@ public interface UserPointDAO {
 
     void userPointSave(UserPointDTO userPointDTO);
 
-
 }

@@ -7,4 +7,5 @@ import java.util.List;
 @Mapper
 public interface LevelDAO {
     List<LevelDTO> getLevelList();
+    Long getLevel(Long point);
 }

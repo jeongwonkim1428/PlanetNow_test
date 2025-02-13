@@ -8,12 +8,32 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.application.planetnow.user.LevelDAO;
+import com.application.planetnow.user.PointDAO;
+import com.application.planetnow.user.PointDTO;
+import com.application.planetnow.user.UserDAO;
+import com.application.planetnow.user.UserDTO;
+import com.application.planetnow.user.UserPointDAO;
+import com.application.planetnow.user.UserPointDTO;
+
 @Service
 public class FollowServiceImpl implements FollowService {
 
 
     @Autowired
     private FollowDAO  followDAO;
+    
+    @Autowired
+    private PointDAO pointDAO;
+    
+    @Autowired
+    private UserPointDAO userPointDAO;
+    
+    @Autowired
+    private UserDAO userDAO;
+    
+    @Autowired
+    private LevelDAO levelDAO;
 
 	@Override
 	public List<Map<String, Object>> getFollowerList(Map<String, Object> temp) {
@@ -64,14 +84,43 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	public void createFollow(FollowDTO followDTO) {
 			followDAO.createFollow(followDTO);
-//		if (followDAO.checkList(list) == null) {
-//			
-//			return "create";
-//			
-//		}
-//		else {
-//			return "already";
-//		}
+			Long followerId = followDTO.getFollowerId();
+
+			List<PointDTO> pointList = pointDAO.getPointList();
+			PointDTO pointDTO = new PointDTO();
+			
+			for (PointDTO dto : pointList) {
+				if (dto.getAction().equals("팔로우")) {
+					pointDTO = dto;
+//					System.out.println(pointDTO);
+				}
+			}
+			Long pointId = pointDTO.getPointId();
+//			System.out.println("pointId: " + pointId);
+			
+			
+			UserPointDTO userPointDTO = UserPointDTO.of(followerId, pointId);
+//			System.out.println(userPointDTO);
+			
+			userPointDAO.userPointSave(userPointDTO);
+			
+			Long point = userPointDAO.getUserTotalPoint(followerId);
+//			System.out.println("Point: " + point);
+			
+			Long compareLevel = (point / 100) * 100;
+			Long level = levelDAO.getLevel(compareLevel);
+//			System.out.println("Level: " + level);
+			
+			
+			UserDTO userDetail = userDAO.getUserDetailById(followerId);
+//			System.out.println("유저: " + userDetail);
+
+			userDetail.setTotalPoint(point);
+			userDetail.setLevelId(level);
+//			System.out.println("변경후: " + userDetail);
+
+			
+			userDAO.updateUser(userDetail);
 		
 	}
 
