@@ -66,7 +66,7 @@ public class FollowController {
 //            System.out.println(follower.get("followerId"));
             follower.put("check", followService.check((Long)follower.get("followerId"), loginId));
             
-        	System.out.println("follower: " + follower);
+//        	System.out.println("follower: " + follower);
         }
 //        System.out.println(searchFollower);
 //        System.out.println("userId: " + userId);
@@ -86,8 +86,8 @@ public class FollowController {
     	HttpSession session = request.getSession();
     	Long loginId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
     	
-    	System.out.println("loginId: " + loginId);
-    	System.out.println("userId: " +userId);
+//    	System.out.println("loginId: " + loginId);
+//    	System.out.println("userId: " +userId);
     	
     	// 맵생성 
     	Map<String, Object> temp = new HashMap<String, Object>();
@@ -111,7 +111,7 @@ public class FollowController {
             following.put("followingCount", followService.followingCnt((Long)following.get("followeeId")));
             following.put("check", followService.check((Long)following.get("followeeId"), loginId));
 //            System.out.println("followeeId1: "+  following.get("followeeId"));
-            System.out.println("following: " + following);
+//            System.out.println("following: " + following);
         }
         
         model.addAttribute("userId", userId);
@@ -130,7 +130,7 @@ public class FollowController {
     	followDTO.setFolloweeId(followeeId);
     	followDTO.setFollowerId(followerId);
     	followService.createFollow(followDTO);
-    	System.out.println(followDTO);
+//    	System.out.println(followDTO);
     	
     	return "";
     }
@@ -140,8 +140,8 @@ public class FollowController {
     public String deleteFollower(@RequestParam("followeeId") Long followeeId, 
 			   				  @RequestParam("followerId") Long followerId) {
     	followService.deleteFollow(followeeId, followerId);
-    	System.out.println(followeeId);
-    	System.out.println(followerId);
+//    	System.out.println(followeeId);
+//    	System.out.println(followerId);
     	
     	return "";
     }
