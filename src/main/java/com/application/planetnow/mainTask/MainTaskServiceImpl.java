@@ -218,6 +218,9 @@ public class MainTaskServiceImpl implements MainTaskService {
     public void updateExpiredMainTaskStatus() {
         List<MainTaskDTO> expiredMainTasks = mainTaskDAO.getExpiredMainTasks(new Date());
         for (MainTaskDTO mainTaskDTO : expiredMainTasks) {
+            if (mainTaskDTO.getTaskStatusId() == 3) {
+                continue;
+            }
             mainTaskDTO.setTaskStatusId(4);
         }
         mainTaskDAO.updateExpiredMainTaskStatus(expiredMainTasks);
