@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.application.planetnow.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,5 +59,12 @@ public class MainController {
     	model.addAttribute("bestUserList" , bestUserList);
     	return "/home";
     }
+
+	@GetMapping("/chat")
+	public String chat(Model model, HttpServletRequest request) {
+		model.addAttribute("userId", request.getSession().getAttribute("userId"));
+		model.addAttribute("nickname", userService.getUserDetail((String) request.getSession().getAttribute("email")).getNickname());
+		return "/chat/chat";
+	}
     
 }
