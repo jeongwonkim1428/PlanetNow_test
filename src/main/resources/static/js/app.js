@@ -6,7 +6,7 @@ stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/messages', (message) => {
-        showGreeting(JSON.parse(message.body).content);
+        showMessage(JSON.parse(message.body).content);
         const $container = $('#scrollable-container');
         $container.scrollTop($container[0].scrollHeight);
     });
@@ -64,7 +64,7 @@ function sendContent() {
     $("#content").val("");
 }
 
-function showGreeting(message) {
+function showMessage(message) {
     $("#messages").append("<tr><td>" + message + "</td></tr>");
 }
 
