@@ -10,11 +10,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 <div layout:fragment="content">
+
+    <section class="banner set-bg" data-setbg="img/banner/banner-10.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-8 m-auto">
+                    <div class="banner__slider owl-carousel">
+                        <div class="banner__item" th:each="topBestUser : ${bestUserList}">
+                            <div class="banner__text">
+                                <span th:text="${topBestUser.nickname}"></span>
+                                <h1 th:text="${topBestUser.ambitionQuote}" style="font-family: 'Nanum Pen Script', cursive;"></h1>
+                                </br>
+                                <a th:href="@{/user/user-detail(userId=${topBestUser.userId})}">유저 프로필로 고고씽</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
 <!-- <div th:text="${topViewList}"></div> -->
     <!-- Trend Section Begin -->
     <section class="trend spad">
@@ -27,19 +52,12 @@
                         </div>
                         <div class="trend__item">
                         	<div th:each="topView : ${topViewList}">
-	                            <div class="trend__item__pic">
+	                            <div class="blog__comment__item__pic">
 	                                <img th:src="@{/user/thumbnails(fileName=${topView.profileUuid})}" width="80" height="80" alt="" style="cursor: pointer;" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topView.mainTaskId})}'|">
 	                            </div>
 	                            <div class="trend__item__text">
-	                                <h3 class="product__price" style="cursor: pointer;" th:text="${topView.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topView.mainTaskId})}'|">제목</h3>
-	<!--                                <div class="rating">-->
-	<!--                                    <i class="fa fa-star"></i>-->
-	<!--                                    <i class="fa fa-star"></i>-->
-	<!--                                    <i class="fa fa-star"></i>-->
-	<!--                                    <i class="fa fa-star"></i>-->
-	<!--                                    <i class="fa fa-star"></i>-->
-	<!--                                </div>-->
-	                                <h5 th:text="|작성자: ${topView.nickname}|"></h5>
+	                                <h2 class="product__price" style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;" th:text="${topView.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topView.mainTaskId})}'|">제목</h2>
+	                                <h6 th:text="|작성자: ${topView.nickname}|"></h6>
 	                                <h6 th:text="|조회수: ${topView.viewCnt}|"></h6><br><br>
 	                            </div>
                         	</div>
@@ -53,12 +71,12 @@
                         </div>
                         <div class="trend__item">
                         	<div th:each="topLike : ${topLikeList}">
-	                            <div class="trend__item__pic">
+	                            <div class="blog__comment__item__pic">
 	                                <img th:src="@{/user/thumbnails(fileName=${topLike.profileUuid})}" width="80" height="80" alt="" style="cursor: pointer;" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topLike.mainTaskId})}'|">
 	                            </div>
 	                            <div class="trend__item__text">
-	                                <h3 class="product__price" style="cursor: pointer;" th:text="${topLike.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topLike.mainTaskId})}'|">제목</h3>
-	                                <h5 th:text="|작성자: ${topLike.nickname}|"></h5>
+	                                <h2 class="product__price" style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;" th:text="${topLike.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topLike.mainTaskId})}'|">제목</h2>
+	                                <h6 th:text="|작성자: ${topLike.nickname}|"></h6>
 	                                <h6 th:text="|좋아요: ${topLike.likeCnt}|"></h6><br><br>
 	                            </div>
                         	</div>
@@ -72,12 +90,12 @@
                         </div>
                         <div class="trend__item">
                        		<div th:each="topReply : ${topReplyList}">
-	                            <div class="trend__item__pic">
+	                            <div class="blog__comment__item__pic">
 	                                <img th:src="@{/user/thumbnails(fileName=${topReply.profileUuid})}" width="80" height="80" alt="" style="cursor: pointer;" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topReply.mainTaskId})}'|">
 	                            </div>
 	                            <div class="trend__item__text">
-	                                <h3 class="product__price" style="cursor: pointer;" th:text="${topReply.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topReply.mainTaskId})}'|" > 제목</h3>
-	                                <h5 th:text="|작성자: ${topReply.nickname}|"></h5>
+	                                <h2 class="product__price" style="font-family: 'Dongle', sans-serif; color: #444; cursor: pointer;" th:text="${topReply.mainSubject}" th:onclick="|location.href='@{/task/task-detail(mainTaskId=${topReply.mainTaskId})}'|" > 제목</h2>
+	                                <h6 th:text="|작성자: ${topReply.nickname}|"></h6>
 	                                <h6 th:text="|댓글수: ${topReply.replyCnt}|"></h6><br><br>
 	                            </div>
                        		</div>
@@ -89,41 +107,42 @@
     </section>
     <!-- Trend Section End -->
 
-    <!-- Categories Section Begin -->
-    <section class="categories">
-        <div class="section-title col-lg-4 col-md-4 col-sm-6">
-            <h4>베스트 유저</h4>
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6 p-0">
-                	<div th:each="topBest : ${bestUser}">
-	                    <div class="categories__item categories__large__item set-bg"
-	                    th:data-setbg="@{/user/thumbnails(fileName=${topBest.profileUuid})}">
-	                    <div class="categories__text">
-	                        <h1 th:text="${topBest.nickname}" style="color: white; text-shadow: 2px 2px 2px black;">유저1</h1>
-	                        <p th:text="${topBest.ambitionQuote}" style="color: white; text-shadow: 2px 2px 2px black;">유저 포부.</p>
-	                        <a th:href="@{/user/user-detail(userId=${topBest.userId})}" style="color: white; text-shadow: 2px 2px 2px black;">User details</a>
-	                    </div>
-	                </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0" th:each="topBestUser : ${bestUserList}">
-                        <div class="categories__item set-bg" th:data-setbg="@{/user/thumbnails(fileName=${topBestUser.profileUuid})}">
-                            <div class="categories__text">
-                                <h4 th:text="${topBestUser.nickname}" style="color: white; text-shadow: 2px 2px 2px black;">유저2</h4>
-                                <p th:text="${topBestUser.ambitionQuote}" style="color: white; text-shadow: 2px 2px 2px black;">유저 포부.</p>
-                                <a th:href="@{/user/user-detail(userId=${topBestUser.userId})}" style="color: white; text-shadow: 2px 2px 2px black;">User details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<!--    &lt;!&ndash; Categories Section Begin &ndash;&gt;-->
+<!--    <section class="categories">-->
+<!--        <div class="section-title col-lg-4 col-md-4 col-sm-6">-->
+<!--            <h4>베스트 유저</h4>-->
+<!--        </div>-->
+<!--        <div class="container-fluid">-->
+<!--            <div class="row">-->
+<!--                <div class="col-lg-6 p-0">-->
+<!--                	<div th:each="topBest : ${bestUser}">-->
+<!--	                    <div class="categories__item categories__large__item set-bg"-->
+<!--	                    th:data-setbg="@{/user/thumbnails(fileName=${topBest.profileUuid})}">-->
+<!--	                    <div class="categories__text">-->
+<!--	                        <h1 th:text="${topBest.nickname}" style="color: white; text-shadow: 2px 2px 2px black;">유저1</h1>-->
+<!--	                        <p th:text="${topBest.ambitionQuote}" style="color: white; text-shadow: 2px 2px 2px black;">유저 포부.</p>-->
+<!--	                        <a th:href="@{/user/user-detail(userId=${topBest.userId})}" style="color: white; text-shadow: 2px 2px 2px black;">User details</a>-->
+<!--	                    </div>-->
+<!--	                </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-6 col-md-6 col-sm-6 p-0" th:each="topBestUser : ${bestUserList}">-->
+<!--                        <div class="categories__item set-bg" th:data-setbg="@{/user/thumbnails(fileName=${topBestUser.profileUuid})}">-->
+<!--                            <div class="categories__text">-->
+<!--                                <h4 th:text="${topBestUser.nickname}" style="color: white; text-shadow: 2px 2px 2px black;">유저2</h4>-->
+<!--                                <p th:text="${topBestUser.ambitionQuote}" style="color: white; text-shadow: 2px 2px 2px black;">유저 포부.</p>-->
+<!--                                <a th:href="@{/user/user-detail(userId=${topBestUser.userId})}" style="color: white; text-shadow: 2px 2px 2px black;">User details</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
 </div>
 </body>
 

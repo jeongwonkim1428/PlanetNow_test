@@ -8,5 +8,8 @@ import java.util.List;
 public interface PointDAO {
     List<PointDTO> getPointList();
     PointDTO getReplyPoint();
-	PointDTO getLikePoint();
+	  PointDTO getLikePoint();
+
+    public PointDTO getFollowPoint();
+
 }

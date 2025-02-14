@@ -4,26 +4,29 @@ import com.application.planetnow.follow.FollowDAO;
 import com.application.planetnow.follow.FollowDTO;
 import com.application.planetnow.mainTask.CategoryDTO;
 import com.application.planetnow.mainTask.MainTaskDAO;
+import com.application.planetnow.mainTask.MainTaskDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
 class PlanetNowApplicationTests {
 
-//    @Autowired
-//    MainTaskDAO mainTaskDAO;
-//    
-//    @Autowired
-//    FollowDAO followDAO;
-//
-//    @Test
-//    void contextLoads() {
-//    }
-//
+    @Autowired
+    MainTaskDAO mainTaskDAO;
+    
+    @Autowired
+    FollowDAO followDAO;
+
+    @Test
+    void contextLoads() {
+    }
+
 //    @Test
 //    void searchMainTask() {
 //

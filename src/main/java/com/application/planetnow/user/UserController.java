@@ -101,12 +101,17 @@ public class UserController {
     public List<Map<String, Object>> searchName(@RequestParam("search") String search,
                                                 HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Long loginId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
-        List<Map<String, Object>> searches = userService.searchUser(search);
+        if (session.getAttribute("userId") != null) {
+            Long loginId = userService.getUserDetail((String) session.getAttribute("email")).getUserId();
+            List<Map<String, Object>> searches = userService.searchUser(search);
 
-        for (Map<String, Object> temp : searches) {
-            temp.put("check", followService.check((Long) temp.get("userId"), loginId));
+            for (Map<String, Object> temp : searches) {
+                temp.put("check", followService.check((Long) temp.get("userId"), loginId));
+            }
+            return searches;
         }
+
+        List<Map<String, Object>> searches = userService.searchUser(search);
 
         return searches;
     }

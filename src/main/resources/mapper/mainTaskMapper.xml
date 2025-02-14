@@ -114,6 +114,14 @@
         WHERE MAIN_TASK_ID = #{mainTaskId}
     </update>
 
+    <update id="updateExpiredMainTaskStatus" parameterType="java.util.List">
+        <foreach collection="list" item="mainTask" separator=";">
+            UPDATE main_task
+            SET TASK_STATUS_ID = #{mainTask.taskStatusId}
+            WHERE MAIN_TASK_ID = #{mainTask.mainTaskId}
+        </foreach>
+    </update>
+
     <update id="increaseViewCnt">
         UPDATE MAIN_TASK
         SET VIEW_CNT = VIEW_CNT + 1
@@ -265,10 +273,16 @@
 		    ON 	M.USER_ID = U.USER_ID  
 		 GROUP BY U.NICKNAME, U.PROFILE_UUID , U.AMBITION_QUOTE, U.USER_ID
 		 ORDER BY POST_CNT DESC, NICKNAME DESC 
-		LIMIT 	4 OFFSET 1 <!-- 첫번째 제외하고 두번째부터 -->
+		LIMIT 	5 OFFSET 0 <!-- 첫번째 제외하고 두번째부터 -->
 	</select>
-   
-   
+
+    <select id="getExpiredMainTasks" parameterType="Date" resultType="MainTaskDTO">
+    <![CDATA[
+        SELECT *
+        FROM MAIN_TASK
+        WHERE END_TIMESTAMP <= #{now}
+        ]]>
+</select>
     
 
 </mapper>

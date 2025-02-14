@@ -4,6 +4,12 @@
       layout:decorate="~{/layout.html}">
 
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
     <script>
         $(document).ready(function() {
             applyTaskStatusColors();
@@ -235,7 +241,7 @@
                                       th:data-tstatus="${mainTaskDetail.taskStatusValue}"
                                       style="font-size: 12px; color: #ffffff; text-transform: uppercase; font-weight: 500; display: inline-block; padding: 3px 11px 1px; border-radius: 1px;">
                                 </span>
-                                <h4 th:text="${mainTaskDetail.mainSubject}"></h4>
+                                <h1 th:text="${mainTaskDetail.mainSubject}" style="font-family: 'Dongle', sans-serif; color: #444;"></h1>
                                 <ul>
                                     <li>by <span th:text="${mainTaskDetail.nickname}"></span></li>
                                     <li>등록날짜 <span th:text="${mainTaskDetail.enrolledAt}"></span></li>
@@ -248,8 +254,11 @@
                             <p th:text="'기한 : ' + ${#dates.format(mainTaskDetail.startTimestamp, 'yyyy-MM-dd')} + ' 부터 ' + ${#dates.format(mainTaskDetail.endTimestamp, 'yyyy-MM-dd') + ' 까지.'}"></p>
                             <p th:text="|메모 : ${mainTaskDetail.memo}|"></p>
                         </div>
+                        <div class="blog__details__quote">
+                            <div class="icon"><i class="fa fa-quote-left"></i></div>
+                        </div>
                         <div class="blog__details__desc">
-                            <div><h4>서브 태스크 : </h4></div>
+                            <div><h2 style="font-family: 'Nanum Pen Script', cursive;">할 일(Task) 목록 </h2></div>
                             </br>
                             <div th:if="${session.email == mainTaskDetail.email}">
                                 <div th:each="subTaskMap : ${subTaskList}">
@@ -309,9 +318,10 @@
                         </div>
                         <div class="blog__details__quote">
                             <div class="icon"><i class="fa fa-quote-left"></i></div>
-                            <p>이 유저에게 도움이 될만한 서브태스크를 추천해주세요! 추천 해주신 서브태스크는 글쓴이가 수락 또는 거절할 수 있습니다</p>
                         </div>
-                        <div><h4>추천 서브태스크:</h4></div>
+                            <p>이 유저에게 도움이 될만한 할 일(Task)을 추천해주세요! 추천 해주신 할 일(Task)는 글쓴이가 수락 또는 거절할 수 있습니다</p>
+                        </div>
+                        <div><h2 style="font-family: 'Nanum Pen Script', cursive;">할 일(Task) 추천하기:</h2></div>
                         </br>
                         <div class="blog__details__desc">
                             <div th:if="${session.email == mainTaskDetail.email}">
@@ -355,11 +365,14 @@
                             </p>
                             </br>
                         </div>
+                        <div class="blog__details__quote">
+                            <div class="icon"><i class="fa fa-quote-left"></i></div>
+                        </div>
                         <div class="blog__details__tags">
                             <input type="hidden" th:value="${mainTaskId}" id="mainTaskId">
                             <a th:if="${likeStatus == true}" class="fa fa-heart" id="heartO" style="cursor: pointer;"> 좋아요</a>
                             <a th:if="${likeStatus == false}" class="fa fa-heart-o" id="heartX" style="cursor: pointer;"> 좋아요</a>
-                            <a th:href="@{/task/task-update(mainTaskId=${mainTaskDetail.mainTaskId})}">수정하기</a>
+                            <a th:href="@{/task/task-update(mainTaskId=${mainTaskDetail.mainTaskId})}" >수정하기</a>
                             <a th:href="@{/task/task-delete(mainTaskId=${mainTaskDetail.mainTaskId})}"
                                onclick="return confirmDelete(event, this)">삭제하기</a>
                         </div>
@@ -411,8 +424,8 @@
                                         <li><i class="fa fa-clock-o"></i> <span th:text="${replyMap.enrolledAt}">작성 날짜</span></li>
                                     </ul>
                                     <div th:if="${session.email == replyMap.email}" >
-                                        <a class="updatebutton" name="updatebutton">수정하기</a>
-                                        <a th:href="@{/reply/deleteReply(replyId=${replyMap.replyId})}">삭제하기</a>
+                                        <a class="updatebutton" name="updatebutton" style="cursor: pointer;">수정하기</a> &emsp;
+                                        <a th:href="@{/reply/deleteReply(replyId=${replyMap.replyId})}" style="cursor: pointer; color: black">삭제하기</a>
                                     </div>
                                 </div>
                             </div>

@@ -4,6 +4,11 @@
       layout:decorate="~{/layout.html}">
 
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
 
     <script>
 
@@ -156,11 +161,12 @@
                          <!-- followerId가 로그인한 유저ID와 같아야 함 -->
                         <tr th:each="followingMap : ${followingListMap}">
                             <td class="cart__product__item">
-                                <img th:src="@{/user/thumbnails(fileName=${followingMap.profileUuid})}" width="90" height="90" alt="">
+                                <div class="blog__comment__item__pic"><img th:src="@{/user/thumbnails(fileName=${followingMap.profileUuid})}" width="90"
+                                        height="90" alt=""/></div>
                                 <div class="cart__product__item__title">
                                     <input type="hidden" id="followeeId" th:value="${followingMap.userId}">
-                                    <h6><a th:href="@{/user/user-detail(userId=${followingMap.userId})}" th:text="${followingMap.nickname}"></a></h6>
-                                    <div th:text="${followingMap.ambitionQuote}"></div>
+                                    <h6><a th:href="@{/user/user-detail(userId=${followingMap.userId})}" th:text="${followingMap.nickname}" style="color: black"></a></h6>
+                                    <div style="font-family: 'Nanum Pen Script', cursive; font-size: 26px" th:text="${followingMap.ambitionQuote}"></div>
                                 </div>
                             </td>
                             <td th:text="|${followingMap.mainTaskCount}개|"></td>

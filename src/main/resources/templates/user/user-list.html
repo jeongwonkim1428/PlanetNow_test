@@ -6,6 +6,12 @@
 
 
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
     <script>
         $(function () {
 
@@ -97,11 +103,12 @@
                                 userTable += `
                                <tr>
                                    <td>
-                                       <img src="${imgSrc}" width="90" height="90" alt="프로필 이미지">
+                                       <div class="blog__comment__item__pic"><img src="${imgSrc}" width="90" height="90" alt="프로필 이미지"></div>
                                        <div>
-                                           <h6><a href="/user/user-detail?userId=${user.userId}">${user.name} / ${user.nickname}</a></h6>
+                                            </br>
+                                           <h6><a href="/user/user-detail?userId=${user.userId}" style="color: black">${user.name} / ${user.nickname}</a></h6>
                                            <input type="hidden" value="${user.userId}" name="followeeId"/>
-                                           <div>${user.ambitionQuote}</div>
+                                           <div style="font-family: 'Nanum Pen Script', cursive; font-size: 26px">${user.ambitionQuote}</div>
                                        </div>
                                    </td>
                                    <td>${user.postCount}개</td>
@@ -115,7 +122,7 @@
                               `;
                                 }
                                 else if (followerId == user.userId) {
-                                    userTable += `본인
+                                    userTable += `본인입니다.
                                          </td>
                                      </tr>
                                  `;
