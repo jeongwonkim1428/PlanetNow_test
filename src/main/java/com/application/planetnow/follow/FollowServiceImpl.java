@@ -109,12 +109,11 @@ public class FollowServiceImpl implements FollowService {
 //			System.out.println("Point: " + point);
 			
 			List<LevelDTO> levelList = levelDAO.getLevelList();
-			Long level = (long) 0;
+			Long level = (long) 1;
 			
 			for (LevelDTO levelDTO : levelList) {
-				if (point < levelDTO.getLevelValue()) {
-					level = levelDTO.getLevelId() - 1;
-					break;
+				if (point >= levelDTO.getLevelValue()) {
+					level = levelDTO.getLevelId();
 				}
 			}
 			
