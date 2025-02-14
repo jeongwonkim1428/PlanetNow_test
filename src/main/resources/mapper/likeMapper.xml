@@ -27,5 +27,7 @@
 		FROM	LIKES
 		WHERE	MAIN_TASK_ID = #{mainTaskId} 
 	</select>
+	
+	
 
 </mapper>

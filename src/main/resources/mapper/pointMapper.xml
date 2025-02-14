@@ -6,5 +6,16 @@
         SELECT *
         FROM POINT
     </select>
-
+    
+    <select id="getReplyPoint" resultType="PointDTO" >
+    	SELECT *
+    	FROM	POINT
+    	WHERE	ACTION = "댓글"
+    </select>
+    
+    <select id="getLikePoint" resultType="PointDTO">
+    	SELECT	*
+    	FROM	POINT
+    	WHERE	ACTION = "좋아요"
+    </select>
 </mapper>
