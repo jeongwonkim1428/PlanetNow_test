@@ -62,16 +62,6 @@ class PlanetNowApplicationTests {
 //    	System.out.println(followDAO.check(followDTO));
 //    }
 
-    @Test
-    void getExpiredMainTasks() {
-        Date now = new Date();
-
-        List<MainTaskDTO> mainTaskDTOS = mainTaskDAO.getExpiredMainTasks(now);
-        for (MainTaskDTO mainTaskDTO : mainTaskDTOS) {
-            System.out.println(mainTaskDTO);
-        }
-    }
-
 
 
 }
