@@ -9,6 +9,7 @@
         $(function (){
 
             $("#loginBtn").click(function (){
+                event.preventDefault();
                 let login = {
                     "email" : $("#email").val(),
                     "password" : $("#password").val()
@@ -30,14 +31,10 @@
                                 window.location.href = "/home"; // Redirect to a default page
                             }
                         }else {
-                            $("#failMsg").html("<span style='color:red;'>아이디와 패스워드를 확인하세요.</span>");
+                            $("#failMsg").html("<h6 style='color:red;'>아이디와 패스워드를 확인하세요.</h6>");
                         }
                     }
-
-
                 });
-
-
             });
         })
 
@@ -77,14 +74,15 @@
                             <input type="text" name="email" id="email" placeholder="아이디(이메일)">
                             <input type="password" name="isValidPasswordMsg" id="password" placeholder="비밀번호">
                             <span id="failMsg" ></span>
+                            <button type="submit" class="site-btn" id="loginBtn">로그인</button>
                         </form>
                     </div>
                     <div align="right">
                         <a>회원가입</a>
                     </div><br>
-                    <div align="center">
-                        <button type="submit" class="site-btn" id="loginBtn">로그인</button>
-                    </div>
+<!--                    <div align="center">-->
+<!--                        <button type="submit" class="site-btn" id="loginBtn">로그인</button>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>

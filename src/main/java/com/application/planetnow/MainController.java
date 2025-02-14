@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.application.planetnow.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,7 +63,11 @@ public class MainController {
 
 	@GetMapping("/chat")
 	public String chat(Model model, HttpServletRequest request) {
-		model.addAttribute("userId", request.getSession().getAttribute("userId"));
+		HttpSession session = request.getSession();
+		if (session.getAttribute("email") == null) {
+			return "redirect:/user/login";
+		}
+		model.addAttribute("userId", session.getAttribute("userId"));
 		model.addAttribute("nickname", userService.getUserDetail((String) request.getSession().getAttribute("email")).getNickname());
 		return "/chat/chat";
 	}

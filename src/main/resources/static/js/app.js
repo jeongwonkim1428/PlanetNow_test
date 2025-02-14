@@ -1,12 +1,14 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:80/gs-guide-websocket'
+    brokerURL: 'ws://localhost:80/websocket'
 });
 
 stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/greetings', (greeting) => {
-        showGreeting(JSON.parse(greeting.body).content);
+    stompClient.subscribe('/topic/messages', (message) => {
+        showGreeting(JSON.parse(message.body).content);
+        const $container = $('#scrollable-container');
+        $container.scrollTop($container[0].scrollHeight);
     });
     stompClient.publish({
         destination: "/app/welcome",
@@ -32,7 +34,7 @@ function setConnected(connected) {
     else {
         $("#conversation").hide();
     }
-    $("#greetings").html("");
+    $("#messages").html("");
 }
 
 function connect() {
@@ -50,24 +52,24 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
+function sendContent() {
     stompClient.publish({
         destination: "/app/hello",
-        body: JSON.stringify({'name': $("#name").val(),
+        body: JSON.stringify({'content': $("#content").val(),
                                     'userId': $("#userId").val(),
                                     'nickname': $("#nickname").val()})
     });
-    $("#name").val("");
+    $("#content").val("");
 }
 
 function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    $("#messages").append("<tr><td>" + message + "</td></tr>");
 }
 
 $(function () {
     $("form").on('submit', (e) => e.preventDefault());
     $( "#connect" ).click(() => connect());
     $( "#disconnect" ).click(() => disconnect());
-    $( "#send" ).click(() => sendName());
+    $( "#send" ).click(() => sendContent());
 });
 
