@@ -39,6 +39,7 @@ function setConnected(connected) {
 
 function connect() {
     stompClient.activate();
+    $("#content").prop("disabled", false);
 }
 
 function disconnect() {
@@ -46,6 +47,7 @@ function disconnect() {
         destination: "/app/bye", // Existing backend endpoint
         body: $("#nickname").val() // Send the welcome message
     });
+    $("#content").prop("disabled", true);
 
     stompClient.deactivate();
     setConnected(false);
