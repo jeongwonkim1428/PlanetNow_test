@@ -42,6 +42,18 @@
                     </table>
                     <h6>이곳은 전체 채팅방입니다. 하단의 Connect 버튼을 클릭하여 채팅에 참여하실 수 있습니다. 접속 시, 현재 접속 중인 사용자들에게 알림이 전송됩니다. Disconnect 버튼을 클릭하면 연결이 해제되며, 채팅 내역이 초기화됩니다. 비적절한 언어 사용 시 강제 퇴장 조치될 수 있으니 유의해 주시기 바랍니다.</h6>
                     </br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="cart__btn">
+                                <a id="connect" style="cursor: pointer;">connect</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="cart__btn update__btn">
+                                <a id="disconnect" style="cursor: pointer;">disconnect</a>
+                            </div>
+                        </div>
+                    </div>
                     <div id="scrollable-container" style="height: 600px; overflow-y: auto; border: 1px solid #ccc; background-color: #f9f9f9;">
                         <table id="conversation" class="table table-striped">
                             <tbody id="messages">
@@ -52,23 +64,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="cart__btn">
-                    <a id="connect" style="cursor: pointer;">connect</a>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="cart__btn update__btn">
-                    <a id="disconnect" style="cursor: pointer;">disconnect</a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-lg-12">
                 <div class="discount__content">
-                    <h6>Send message here -></h6>
+<!--                    <h6>Send message here -></h6>-->
                     <form>
-                        <input type="text" id="content" disabled placeholder="Enter your text">
+                        <input type="text" id="content" disabled placeholder="Enter your message">
                         <input type="hidden" id="userId" th:value="${userId}">
                         <input type="hidden" id="nickname" th:value="${nickname}">
                         <button type="submit" id="send" class="site-btn" >send</button>

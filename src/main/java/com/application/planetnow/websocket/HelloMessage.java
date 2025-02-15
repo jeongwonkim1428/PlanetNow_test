@@ -11,8 +11,6 @@ public class HelloMessage {
 	private String userId;
 	private String nickname;
 
-	public HelloMessage() {
-	}
 
 	public HelloMessage(String content, String userId, String nickname) {
 		this.content = content;
