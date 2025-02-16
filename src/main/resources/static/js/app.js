@@ -1,11 +1,11 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://115.139.55.5:823/websocket'
+    brokerURL: 'ws://localhost:80/websocket'
 });
 
 stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/messages', (message) => {
+    stompClient.subscribe('/topic/allChat', (message) => {
         showMessage(JSON.parse(message.body).content);
         const $container = $('#scrollable-container');
         $container.scrollTop($container[0].scrollHeight);
