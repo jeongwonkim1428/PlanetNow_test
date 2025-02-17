@@ -55,13 +55,19 @@ function disconnect() {
 }
 
 function sendContent() {
-    stompClient.publish({
-        destination: "/app/hello",
-        body: JSON.stringify({'content': $("#content").val(),
-                                    'userId': $("#userId").val(),
-                                    'nickname': $("#nickname").val()})
-    });
-    $("#content").val("");
+    let content = document.getElementById("content").value.trim();
+    if (content === "") {
+        return
+    } else {
+        stompClient.publish({
+            destination: "/app/hello",
+            body: JSON.stringify({'content': $("#content").val(),
+                'userId': $("#userId").val(),
+                'nickname': $("#nickname").val()})
+        });
+        $("#content").val("");
+    }
+
 }
 
 function showMessage(message) {
