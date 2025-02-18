@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.Subject;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 @SpringBootTest
 @Transactional
-public class TaskTests {
+public class TaskDaoTests {
 
     @Autowired
     private MainTaskDAO mainTaskDAO;
