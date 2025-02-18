@@ -77,6 +77,7 @@ public class UserDAOTest {
     public void searchUserTest(){
         String keyword = "닉";
         List<Map<String,Object>> searchUser =userDAO.searchUser(keyword);
+
         assertThat(searchUser)
                 .isNotEmpty();
     }
