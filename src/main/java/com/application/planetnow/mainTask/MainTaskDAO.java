@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.application.planetnow.user.UserDTO;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.data.jdbc.repository.query.Query;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -56,4 +58,8 @@ public interface MainTaskDAO {
    List<MainTaskDTO> getExpiredMainTasks(Date now);
 
    void updateExpiredMainTaskStatus(List<MainTaskDTO> expiredMainTasks);
+
+   @Select("SELECT MAX(MAIN_TASK_ID) FROM MAIN_TASK")
+   public Long getMainTaskId();
+
 }

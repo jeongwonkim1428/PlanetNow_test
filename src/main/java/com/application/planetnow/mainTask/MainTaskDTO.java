@@ -21,6 +21,7 @@ public class MainTaskDTO {
     private Long viewCnt;
     private List<SubTaskDTO> subTaskDtoList;
     private Long likeCnt;
-    
+
+
 
 }

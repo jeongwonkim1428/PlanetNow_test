@@ -35,6 +35,7 @@
         JOIN TASK_STATUS T
         ON S.TASK_STATUS_ID = T.TASK_STATUS_ID
         WHERE S.MAIN_TASK_ID = #{mainTaskId}
+        ORDER BY S.SUB_TASK_ID
     </select>
 
     <update id="changeStatus" parameterType="SubTaskDTO">
