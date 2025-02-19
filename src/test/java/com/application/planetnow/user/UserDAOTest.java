@@ -43,8 +43,8 @@ public class UserDAOTest {
         userDAO.saveUser(user);
 
     }
-    @Test @Order(1) @DisplayName("유저 생성(회원가입)")
-    public void creatUserTest(){
+    @Test @Order(1) @DisplayName("유저 조회")
+    public void findUser(){
         // When
         UserDTO userDTO = userDAO.getUserDetail(user.getEmail());
         // Then
