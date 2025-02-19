@@ -95,8 +95,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Map<String, Object>> searchUser(String name) {
         return userDAO.searchUser(name);
-
-
     }
 
     @Override
@@ -109,8 +107,6 @@ public class UserServiceImpl implements UserService {
         Integer userCompleted =userTaskList.stream()
                 .filter((task) -> task.getTaskStatusId().equals(3))
                 .toList().size();
-
-
         return (double) Math.round((double) userCompleted / userTaskCount * 10000) / 100 ;
     }
 
@@ -223,10 +219,6 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
-
-
-
-
     }
 
 
