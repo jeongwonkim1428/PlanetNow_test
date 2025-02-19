@@ -33,7 +33,7 @@
     <select id="getReplyCnt" parameterType="Long" resultType="int">
         SELECT	COUNT(*)
         FROM	REPLY
-                    WHER	MAIN_TASK_ID = #{mainTaskId}
+                    WHERE	MAIN_TASK_ID = #{mainTaskId}
     </select>
 
     <select id="getReplyDetail" parameterType="Long" resultType="ReplyDTO">
