@@ -18,4 +18,8 @@ public class HelloMessage {
 		this.nickname = nickname;
 	}
 
+
+	public HelloMessage() {
+	}
+
 }

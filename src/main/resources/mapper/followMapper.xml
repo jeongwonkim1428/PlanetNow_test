@@ -90,7 +90,7 @@
         WHERE  FOLLOWER_ID = #{followerId}
     </select>
     
-    <insert id="createFollow" parameterType="Long">
+    <insert id="createFollow" parameterType="FollowDTO">
     	INSERT INTO FOLLOW (
     						FOLLOWEE_ID, 
     						FOLLOWER_ID
