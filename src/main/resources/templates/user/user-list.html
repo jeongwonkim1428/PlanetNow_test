@@ -16,12 +16,16 @@
         $(function () {
 
             $(document).on("click", "#followerBtn", function(){
+            	let followeeId = $(this).data("followee-id");
+            	let buttonId = $(this).data("button-id");
                 let param = {
-                    "followeeId" : $("[name='followeeId']").val(),
+                    "followeeId" : followeeId,
                     "followerId" : $("#followerId").val()         // 로그인한 유저ID
                 };
+                console.log(followeeId);
+                console.log(buttonId);
 
-                if ($("#followerBtn").val() == "팔로우") {
+                if (buttonId == "팔로우") {
                     console.log(param);
                     $.ajax({
                         url : "/follow/createFollow",
@@ -37,7 +41,7 @@
                     });
                 }
 
-                else if ($("#followerBtn").val() == "팔로우 취소") {
+                else if (buttonId == "팔로우 취소") {
                     console.log(param);
                     $.ajax({
                         url : "/follow/deleteFollow",
@@ -52,7 +56,7 @@
                         }
                     });
                 }
-                else if ($("#followerBtn").val() == "맞팔로우") {
+                else if (buttonId == "맞팔로우") {
                     $.ajax({
                         url : "/follow/createFollow",
                         type : "post",
@@ -66,7 +70,7 @@
                         }
                     });
                 }
-                else if ($("#followerBtn").val() == "맞팔로우 취소") {
+                else if (buttonId == "맞팔로우 취소") {
                     console.log(param);
                     $.ajax({
                         url : "/follow/deleteFollow",
@@ -107,7 +111,6 @@
                                        <div>
                                             </br>
                                            <h6><a href="/user/user-detail?userId=${user.userId}" style="color: black">${user.name} / ${user.nickname}</a></h6>
-                                           <input type="hidden" value="${user.userId}" name="followeeId"/>
                                            <div style="font-family: 'Nanum Pen Script', cursive; font-size: 26px">${user.ambitionQuote}</div>
                                        </div>
                                    </td>
@@ -130,28 +133,28 @@
                                 else {
                                     // 맞팔로우
                                     if (user.check == -1) {
-                                        userTable += `<input type="button" class="site-btn" value="맞팔로우" id="followerBtn" >
+                                        userTable += `<input type="button" class="site-btn" data-followee-id="${user.userId}" data-button-id="맞팔로우" value="맞팔로우" id="followerBtn" >
                                             </td>
                                         </tr>
                                     `;
                                     }
                                     // 맞팔로우 취소
                                     else if (user.check == 2) {
-                                        userTable += `<input type="button" class="site-btn" value="맞팔로우 취소" id="followerBtn" >
+                                        userTable += `<input type="button" class="site-btn" data-followee-id="${user.userId}" data-button-id="맞팔로우 취소" value="맞팔로우 취소" id="followerBtn" >
                                             </td>
                                         </tr>
                                     `;
                                     }
                                     // 팔로우
                                     else if (user.check == -2) {
-                                        userTable += `<input type="button" class="site-btn" value="팔로우" id="followerBtn" >
+                                        userTable += `<input type="button" class="site-btn" data-followee-id="${user.userId}" data-button-id="팔로우" value="팔로우" id="followerBtn" >
                                             </td>
                                         </tr>
                                     `;
                                     }
                                     // 팔로우 취소
                                     else if (user.check == 1) {
-                                        userTable += `<input type="button" class="site-btn" value="팔로우 취소" id="followerBtn" >
+                                        userTable += `<input type="button" class="site-btn" data-followee-id="${user.userId}" data-button-id="팔로우 취소" value="팔로우 취소" id="followerBtn" >
                                             </td>
                                         </tr>
                                     `;

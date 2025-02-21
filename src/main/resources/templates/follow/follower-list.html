@@ -11,15 +11,17 @@
             // 팔로우상태인지 아닌지 판정
             // html 버튼의 값을 바꿔줘야함
             
-        	
-        	$("#followerBtn").click(function(){
-        	    let param = {
-        	        "followeeId" : $("#followeeId").val(),
-        	        "followerId" : $("#followerId").val()
-        	    };
-        	    
-        	    console.log(param);
-        	    if ($("#followerBtn").val() == "맞팔로우") {
+            $(document).on("click", "#followerBtn", function(){
+            	let followeeId = $(this).data("followee-id");
+            	let buttonId = $(this).data("button-id");
+                let param = {
+                    "followeeId" : followeeId,
+                    "followerId" : $("#followerId").val()         // 로그인한 유저ID
+                };
+                console.log(followeeId);
+                console.log(buttonId);
+                
+                if (buttonId == "맞팔로우") {
 
         	        $.ajax({
         	            url : "/follow/createFollow",
@@ -35,7 +37,7 @@
         	            }
         	        });
 
-        	    } else if ($("#followerBtn").val() == "맞팔로우 취소") {
+        	    } else if (buttonId == "맞팔로우 취소") {
 
         	        console.log(param);
         	        $.ajax({
@@ -52,17 +54,7 @@
         	            }
         	        });
 
-        	    }
-        	});
-
-            $("#follower2Btn").click(function(){
-        	    let param = {
-        	        "followeeId" : $("[name='followeeId']").val(),
-        	        "followerId" : $("[name='followerId']").val()
-        	    };
-        	    
-        	    console.log(param);
-        	    if ($("#follower2Btn").val() == "팔로우") {
+        	    } if (buttonId == "팔로우") {
         	        
         	        console.log(param);
         	        $.ajax({
@@ -79,7 +71,7 @@
         	            }
         	        });
         	        
-        	    } else if ($("#follower2Btn").val() == "팔로우 취소") {
+        	    } else if (buttonId == "팔로우 취소") {
         	        
         	        console.log(param);
         	        $.ajax({
@@ -97,8 +89,10 @@
         	        });
         	        
         	    }
-        	});
-
+                
+            	
+            });
+        	
 
         });
 
@@ -173,11 +167,13 @@
 	                            <td th:text="|${followerMap.followerCount}명|"></td>
 	                            <td th:if="${followerMap.check == -1}">
 	                            	<input type="hidden" id="followerId" th:value="${session.userId}" />
-	                                <input type="button" id="followerBtn" class="site-btn" value="맞팔로우" />
+	                            	<input type="hidden" name="followeeId" th:value="${followerMap.followerId}" />
+	                                <input type="button" id="followerBtn" class="site-btn" th:data-followee-id="${followerMap.followerId}" data-button-id="맞팔로우" value="맞팔로우" />
 	                            </td>
                  	            <td th:if="${followerMap.check == 2}">
 	                            	<input type="hidden" id="followerId" th:value="${session.userId}" />
-	                                <input type="button" id="followerBtn" class="site-btn" value="맞팔로우 취소" />
+	                            	<input type="hidden" name="followeeId" th:value="${followerMap.followerId}" />
+	                                <input type="button" id="followerBtn" class="site-btn" th:data-followee-id="${followerMap.followerId}" data-button-id="맞팔로우 취소" value="맞팔로우 취소" />
 	                            </td>
 	                            <td th:if="${session.userId == null && followerMap.followerId != session.userId}">
 	                            	<input type="hidden" id="followerId" th:value="${session.userId}" />
@@ -187,12 +183,12 @@
 	                            <td th:if="${followerMap.check == -2 && session.userId != nul && followerMap.followerId != session.userId }">
 	                            	<input type="hidden" name="followerId" th:value="${session.userId}" />
 	                            	<input type="hidden" name="followeeId" th:value="${followerMap.followerId}" />
-	                            	<input type="button" id="follower2Btn" class="site-btn" value="팔로우"/>
+	                            	<input type="button" id="followerBtn" class="site-btn" th:data-followee-id="${followerMap.followerId}" data-button-id="팔로우" value="팔로우"/>
 	                            </td>
    	                            <td th:if="${followerMap.check == 1 && session.userId != null && followerMap.followerId != session.userId }">
 	                            	<input type="hidden" name="followerId" th:value="${session.userId}" />
 	                            	<input type="hidden" name="followeeId" th:value="${followerMap.followerId}" />
-	                            	<input type="button" id="follower2Btn" class="site-btn" value="팔로우 취소"/>
+	                            	<input type="button" id="followerBtn" class="site-btn" th:data-followee-id="${followerMap.followerId}" data-button-id="팔로우 취소" value="팔로우 취소"/>
 	                            </td>
 	                            <td th:if="${followerMap.followerId == session.userId}">
 	                            	<input type="button" id="myPage" class="site-btn" value="My Page" th:onclick="|location.href='@{/user/profile}'|" />

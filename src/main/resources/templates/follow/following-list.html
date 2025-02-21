@@ -11,96 +11,91 @@
 
 
     <script>
-
+    
         $(function(){
 
-        	$("#following2Btn").click(function(){
+        	$(document).on("click", "#followingBtn", function(){
         		
-        		let param = {
-        			"followeeId" : $("[name='followeeId']").val(),
-        			"followerId" : $("[name='followerId']").val()
-        		};
-        		console.log(param);
+        		let followeeId = $(this).data("followee-id");
+            	let buttonId = $(this).data("button-id");
+            	let param = {
+                        "followeeId" : followeeId,
+                        "followerId" : $("#followerId").val()     // 로그인한 유저ID
+                    };
+                    console.log(followeeId);
+                    console.log(buttonId);
+                    
+                    if (buttonId == "맞팔로우") {
+
+            	        $.ajax({
+            	            url : "/follow/createFollow",
+            	            type : "post",
+            	            data : $.param(param),
+            	            success : function(isSuccess) {
+            	                alert("맞팔로우 성공");
+            	                location.reload();
+            	            },
+            	            error: function (xhr, status, error) {
+            	                console.error("Error:", error);
+            	                alert("이미 팔로우 중" + error);
+            	            }
+            	        });
+
+            	    } else if (buttonId == "맞팔로우 취소") {
+
+            	        console.log(param);
+            	        $.ajax({
+            	            url : "/follow/deleteFollow",
+            	            type : "post",
+            	            data : $.param(param),
+            	            success : function(isSuccess) {
+            	                alert("맞팔로우 취소");
+            	                location.reload();
+            	            },
+            	            error: function (xhr, status, error) {
+            	                console.error("Error:", error);
+            	                alert("실패" + error);
+            	            }
+            	        });
+
+            	    } if (buttonId == "팔로우") {
+            	        
+            	        console.log(param);
+            	        $.ajax({
+            	            url : "/follow/createFollow",
+            	            type : "post",
+            	            data : $.param(param),
+            	            success : function(isSuccess) {
+            	                alert("팔로우 성공");
+            	                location.reload();
+            	            },
+            	            error: function (xhr, status, error) {
+            	                console.error("Error:", error);
+            	                alert("이미 팔로우 중 or 로그인 필요" + error);
+            	            }
+            	        });
+            	        
+            	    } else if (buttonId == "팔로우 취소") {
+            	        
+            	        console.log(param);
+            	        $.ajax({
+            	            url : "/follow/deleteFollow",
+            	            type : "post",
+            	            data : $.param(param),
+            	            success : function(isSuccess) {
+            	                alert("팔로우 취소");
+            	                location.reload();
+            	            },
+            	            error: function (xhr, status, error) {
+            	                console.error("Error:", error);
+            	                alert("실패" + error);
+            	            }
+            	        });
+            	        
+            	    }
         		
-				if ($("#following2Btn").val() == "팔로우") {
-        	        
-        	        console.log(param);
-        	        $.ajax({
-        	            url : "/follow/createFollow",
-        	            type : "post",
-        	            data : $.param(param),
-        	            success : function(isSuccess) {
-        	                alert("팔로우 성공");
-        	                location.reload();
-        	            },
-        	            error: function (xhr, status, error) {
-        	                console.error("Error:", error);
-        	                alert("이미 팔로우 중 or 로그인 필요" + error);
-        	            }
-        	        });
-        	        
-        	    } else if ($("#following2Btn").val() == "팔로우 취소") {
-        	        
-        	        console.log(param);
-        	        $.ajax({
-        	            url : "/follow/deleteFollow",
-        	            type : "post",
-        	            data : $.param(param),
-        	            success : function(isSuccess) {
-        	                alert("팔로우 취소");
-        	                location.reload();
-        	            },
-        	            error: function (xhr, status, error) {
-        	                console.error("Error:", error);
-        	                alert("실패" + error);
-        	            }
-        	        });
-        	        
-        	    }
         	});
         	
-        	$("#followingBtn").click(function(){
-        	    let param = {
-        	        "followeeId" : $("#followeeId").val(),
-        	        "followerId" : $("#followerId").val()
-        	    };
-        	    
-        	    console.log(param);
-        	    if ($("#followingBtn").val() == "맞팔로우") {
-
-        	        $.ajax({
-        	            url : "/follow/createFollow",
-        	            type : "post",
-        	            data : $.param(param),
-        	            success : function(isSuccess) {
-        	                alert("맞팔로우 성공");
-        	                location.reload();
-        	            },
-        	            error: function (xhr, status, error) {
-        	                console.error("Error:", error);
-        	                alert("이미 팔로우 중" + error);
-        	            }
-        	        });
-
-        	    } else if ($("#followingBtn").val() == "맞팔로우 취소") {
-
-        	        console.log(param);
-        	        $.ajax({
-        	            url : "/follow/deleteFollow",
-        	            type : "post",
-        	            data : $.param(param),
-        	            success : function(isSuccess) {
-        	                alert("맞팔로우 취소");
-        	                location.reload();
-        	            },
-        	            error: function (xhr, status, error) {
-        	                console.error("Error:", error);
-        	                alert("실패" + error);
-        	            }
-        	        });
-
-        	    }
-        	});
 
         });
 
@@ -173,22 +168,20 @@
                             <td th:text="|${followingMap.replyCount}개|"></td>
                             <td th:text="|${followingMap.followingCount}명|"></td>
 	                         <td th:if="${followingMap.check == -2 && session.userId != nul && followingMap.followeeId != session.userId }">
-	                            	<input type="hidden" name="followerId" th:value="${session.userId}" />
-	                            	<input type="hidden" name="followeeId" th:value="${followingMap.followeeId}" />
-	                            	<input type="button" id="following2Btn" class="site-btn" value="팔로우"/>
+	                            	<input type="hidden" id="followerId" th:value="${session.userId}" />
+	                            	<input type="button" id="followingBtn" class="site-btn" th:data-followee-id="${followingMap.followeeId}" data-button-id="팔로우" value="팔로우"/>
 	                         </td>
                            	<td th:if="${followingMap.check == 1 && session.userId != null && followingMap.followeeId != session.userId }">
-	                           	<input type="hidden" name="followerId" th:value="${session.userId}" />
-	                           	<input type="hidden" name="followeeId" th:value="${followingMap.followeeId}" />
-	                           	<input type="button" id="following2Btn" class="site-btn" value="팔로우 취소"/>
+	                           	<input type="hidden" id="followerId" th:value="${session.userId}" />
+	                           	<input type="button" id="followingBtn" class="site-btn" th:data-followee-id="${followingMap.followeeId}" data-button-id="팔로우 취소" value="팔로우 취소"/>
                            </td>
                            <td th:if="${followingMap.check == -1}">
                             	<input type="hidden" id="followerId" th:value="${session.userId}" />
-                                <input type="button" id="followingBtn" class="site-btn" value="맞팔로우" />
+                                <input type="button" id="followingBtn" class="site-btn" th:data-followee-id="${followingMap.followeeId}" data-button-id="맞팔로우" value="맞팔로우" />
                             </td>
                 	            <td th:if="${followingMap.check == 2}">
                             	<input type="hidden" id="followerId" th:value="${session.userId}" />
-                                <input type="button" id="followingBtn" class="site-btn" value="맞팔로우 취소" />
+                                <input type="button" id="followingBtn" class="site-btn" th:data-followee-id="${followingMap.followeeId}" data-button-id="맞팔로우 취소" value="맞팔로우 취소" />
                             </td>
                             <td th:if="${session.userId == null && followerMap.followerId != session.userId}">
                             	<input type="hidden" id="followerId" th:value="${session.userId}" />
